@@ -8,6 +8,7 @@ class LittleVillage:
         self.toDoList = []
         self.villagers = []
         self.places=[]
+        self.buildings=[]
         self.globalPosition = [0.,0.]
         self.name = "defaultVillageName"
         
@@ -28,17 +29,27 @@ class LittleVillage:
             lv.generate()
             self.villagers.append(lv)
             
-        entrepot = LittlePlace()
+        entrepot = LittleBuilding()
         entrepot.name = "Warehouse"
-        self.places.append(entrepot)
+        self.buildings.append(entrepot)
         
-    def printAll(self):
-        print "This is the village of "+self.name
-        print "inhabitants :"
+    def __str__(self):
+        s = "This is the village of "+self.name
+        s += "\ninhabitants :"
         for v in self.villagers:
-            print v.name, " ", v.gender
+            s += "\n"+v.name+ " "+ str(v.gender)
+        return s
+        
+    def iterate(self):
+        for p in self.villagers:
+            if not p.busy:
+                p.selectTask(self.toDoList)
+            else:
+                p.performTask()
 
 if __name__ == '__main__':
     lv = LittleVillage()
     lv.createRandomVillage(10)
-    lv.printAll()
+    print lv
+    
+    lv.iterate()
