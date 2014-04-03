@@ -2,6 +2,7 @@ import random, utils
 
 from LittleVillager import *
 from LittlePlace import *
+from LittleTask import *
 
 class LittleVillage:
     def __init__(self):
@@ -43,6 +44,7 @@ class LittleVillage:
     def iterate(self):
         for p in self.villagers:
             if not p.busy:
+                #~ print "test"
                 p.selectTask(self.toDoList)
             else:
                 p.performTask()
@@ -51,5 +53,8 @@ if __name__ == '__main__':
     lv = LittleVillage()
     lv.createRandomVillage(10)
     print lv
-    
+    lbt = LittleBuildTask("warehouse")
+    lv.toDoList.append(lbt)
+    lv.iterate()
+    lv.iterate()
     lv.iterate()
