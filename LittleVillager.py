@@ -1,5 +1,7 @@
 import utils, random
 
+
+
 class LittleVillager:
     def __init__(self):
         self.name = "defaultVillagerName"
@@ -26,10 +28,11 @@ class LittleVillager:
 
         
     def performTask(self):
-        self.task.execute([])
+        toReturn = self.task.execute([])
         self.task.state = "to do"
         print self.task.name, " status ", self.task.status
         self.busy = False
+        return toReturn
 
 if __name__ == '__main__':
     lv = LittleVillager()
