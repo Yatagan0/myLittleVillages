@@ -20,16 +20,17 @@ class LittleBuildTask(LittleTask):
             
     def execute(self, param):
         print self.name, " executing"
-        if self.status is "to do":
+        if self.status == "to start":
             #select position
             #add bring items
             self.status = "waiting for materials"
-        elif self.status is "waiting for materials":
+        elif self.status == "waiting for materials":
             #check if remaining materials
             self.status = "building"
-        elif self.status is "building":
+        elif self.status == "building":
             #check if remaining time
             self.status = "done"
+        return []
             
 
 class LittleCarryTask(LittleTask):

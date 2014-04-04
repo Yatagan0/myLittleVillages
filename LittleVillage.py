@@ -48,6 +48,13 @@ class LittleVillage:
                 p.selectTask(self.toDoList)
             else:
                 p.performTask()
+        inds = range(len(self.toDoList))
+        inds.reverse()
+        for i in inds:
+            if self.toDoList[i].status == "done":
+                print self.toDoList[i].name, " finished"
+                self.toDoList.pop(i)
+            
 
 if __name__ == '__main__':
     lv = LittleVillage()
@@ -55,6 +62,9 @@ if __name__ == '__main__':
     print lv
     lbt = LittleBuildTask("warehouse")
     lv.toDoList.append(lbt)
-    lv.iterate()
-    lv.iterate()
-    lv.iterate()
+    lbt = LittleBuildTask("warehouse")
+    lv.toDoList.append(lbt)
+    lbt = LittleBuildTask("warehouse")
+    lv.toDoList.append(lbt)
+    for i in range(25):
+        lv.iterate()

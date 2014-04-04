@@ -21,12 +21,14 @@ class LittleVillager:
                 self.task = t
                 self.task.state = "in progress"
                 return
+            
 
 
         
     def performTask(self):
         self.task.execute([])
         self.task.state = "to do"
+        print self.task.name, " status ", self.task.status
         self.busy = False
 
 if __name__ == '__main__':
