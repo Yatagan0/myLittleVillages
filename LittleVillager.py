@@ -28,7 +28,7 @@ class LittleVillager:
 
         
     def performTask(self):
-        toReturn = self.task.execute([])
+        toReturn = self.task.execute()
         self.task.state = "to do"
         print self.task.name, " status ", self.task.status
         self.busy = False

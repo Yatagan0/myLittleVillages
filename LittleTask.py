@@ -7,6 +7,10 @@ class LittleTask:
         self.state = "to do"
         self.status = "to start"
         self.village=village
+        self.name ="defaultTaskName"
+        
+    def execute(self):
+        print "executing default"
         
 
 
@@ -26,7 +30,7 @@ class LittleBuildTask(LittleTask):
             self.materials["wood"] = 8
             self.materials["stone"] = 8
             
-    def execute(self, param):
+    def execute(self):
         print self.name, " executing"
         toReturn = {}
         if self.status == "to start":
@@ -44,6 +48,12 @@ class LittleBuildTask(LittleTask):
                
             self.building.position = [posX, posY]
             print "end pos for ", self.name, " ", self.building.position 
+        
+            for m in self.materials:
+                for i in range(self.materials[m]):
+                    pass
+                    lct = LittleCarryTask(self.village)
+                    self.village.toDoList.append(lct)
                
             self.status = "waiting for materials"
         elif self.status == "waiting for materials":
