@@ -31,7 +31,7 @@ class LittleBuildTask(LittleTask):
             self.materials["stone"] = 8
             
     def execute(self):
-        print self.name, " executing"
+        #~ print self.name, " executing"
         toReturn = {}
         if self.status == "to start":
             #select position
@@ -51,8 +51,9 @@ class LittleBuildTask(LittleTask):
         
             for m in self.materials:
                 for i in range(self.materials[m]):
-                    pass
                     lct = LittleCarryTask(self.village)
+                    lct.material = m
+                    lct.dependantTask = self
                     self.village.toDoList.append(lct)
                
             self.status = "waiting for materials"
@@ -69,7 +70,12 @@ class LittleBuildTask(LittleTask):
 class LittleCarryTask(LittleTask):
     def __init__(self, village):
         LittleTask.__init__(self, village)
+        self.name = "carryTask"
+        self.dependantTask = None
+        self.material = ""
         
+    def execute(self):
+        self.status = "done"
         
 class LittleWorkTask(LittleTask):
     def __init__(self, village):

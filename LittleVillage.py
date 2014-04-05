@@ -73,11 +73,11 @@ if __name__ == '__main__':
     
     lbt = LittleBuildTask(lv, "warehouse")
     lv.toDoList.append(lbt)
-    lbt = LittleBuildTask(lv, "house")
-    lv.toDoList.append(lbt)
-    lbt = LittleBuildTask(lv, "house")
-    lv.toDoList.append(lbt)
-    for i in range(25):
+    #~ lbt = LittleBuildTask(lv, "house")
+    #~ lv.toDoList.append(lbt)
+    #~ lbt = LittleBuildTask(lv, "house")
+    #~ lv.toDoList.append(lbt)
+    for i in range(50):
         lv.iterate()
         
     print lv
