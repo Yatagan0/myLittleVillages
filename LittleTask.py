@@ -59,7 +59,12 @@ class LittleBuildTask(LittleTask):
             self.status = "waiting for materials"
         elif self.status == "waiting for materials":
             #check if remaining materials
-            self.status = "building"
+            canContinue = True
+            for m in self.materials:
+                if self.materials[m] > 0:
+                    canContinue = False
+            if canContinue:
+                self.status = "building"
         elif self.status == "building":
             #check if remaining time
             self.village.buildings.append(self.building)
@@ -75,7 +80,13 @@ class LittleCarryTask(LittleTask):
         self.material = ""
         
     def execute(self):
-        self.status = "done"
+        if self.status == "to start":
+            self.status = "getting material"
+        elif self.status == "getting material":
+            self.status = "carrying material"
+        elif self.status == "carrying material":
+            self.dependantTask.materials[self.material] -= 1
+            self.status = "done"
         
 class LittleWorkTask(LittleTask):
     def __init__(self, village):
