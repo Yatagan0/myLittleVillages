@@ -18,8 +18,8 @@ class LittleVillager:
         
     def selectTask(self, taskList):
         for t in taskList:
-            #~ print t.name, "in state ", t.state
-            if t.state== "to do":
+            print t.name, "in state ", t.state
+            if t.state== "to do" and t.canPerform():
                 print self.name, " executing ", t.name
                 self.busy=True
                 self.task = t
@@ -41,10 +41,13 @@ class LittleVillager:
     def performTask(self):
         toReturn = self.task.execute()
         if toReturn:
+            print "finished"
             self.task.state = "to do"
-            #~ print self.task.name, " status ", self.task.status
+            print self.task.name, " status ", self.task.status
             self.busy = False
             return toReturn
+        print "not finished"
+        return []
 
 if __name__ == '__main__':
     lv = LittleVillager()

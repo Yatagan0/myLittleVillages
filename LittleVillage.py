@@ -12,6 +12,7 @@ class LittleVillage:
         self.buildings=[]
         self.globalPosition = [0.,0.]
         self.name = "defaultVillageName"
+        self.carrying = ""
         
     def readVillage(self, file):
         print "bla"
@@ -45,7 +46,7 @@ class LittleVillage:
         for v in self.villagers:
             s += "\n"+v.name+ " "+ str(v.position)
         for b in self.buildings:
-            s += "\n"+b.name
+            s += "\n"+b.name+ " "+ str(b.position)
         return s
         
     def positionFree(self, x, y):
@@ -78,7 +79,7 @@ class LittleVillage:
 
 if __name__ == '__main__':
     lv = LittleVillage()
-    lv.createRandomVillage(10)
+    lv.createRandomVillage(1)
     
     lbt = LittleBuildTask(lv, "warehouse")
     lv.toDoList.append(lbt)

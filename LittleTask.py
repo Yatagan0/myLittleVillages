@@ -12,7 +12,9 @@ class LittleTask:
 	
     def execute(self):
         print "executing default"
-        
+
+    def canPerform(self):
+        return True
 
 
 class LittleBuildTask(LittleTask):
@@ -60,6 +62,7 @@ class LittleBuildTask(LittleTask):
                     self.village.toDoList.append(lct)
                
             self.status = "waiting for materials"
+            return True
         elif self.status == "waiting for materials":
             #check if remaining materials
             canContinue = True
@@ -68,10 +71,12 @@ class LittleBuildTask(LittleTask):
                     canContinue = False
             if canContinue:
                 self.status = "building"
+            return True
         elif self.status == "building":
             #check if remaining time
             self.village.buildings.append(self.building)
             self.status = "done"
+            return True
         return toReturn
             
 
@@ -88,16 +93,22 @@ class LittleCarryTask(LittleTask):
         if self.status == "to start":
             self.goalBuilding = self.getClosestBuilding("warehouse", self.destination, 1)
             self.goalBuilding = self.goalBuilding[0]
-            print "goal position ",self.goalBuilding.position
+            print "goal position ",self.goalBuilding.name ," ",self.goalBuilding.position
             self.status = "getting material"
+            return True
         elif self.status == "getting material":
             if self.villager.goto(self.goalBuilding.position):
                 self.status = "carrying material"
+                self.villager.carrying = self.material
+                print "after goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
+                return True
         elif self.status == "carrying material":
             if self.villager.goto(self.destination):
-                self.status = "carrying material"
-            self.dependantTask.materials[self.material] -= 1
-            self.status = "done"
+                self.dependantTask.materials[self.material] -= 1
+                self.villager.carrying = ""
+                self.status = "done"
+                print "after goto 2 ",self.goalBuilding.name ," ",self.goalBuilding.position
+                return True
             
     def getClosestBuilding(self, buildingName, destination, nb):
         listToSort = []
@@ -110,7 +121,9 @@ class LittleCarryTask(LittleTask):
         result = []
         for i in range(min(nb, len(sortedList))):
             result.append(sortedList[i][0])
-
+        for r in result:
+            print r.name," ",r.position
+        
         return result
         
 class LittleWorkTask(LittleTask):
