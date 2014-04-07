@@ -31,14 +31,19 @@ class LittleVillage:
             self.villagers.append(lv)
             
         entrepot = LittleBuilding()
-        entrepot.name = "Warehouse"
+        entrepot.name = "warehouse"
         self.buildings.append(entrepot)
+        
+        entrepot2 = LittleBuilding()
+        entrepot2.name = "warehouse"
+        entrepot2.position=[1, 0]
+        self.buildings.append(entrepot2)
         
     def __str__(self):
         s = "This is the village of "+self.name
         s += "\ninhabitants :"
         for v in self.villagers:
-            s += "\n"+v.name+ " "+ str(v.gender)
+            s += "\n"+v.name+ " "+ str(v.position)
         for b in self.buildings:
             s += "\n"+b.name
         return s
@@ -46,15 +51,19 @@ class LittleVillage:
     def positionFree(self, x, y):
         for b in self.buildings:
             if b.position[0] == x and b.position[1] == y :
+                print "position ",x, " ",y, "not free : ",b.name
                 return False
         return True
+
+
         
     def iterate(self):
         for p in self.villagers:
             if not p.busy:
-                #~ print "test"
+                #~ print "select"
                 p.selectTask(self.toDoList)
             else:
+                #~ print "perform"
                 toDoNow = p.performTask()
                
                 
@@ -63,7 +72,7 @@ class LittleVillage:
         inds.reverse()
         for i in inds:
             if self.toDoList[i].status == "done":
-                print self.toDoList[i].name, " finished"
+                #~ print self.toDoList[i].name, " finished"
                 self.toDoList.pop(i)
             
 
@@ -78,6 +87,7 @@ if __name__ == '__main__':
     #~ lbt = LittleBuildTask(lv, "house")
     #~ lv.toDoList.append(lbt)
     for i in range(50):
+        #~ print "iterate"
         lv.iterate()
         
     print lv

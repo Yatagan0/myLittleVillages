@@ -1,3 +1,4 @@
+import math
 
 start = "B.C.D.F.G.H.J.L.M.N.P.R.S.T.V.Qu.Ch.St"
 start = start.split('.')
@@ -12,4 +13,8 @@ for f in start:
         allU.append((f+t))
         allL.append((f+t).lower())
         
+        
+def distance(p1, p2):
+    #~ return 0
+    return math.sqrt((p1[0] - p2[0])*(p1[0] - p2[0])+(p1[1] - p2[1])*(p1[1] - p2[1]))
     

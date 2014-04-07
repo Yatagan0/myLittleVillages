@@ -43,6 +43,7 @@ class LittleBuildTask(LittleTask):
             posY = 0
             size = 0
             while( not self.village.positionFree(posX, posY)):
+                print "r"
                 size +=1
                 posX = random.randint(-size, size)
                 posY= random.randint(-size, size)
@@ -54,6 +55,7 @@ class LittleBuildTask(LittleTask):
                 for i in range(self.materials[m]):
                     lct = LittleCarryTask(self.village)
                     lct.material = m
+                    lct.destination = self.building.position 
                     lct.dependantTask = self
                     self.village.toDoList.append(lct)
                
@@ -79,15 +81,37 @@ class LittleCarryTask(LittleTask):
         self.name = "carryTask"
         self.dependantTask = None
         self.material = ""
+        self.destination = [0, 0]
         
     def execute(self):
+        #~ print self.name, " executing"
         if self.status == "to start":
+            self.goalBuilding = self.getClosestBuilding("warehouse", self.destination, 1)
+            self.goalBuilding = self.goalBuilding[0]
+            print "goal position ",self.goalBuilding.position
             self.status = "getting material"
         elif self.status == "getting material":
-            self.status = "carrying material"
+            if self.villager.goto(self.goalBuilding.position):
+                self.status = "carrying material"
         elif self.status == "carrying material":
+            if self.villager.goto(self.destination):
+                self.status = "carrying material"
             self.dependantTask.materials[self.material] -= 1
             self.status = "done"
+            
+    def getClosestBuilding(self, buildingName, destination, nb):
+        listToSort = []
+        for b in self.village.buildings:
+            if b.name == buildingName:
+                listToSort.append([b, 1*utils.distance(self.villager.position, b.position) + 1*utils.distance(destination, b.position) ])
+        #~ print "non sorted list ",listToSort
+        sortedList = sorted(listToSort,  key=lambda tup: tup[1])
+        #~ print "sorted list ",sortedList 
+        result = []
+        for i in range(min(nb, len(sortedList))):
+            result.append(sortedList[i][0])
+
+        return result
         
 class LittleWorkTask(LittleTask):
     def __init__(self, village):
