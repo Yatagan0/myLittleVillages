@@ -9,11 +9,12 @@ class LittleTask:
         self.village=village
         self.name ="defaultTaskName"
         self.villager = None
-	
+ 
     def execute(self):
         print "executing default"
 
     def canPerform(self):
+        print "default perform"
         return True
 
 
@@ -78,6 +79,16 @@ class LittleBuildTask(LittleTask):
             self.status = "done"
             return True
         return toReturn
+        
+    def canPerform(self):
+        if self.status == "waiting for materials":
+            for m in self.materials:
+                if self.materials[m] > 0:
+                    print "cannot perform"
+                    return False
+        print "can perform"
+        return True
+
             
 
 class LittleCarryTask(LittleTask):
@@ -97,18 +108,23 @@ class LittleCarryTask(LittleTask):
             self.status = "getting material"
             return True
         elif self.status == "getting material":
+            print "before goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.goalBuilding.position):
                 self.status = "carrying material"
                 self.villager.carrying = self.material
                 print "after goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
                 return True
+            print "after goto 1BIS ",self.goalBuilding.name ," ",self.goalBuilding.position
         elif self.status == "carrying material":
+            print "before goto2 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.destination):
+            #~ if self.villager.goto(self.goalBuilding.position):
                 self.dependantTask.materials[self.material] -= 1
                 self.villager.carrying = ""
                 self.status = "done"
                 print "after goto 2 ",self.goalBuilding.name ," ",self.goalBuilding.position
                 return True
+            print "after goto 2BIS ",self.goalBuilding.name ," ",self.goalBuilding.position
             
     def getClosestBuilding(self, buildingName, destination, nb):
         listToSort = []

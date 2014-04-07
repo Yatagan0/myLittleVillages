@@ -79,7 +79,7 @@ class LittleVillage:
 
 if __name__ == '__main__':
     lv = LittleVillage()
-    lv.createRandomVillage(1)
+    lv.createRandomVillage(10)
     
     lbt = LittleBuildTask(lv, "warehouse")
     lv.toDoList.append(lbt)

@@ -18,7 +18,7 @@ class LittleVillager:
         
     def selectTask(self, taskList):
         for t in taskList:
-            print t.name, "in state ", t.state
+            #~ print t.name, "in state ", t.state
             if t.state== "to do" and t.canPerform():
                 print self.name, " executing ", t.name
                 self.busy=True
@@ -28,13 +28,20 @@ class LittleVillager:
                 return
             
     def goto(self, target):
+        #~ return True
+        print "target ", target
         d = utils.distance(self.position, target)
+        print "distance ", d
+        print "target ", target
         if d < self.speed:
-            self.position = target
+            self.position[0] = target[0]
+            self.position[1] = target[1]
             return True
         else:
             self.position[0] += self.speed*(target[0] - self.position[0])/d
+            #~ self.position[1] = target[1]
             self.position[1] += self.speed*(target[1] - self.position[1])/d
+            print "target ", target
             return False
 
         
@@ -43,10 +50,10 @@ class LittleVillager:
         if toReturn:
             print "finished"
             self.task.state = "to do"
-            print self.task.name, " status ", self.task.status
+            #~ print self.task.name, " status ", self.task.status
             self.busy = False
             return toReturn
-        print "not finished"
+        #~ print self.task.name, "not finished"
         return []
 
 if __name__ == '__main__':
