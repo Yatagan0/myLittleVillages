@@ -11,6 +11,7 @@ class LittleVillager:
         self.task = None
         self.position = [0., 0.]
         self.speed = 1.0
+	self.money = 0.0
         
     def generate(self):
         self.name = utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] + " "+utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] +utils.allL[random.randint(0, len(utils.allL)-1)]
@@ -20,7 +21,7 @@ class LittleVillager:
         for t in taskList:
             #~ print t.name, "in state ", t.state
             if t.state== "to do" and t.canPerform():
-                print self.name, " executing ", t.name
+                #~ print self.name, " executing ", t.name
                 self.busy=True
                 self.task = t
                 t.villager = self
@@ -29,10 +30,10 @@ class LittleVillager:
             
     def goto(self, target):
         #~ return True
-        print "target ", target
+        #~ print "target ", target
         d = utils.distance(self.position, target)
-        print "distance ", d
-        print "target ", target
+        #~ print "distance ", d
+        #~ print "target ", target
         if d < self.speed:
             self.position[0] = target[0]
             self.position[1] = target[1]
@@ -41,14 +42,14 @@ class LittleVillager:
             self.position[0] += self.speed*(target[0] - self.position[0])/d
             #~ self.position[1] = target[1]
             self.position[1] += self.speed*(target[1] - self.position[1])/d
-            print "target ", target
+            #~ print "target ", target
             return False
 
         
     def performTask(self):
         toReturn = self.task.execute()
         if toReturn:
-            print "finished"
+            #~ print "finished"
             self.task.state = "to do"
             #~ print self.task.name, " status ", self.task.status
             self.busy = False
