@@ -8,7 +8,8 @@ class LittleTask:
         self.status = "to start"
         self.village=village
         self.name ="defaultTaskName"
-        
+        self.villager = None
+	
     def execute(self):
         print "executing default"
         

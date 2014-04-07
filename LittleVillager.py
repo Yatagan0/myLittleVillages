@@ -21,6 +21,7 @@ class LittleVillager:
                 print self.name, " executing ", t.name
                 self.busy=True
                 self.task = t
+                t.villager = self
                 self.task.state = "in progress"
                 return
             
@@ -29,6 +30,7 @@ class LittleVillager:
         
     def performTask(self):
         toReturn = self.task.execute()
+    if toReturn:
         self.task.state = "to do"
         #~ print self.task.name, " status ", self.task.status
         self.busy = False
