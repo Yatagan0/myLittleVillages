@@ -59,6 +59,7 @@ class LittleVillage:
 
         
     def iterate(self):
+        print "--------------------"
         for p in self.villagers:
             if not p.busy:
                 #~ print "select"

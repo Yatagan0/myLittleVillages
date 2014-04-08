@@ -21,7 +21,7 @@ class LittleVillager:
         for t in taskList:
             #~ print t.name, "in state ", t.state
             if t.state== "to do" and t.canPerform():
-                #~ print self.name, " executing ", t.name
+                print self.name, " executing ", t.name, " ", t.id
                 self.busy=True
                 self.task = t
                 t.villager = self
@@ -49,6 +49,7 @@ class LittleVillager:
     def performTask(self):
         toReturn = self.task.execute()
         if toReturn:
+            print self.name, " finished ", self.task.name, " ", self.task.id
             #~ print "finished"
             self.task.state = "to do"
             #~ print self.task.name, " status ", self.task.status

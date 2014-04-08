@@ -70,8 +70,8 @@ def displayVillage(village):
 lv = LittleVillage()
 lv.createRandomVillage(10)
 
-lbt = LittleBuildTask(lv, "warehouse")
-lv.toDoList.append(lbt)
+#~ lbt = LittleBuildTask(lv, "warehouse")
+#~ lv.toDoList.append(lbt)
 lbt = LittleBuildTask(lv, "house")
 lv.toDoList.append(lbt)
 lbt = LittleBuildTask(lv, "house")

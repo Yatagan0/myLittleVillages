@@ -2,6 +2,9 @@ import utils, random
 
 from LittlePlace import *
 
+global taskID 
+taskID = 0
+
 class LittleTask:
     def __init__(self, village):
         self.state = "to do"
@@ -10,6 +13,9 @@ class LittleTask:
         self.name ="defaultTaskName"
         self.villager = None
         self.salary = 0.0
+        global taskID
+        self.id = taskID
+        taskID += 1
  
     def execute(self):
         print "executing default"
