@@ -22,7 +22,8 @@ class LittleTask:
 
     def canPerform(self):
         #~ print "default perform"
-        return True
+	return self.status != "done" and self.state == "to do"
+        #~ return True
 
 
 class LittleBuildTask(LittleTask):
@@ -100,13 +101,13 @@ class LittleBuildTask(LittleTask):
         return toReturn
         
     def canPerform(self):
-        if self.status == "waiting for materials":
+        if self.status == "waiting for materials" and self.state == "to do":
             for m in self.materials:
                 if self.materials[m] > 0:
                     #~ print "cannot perform"
                     return False
         #~ print "can perform"
-        return True
+        return self.status != "done" and self.state == "to do"
 
             
 
