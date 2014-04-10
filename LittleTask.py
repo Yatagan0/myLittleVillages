@@ -32,6 +32,7 @@ class LittleBuildTask(LittleTask):
         self.name = name
         self.materials = {}
         self.building = None
+        self.isBuilding = True
         
         if name == "warehouse":
             self.remainingTime = 10
@@ -41,41 +42,54 @@ class LittleBuildTask(LittleTask):
             self.remainingTime = 10
             self.materials["wood"] = 8
             self.materials["stone"] = 8
+        elif name == "field":
+            self.remainingTime = 3
+            self.isBuilding = False
+            self.materials["wood"] = 1
+        elif name == "forest":
+            self.remainingTime = 1
+            self.isBuilding = False
+            
         
         self.salary = 1 + 1*self.materials["wood"]  + 1*self.materials["wood"]  + 1*self.remainingTime
             
     def execute(self):
         #~ print self.name, " executing"
-        toReturn = {}
         if self.status == "to start":
             #select position
             #add bring items
-            self.building= LittleBuilding()
-            self.building.name = self.name+" - in construction"
-            posX = 0
-            posY = 0
-            size = 0
-            while( not self.village.positionFree(posX, posY)):
-                size +=1
-                posX = random.randint(-size, size)
-                posY= random.randint(-size, size)
-               
-            self.building.position = [posX, posY]
-            self.village.buildings.append(self.building)
-            print "end pos for ", self.name, " ", self.building.position 
+            if self.building == None:
+                self.building= LittleBuilding()
+                self.building.name = self.name+" - in construction"
+                posX = 0
+                posY = 0
+                size = 0
+                while( not self.village.positionFree(posX, posY)):
+                    size +=1
+                    posX = random.randint(-size, size)
+                    posY= random.randint(-size, size)
+                   
+                self.building.position = [posX, posY]
+                print "end pos for ", self.name, " ", self.building.position 
+                if self.isBuilding:
+                    self.village.buildings.append(self.building)
+                else:
+                    self.village.places.append(self.building)
+            if self.villager.goto(self.building.position):
+
         
-            for m in self.materials:
-                for i in range(self.materials[m]):
-                    lct = LittleCarryTask(self.village)
-                    lct.material = m
-                    lct.destination = self.building.position 
-                    lct.dependantTask = self
-                    lct.salary = 1
-                    self.village.toDoList.append(lct)
-               
-            self.status = "waiting for materials"
-            self.villager.money += 1
-            return True
+                for m in self.materials:
+                    for i in range(self.materials[m]):
+                        lct = LittleCarryTask(self.village)
+                        lct.material = m
+                        lct.destination = self.building.position 
+                        lct.dependantTask = self
+                        lct.salary = 1
+                        self.village.toDoList.append(lct)
+                   
+                self.status = "waiting for materials"
+                self.villager.money += 1
+                return True
         elif self.status == "waiting for materials":
             #check if remaining materials
             canContinue = True
@@ -98,7 +112,7 @@ class LittleBuildTask(LittleTask):
                 return True
             return True
                 
-        return toReturn
+        return False
         
     def canPerform(self):
         if self.status == "waiting for materials" and self.state == "to do":
