@@ -31,8 +31,7 @@ class LittleVillage:
             lv.generate()
             self.villagers.append(lv)
             
-        entrepot = LittleBuilding()
-        entrepot.name = "warehouse"
+        entrepot = LittleBuilding("warehouse")
         self.buildings.append(entrepot)
         
         #~ entrepot2 = LittleBuilding()

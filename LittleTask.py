@@ -59,8 +59,8 @@ class LittleBuildTask(LittleTask):
             #select position
             #add bring items
             if self.building == None:
-                self.building= LittleBuilding()
-                self.building.name = self.name+" - in construction"
+                self.building= LittleBuilding(self.name)
+                self.building.state =  "in construction"
                 posX = 0
                 posY = 0
                 size = 0
@@ -104,7 +104,7 @@ class LittleBuildTask(LittleTask):
             self.remainingTime -=1
             self.villager.money += 1
             if self.remainingTime == 0:
-                self.building.name = self.name
+                self.building.state = "ok"
                 
                 print self.building.name, "finished in ", self.building.position
                 self.status = "done"
