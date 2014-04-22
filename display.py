@@ -52,15 +52,30 @@ def printPeople(bg, people, pos):
     bg[pixel[0]:(pixel[0]+rows), pixel[1]:(cols+pixel[1]) ] = people 
     
 def displayVillage(village):
-    bg = cv2.imread('plain.jpg')#,cv2.IMREAD_UNCHANGED)
-    building  = cv2.imread('building.jpg')#,cv2.IMREAD_UNCHANGED)
+    bg = cv2.imread('plain_s.jpg')#,cv2.IMREAD_UNCHANGED)
+    building  = cv2.imread('building_s.jpg')#,cv2.IMREAD_UNCHANGED)
     people  = cv2.imread('people.jpg')#,cv2.IMREAD_UNCHANGED)
-    place  = cv2.imread('field.jpg')
+    place  = cv2.imread('field_s.jpg')
+    materials  = cv2.imread('materials.jpg')
     
     for b in village.buildings:
-        printBuilding(bg, building, b.position)
-    for p in village.places:
-        printBuilding(bg, place, p.position)       
+        if b.state == "in construction":
+            printBuilding(bg, materials, b.position)
+        else:
+            if b.type == "storage":
+                printBuilding(bg, building, b.position)
+            elif b.type == "house":
+                printBuilding(bg, building, b.position)
+            elif b.type == "field":
+                printBuilding(bg, place, b.position)
+            elif b.type == "production":
+                printBuilding(bg, building, b.position)
+            #~ printBuilding(bg, building, b.position)
+    #~ for p in village.places:
+        #~ if p.state == "in construction":
+            #~ printBuilding(bg, materials, p.position)
+        #~ else:
+            #~ printBuilding(bg, place, p.position)       
     for p in village.villagers:
         printPeople(bg, people, p.position)
         
