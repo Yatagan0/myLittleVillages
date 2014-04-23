@@ -16,6 +16,22 @@ class LittlePlace:
         global taskID
         self.id = taskID
         taskID += 1
+        
+    def getMaterial(self, mat, num):
+        if mat not in self.content.keys():
+            self.content[mat] = 0
+            return False
+        if self.content[mat] < num:
+            return False
+        self.content[mat] -= num
+        return True
+        
+    def setMaterial(self, mat, num):
+        #Todo check capacity
+        if mat not in self.content.keys():
+            self.content[mat] = num
+        else:
+            self.content[mat] += num
 
 
 class LittleExternalPlace(LittlePlace):
@@ -34,6 +50,7 @@ class LittleBuilding(LittlePlace):
         self.demand = []
         
         self.productionTask = []
+        
         
         
 class LittleStorage(LittleBuilding):

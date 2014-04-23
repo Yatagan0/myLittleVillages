@@ -169,6 +169,8 @@ class LittleCarryTask(LittleTask):
             if self.villager.goto(self.initial.position):
                 self.status = "carrying material"
                 self.villager.carrying = self.material
+                self.initial.getMaterial(self.material, 1)
+                #~ self.initial.content[self.material] -= 1
                 #~ print "after goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
                 
             #~ print "after goto 1BIS ",self.goalBuilding.name ," ",self.goalBuilding.position
@@ -176,7 +178,7 @@ class LittleCarryTask(LittleTask):
             #~ print "before goto2 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.goal.position):
             #~ if self.villager.goto(self.goalBuilding.position):
-                self.dependantTask.materials[self.material] -= 1
+                self.initial.setMaterial(self.material, 1)
                 self.villager.carrying = ""
                 print self.material, "carried in ", self.goal.name
                 self.status = "done"
