@@ -60,7 +60,8 @@ class LittleWorkshop(LittleBuilding):
             self.addProductionTask()
             
     def addProductionTask(self):
-        pass
+        task = LittleWorkTask(self)
+        self.village.toDoList.append(task)
         
 def newBuilding(type, name, position, state, village):
     #~ print "new building"

@@ -22,7 +22,7 @@ class LittleTask:
 
     def canPerform(self):
         #~ print "default perform"
-	return self.status != "done" and self.state == "to do"
+        return self.status != "done" and self.state == "to do"
         #~ return True
 
 
@@ -86,6 +86,7 @@ class LittleBuildTask(LittleTask):
                     self.pos = []
                 else:
                     self.building = newBuilding(self.type, self.name, self.pos, "in construction", self.village)
+                    
                     #~ self.building= LittleBuilding(self.name, self.village)
                     #~ self.building.state =  "in construction"
                     #~ self.building.position = self.pos
@@ -96,9 +97,9 @@ class LittleBuildTask(LittleTask):
 
                     for m in self.materials:
                         for i in range(self.materials[m]):
-                            lct = LittleCarryTask(self.village)
-                            lct.material = m
-                            lct.destination = self.building.position 
+                            lct = LittleCarryTask(self.village, "warehouse", self.building, m)
+                            #~ lct.material = m
+                            #~ lct.destination = self.building.position 
                             lct.dependantTask = self
                             lct.salary = 1
                             self.village.toDoList.append(lct)
@@ -142,24 +143,30 @@ class LittleBuildTask(LittleTask):
             
 
 class LittleCarryTask(LittleTask):
-    def __init__(self, village):
+    def __init__(self, village, initial, goal, material):
         LittleTask.__init__(self, village)
         self.name = "carryTask"
         self.dependantTask = None
-        self.material = ""
-        self.destination = [0, 0]
+        self.material = material
+        self.goal = goal
+        self.initial = initial
         
     def execute(self):
         #~ print self.name, " executing"
         if self.status == "to start":
-            self.goalBuilding = self.getClosestBuilding("warehouse", self.destination, 1)
-            self.goalBuilding = self.goalBuilding[0]
+            #both can't be string
+            if isinstance(self.goal, basestring):
+                self.goal = self.getClosestBuilding(self.goal, self.initial.position, 1)
+                self.goal = self.goal[0]
+            elif isinstance(self.initial, basestring):
+                self.initial = self.getClosestBuilding(self.initial, self.goal.position, 1)
+                self.initial = self.initial[0]
             #~ print "goal position ",self.goalBuilding.name ," ",self.goalBuilding.position
             self.status = "getting material"
             
         elif self.status == "getting material":
             #~ print "before goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
-            if self.villager.goto(self.goalBuilding.position):
+            if self.villager.goto(self.initial.position):
                 self.status = "carrying material"
                 self.villager.carrying = self.material
                 #~ print "after goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
@@ -167,11 +174,11 @@ class LittleCarryTask(LittleTask):
             #~ print "after goto 1BIS ",self.goalBuilding.name ," ",self.goalBuilding.position
         elif self.status == "carrying material":
             #~ print "before goto2 ",self.goalBuilding.name ," ",self.goalBuilding.position
-            if self.villager.goto(self.destination):
+            if self.villager.goto(self.goal.position):
             #~ if self.villager.goto(self.goalBuilding.position):
                 self.dependantTask.materials[self.material] -= 1
                 self.villager.carrying = ""
-                print self.material, "carried in ", self.destination
+                print self.material, "carried in ", self.goal.name
                 self.status = "done"
                 self.villager.money += self.salary
                 #~ print "after goto 2 ",self.goalBuilding.name ," ",self.goalBuilding.position
@@ -196,8 +203,30 @@ class LittleCarryTask(LittleTask):
         return result
         
 class LittleWorkTask(LittleTask):
-    def __init__(self, village):
-        LittleTask.__init__(self, village)
+    def __init__(self, workshop):
+        LittleTask.__init__(self, workshop.village)
+        self.workshop = workshop
+        self.remainingTime = self.workshop.productionTime
+        
+    def execute(self):
+        if self.status == "to start":
+            self.status = "producing"
+            return False
+        elif self.status == "producing":
+            if self.remainingTime > 0:
+                self.remainingTime -=1
+                return False
+            
+
+            lct = LittleCarryTask(self.village, self.workshop,  "warehouse",  self.workshop.production)
+            lct.dependantTask = self
+            lct.salary = 1
+            self.village.toDoList.append(lct)
+            
+            self.status = "done"
+            #~ self.villager.money += self.salary
+            return True
+        
         
 if __name__ == '__main__':
     lbt = LittleBuildTask()
