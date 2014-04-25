@@ -4,22 +4,43 @@ from LittleVillager import *
 from LittleTask import *
 from LittlePlace import *
 
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+
 
 class LittleVillage:
     def __init__(self):
         self.toDoList = []
         self.villagers = []
-        self.places=[]
+        #~ self.places=[]
         self.buildings=[]
-        self.globalPosition = [0.,0.]
+        #~ self.globalPosition = [0.,0.]
         self.name = "defaultVillageName"
-        self.carrying = ""
+        #~ self.carrying = ""
         
-    def readVillage(self, file):
-        print "bla"
+    def readVillage(self, path):
+        tree =  ET.parse(path)
+        root = tree.getroot()
+        mainAttrib = root.attrib
+        self.name = mainAttrib["name"]
         
-    def writeVillage(self, file):
-        print "bla"
+    def writeVillage(self, path):
+        root = ET.Element('village')
+        root.set("name", self.name)
+        for v in self.villagers:
+            v.writeVillager(root)
+        #~ for r in self.recipes:
+            #~ r.addSubElement(root)
+            
+        rough_string = ET.tostring(root, 'utf-8')
+        reparsed = minidom.parseString(rough_string)
+        towrite = reparsed.toprettyxml(indent="  ")
+        #print towrite
+        file = open(path, "w")
+        
+        file.write(towrite)
+        
+        file.close()
         
     def createRandomVillage(self, num):
         startName = utils.allU 

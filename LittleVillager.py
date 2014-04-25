@@ -1,5 +1,5 @@
 import utils, random
-
+import xml.etree.ElementTree as ET
 
 
 class LittleVillager:
@@ -12,6 +12,18 @@ class LittleVillager:
         self.position = [0., 0.]
         self.speed = 0.04 #1.0
         self.money = 0.0
+        
+    def writeVillager(self, root):
+        villager = ET.SubElement(root, 'villager')
+        villager.set("name", self.name)
+        villager.set("gender", str(self.gender))
+        villager.set("busy", str(self.busy))
+        villager.set("task", str(self.task.id))
+        villager.set("positionX", str(self.position[0]))
+        villager.set("positionY", str(self.position[1]))
+        villager.set("speed", str(self.speed))
+        villager.set("money", str(self.money))
+
         
     def generate(self):
         self.name = utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] + " "+utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] +utils.allL[random.randint(0, len(utils.allL)-1)]
