@@ -21,7 +21,7 @@ class LittleVillager:
         for t in taskList:
             #~ print t.name, "in state ", t.state
             if t.state== "to do" and t.canPerform():
-                print self.name, " executing ", t.name, " ", t.id
+                #~ print self.name, " executing ", t.name, " ", t.id
                 self.busy=True
                 self.task = t
                 t.villager = self

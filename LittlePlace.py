@@ -1,4 +1,5 @@
 import utils, random
+#~ from LittleTask import LittleWorkTask
 
 global taskID 
 taskID = 0
@@ -36,8 +37,11 @@ class LittlePlace:
         
     def __str__(self):
         s = self.name+ " "+ str(self.position)
+        if not self.state == "ok":
+                s+= " ("+self.state+")"
         for m in self.content.keys():
             s += "\n  "+m+" "+str(self.content[m])
+            
         return s
 
 
@@ -84,19 +88,20 @@ class LittleWorkshop(LittleBuilding):
             self.addProductionTask()
             
     def addProductionTask(self):
-        task = LittleWorkTask(self)
-        self.village.toDoList.append(task)
+        #~ task = LittleWorkTask(self)
+        #~ self.village.toDoList.append(task)
+        self.village.addProductionTask(self)
         
 def newBuilding(type, name, position, state, village):
     #~ print "new building"
     if type == "storage":
         b =  LittleStorage(name, village)
     elif type == "house":
-        b =  LittleWorkshop(name, village)
+        b =  LittleHouse(name, village)
     elif type == "field":
         b = LittleExternalPlace(name, village)
     elif type == "production":
-        b =  LittleHouse(name, village)
+        b =  LittleWorkshop(name, village)
     else:
         print "warning, ",type," not recognized as a place type"
         b = LittlePlace(village)

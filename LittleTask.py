@@ -165,13 +165,15 @@ class LittleCarryTask(LittleTask):
         elif self.status == "getting material":
             #~ print "before goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.initial.position):
-                self.status = "carrying material"
-                self.villager.carrying = self.material
-                self.initial.getMaterial(self.material, 1)
-                #~ self.initial.content[self.material] -= 1
-                #~ print "after goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
                 
-            #~ print "after goto 1BIS ",self.goalBuilding.name ," ",self.goalBuilding.position
+                if self.initial.getMaterial(self.material, 1):
+                    self.status = "carrying material"
+                    self.villager.carrying = self.material
+                else:
+                    print "there is no ",self.material," here"
+                    self.status = "fail"
+                    return True
+
         elif self.status == "carrying material":
             #~ print "before goto2 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.goal.position):
@@ -212,18 +214,22 @@ class LittleWorkTask(LittleTask):
         
     def execute(self):
         if self.status == "to start":
-            self.status = "producing"
-            return False
+            if self.villager.goto(self.workshop.position):
+                self.status = "producing"
+                return False
         elif self.status == "producing":
             if self.remainingTime > 0:
+                print "producing ",self.workshop.production
                 self.remainingTime -=1
                 return False
             
-
+            print "produced ",self.workshop.production
+            self.workshop.setMaterial(self.workshop.production, 1)
             lct = LittleCarryTask(self.village, self.workshop,  "warehouse",  self.workshop.production)
             #~ lct.dependantTask = self
             lct.salary = 1
             self.village.toDoList.append(lct)
+            self.village.addProductionTask(self.workshop)
             
             self.status = "done"
             #~ self.villager.money += self.salary

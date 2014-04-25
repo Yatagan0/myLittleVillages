@@ -1,8 +1,9 @@
 import random, utils
 
 from LittleVillager import *
-from LittlePlace import *
 from LittleTask import *
+from LittlePlace import *
+
 
 class LittleVillage:
     def __init__(self):
@@ -33,7 +34,9 @@ class LittleVillage:
             
         newBuilding("storage", "warehouse", [0, 0], "ok", self)
         self.buildings[0].setMaterial("stone", 40)
-        self.buildings[0].setMaterial("wood", 40)
+        self.buildings[0].setMaterial("wood", 10)
+        newBuilding("production", "woodcutter", [1, 1], "ok", self)
+        self.buildings[1].startProducing("wood", 3, 1)
         
     def __str__(self):
         s = "This is the village of "+self.name
@@ -52,7 +55,9 @@ class LittleVillage:
                 return False
         return True
 
-
+    def addProductionTask(self, workshop):
+        lwt = LittleWorkTask(workshop)
+        self.toDoList.append(lwt)
         
     def iterate(self):
         print "--------------------"
@@ -72,6 +77,13 @@ class LittleVillage:
             if self.toDoList[i].status == "done":
                 #~ print self.toDoList[i].name, " finished"
                 self.toDoList.pop(i)
+            elif self.toDoList[i].status == "fail":
+                #~ if random.randint(0, 9) == 0:
+                    t = self.toDoList.pop(i)
+                    t.status = "to start"
+                    self.toDoList.append(t)
+                    print "postponning task ",t.id
+                    
             
 
 if __name__ == '__main__':
