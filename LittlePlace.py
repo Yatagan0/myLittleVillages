@@ -56,18 +56,30 @@ class LittleBuilding(LittlePlace):
         LittlePlace.__init__(self, village)
         self.type = "defaultBuilding"
         self.name = name
-        self.capacity = 0
-        
-        self.demand = []
-        
-        self.productionTask = []
-        
+
         
         
 class LittleStorage(LittleBuilding):
     def __init__(self, name, village):
         LittleBuilding.__init__(self, name, village)
         self.type = "storage"
+
+#someone gets material from storage
+    def getMaterial(self, mat, num):
+        result = LittlePlace.getMaterial(self, mat, num)
+        if not result:
+            neighbors = self.village.getClosestBuilding( "warehouse", self.position, nb=3)
+            for n in neighbors:
+                self.village.addCarryTask( n, self, mat, mandatory = False)
+                print "warehouse ",self.id," is asking ",mat," to warehouse ",n.id
+
+        return result
+
+#someone sets material to storage
+    def setMaterial(self, mat, num):
+        result = LittlePlace.setMaterial(self, mat, num)
+        #~ print "test2"
+        return result
 
 class LittleHouse(LittleBuilding):
     def __init__(self, name, village):

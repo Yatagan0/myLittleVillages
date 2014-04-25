@@ -63,7 +63,7 @@ def displayVillage(village):
             printBuilding(bg, materials, b.position)
         else:
             if b.type == "storage":
-                printBuilding(bg, building, b.position)
+                printBuilding(bg, place, b.position)
             elif b.type == "house":
                 printBuilding(bg, building, b.position)
             elif b.type == "field":
@@ -89,14 +89,21 @@ lv.createRandomVillage(10)
 
 #~ lbt = LittleBuildTask(lv, "warehouse")
 #~ lv.toDoList.append(lbt)
+#~ lbt = LittleBuildTask(lv, "stonecutter")
+#~ lv.toDoList.append(lbt)
+#~ lbt = LittleBuildTask(lv, "warehouse")
+#~ lv.toDoList.append(lbt)
 lbt = LittleBuildTask(lv, "house")
 lv.toDoList.append(lbt)
 lbt = LittleBuildTask(lv, "house")
 lv.toDoList.append(lbt)
 lbt = LittleBuildTask(lv, "house")
 lv.toDoList.append(lbt)
-lbt = LittleBuildTask(lv, "field")
+lbt = LittleBuildTask(lv, "house")
 lv.toDoList.append(lbt)
+#~ lbt = LittleBuildTask(lv, "field")
+#~ lv.toDoList.append(lbt)
+
 
 mustRun = True
 

@@ -18,3 +18,8 @@ def distance(p1, p2):
     #~ return 0
     return math.sqrt((p1[0] - p2[0])*(p1[0] - p2[0])+(p1[1] - p2[1])*(p1[1] - p2[1]))
     
+global time
+time = 0
+def iterateTime():
+    global time
+    time += 1

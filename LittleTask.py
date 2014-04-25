@@ -13,6 +13,9 @@ class LittleTask:
         self.name ="defaultTaskName"
         self.villager = None
         self.salary = 0.0
+        
+        self.mandatory = True
+        
         global taskID
         self.id = taskID
         taskID += 1
@@ -64,7 +67,7 @@ class LittleBuildTask(LittleTask):
             self.type = "production"
             
         
-        self.salary = 1 + 1*self.materials["wood"]  + 1*self.materials["wood"]  + 1*self.remainingTime
+        self.salary = 1 + 1*self.materials["wood"]  + 1*self.materials["stone"]  + 1*self.remainingTime
             
     def execute(self):
         #~ print self.name, " executing"
@@ -115,7 +118,11 @@ class LittleBuildTask(LittleTask):
                 
                 
                 self.building.state = "ok"
-                
+                if self.building.type == "production":
+                    if self.name == "stonecutter":
+                        self.building.startProducing("stone", 5, 1)
+                    elif self.name == "woodcutter":
+                        self.building.startProducing("wood", 3, 1)
                 print self.building.name, "finished in ", self.building.position
                 self.status = "done"
                 
@@ -154,11 +161,18 @@ class LittleCarryTask(LittleTask):
         if self.status == "to start":
             #both can't be string
             if isinstance(self.goal, basestring):
-                self.goal = self.getClosestBuilding(self.goal, self.initial.position, 1)
-                self.goal = self.goal[0]
+                #~ self.goallist = self.getClosestBuilding(self.goal, self.initial.position, 1)
+                self.goallist = self.village.getClosestBuilding(self.goal, self.initial.position)
+
+                if self.goal == self.initial.name:
+                    self.goallist.pop(0)
+                self.goal = self.goallist[0]
             elif isinstance(self.initial, basestring):
-                self.initial = self.getClosestBuilding(self.initial, self.goal.position, 1)
-                self.initial = self.initial[0]
+                #~ self.initiallist = self.getClosestBuilding(self.initial, self.goal.position, 1)
+                self.initiallist = self.village.getClosestBuilding(self.initial, self.goal.position, self.villager.position)
+                if self.goal.name == self.initial and not  self.goal.state == "in construction":
+                    self.initiallist.pop(0)
+                self.initial = self.initiallist[0]
             #~ print "goal position ",self.goalBuilding.name ," ",self.goalBuilding.position
             self.status = "getting material"
             
@@ -190,21 +204,7 @@ class LittleCarryTask(LittleTask):
             #~ print "after goto 2BIS ",self.goalBuilding.name ," ",self.goalBuilding.position
         return False
             
-    def getClosestBuilding(self, buildingName, destination, nb):
-        listToSort = []
-        for b in self.village.buildings:
-            if b.name == buildingName:
-                listToSort.append([b, 1*utils.distance(self.villager.position, b.position) + 1*utils.distance(destination, b.position) ])
-        #~ print "non sorted list ",listToSort
-        sortedList = sorted(listToSort,  key=lambda tup: tup[1])
-        #~ print "sorted list ",sortedList 
-        result = []
-        for i in range(min(nb, len(sortedList))):
-            result.append(sortedList[i][0])
-        #~ for r in result:
-            #~ print r.name," ",r.position
-        
-        return result
+
         
 class LittleWorkTask(LittleTask):
     def __init__(self, workshop):

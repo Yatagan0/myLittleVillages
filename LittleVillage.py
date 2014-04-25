@@ -32,11 +32,12 @@ class LittleVillage:
             lv.generate()
             self.villagers.append(lv)
             
-        newBuilding("storage", "warehouse", [0, 0], "ok", self)
+        newBuilding("storage", "warehouse", [0, -2], "ok", self)
         self.buildings[0].setMaterial("stone", 40)
         self.buildings[0].setMaterial("wood", 10)
-        newBuilding("production", "woodcutter", [1, 1], "ok", self)
+        newBuilding("production", "woodcutter", [0, 4], "ok", self)
         self.buildings[1].startProducing("wood", 3, 1)
+        newBuilding("storage", "warehouse", [0, 3], "ok", self)
         
     def __str__(self):
         s = "This is the village of "+self.name
@@ -59,6 +60,30 @@ class LittleVillage:
         lwt = LittleWorkTask(workshop)
         self.toDoList.append(lwt)
         
+    def addCarryTask(self, fromB,toB, mat, mandatory = True):
+        if fromB.id == toB.id:
+            return
+        lct = LittleCarryTask(self, fromB, toB, mat)
+        lct.mandatory = mandatory
+        self.toDoList.append(lct)
+
+
+    def getClosestBuilding(self, buildingName, destination, villagerpos = None, nb=1):
+        listToSort = []
+        for b in self.buildings:
+            if b.name == buildingName and b.state=="ok":
+                if villagerpos is not None:
+                    listToSort.append([b, 1*utils.distance(villagerpos, b.position) + 1*utils.distance(destination, b.position) ])
+                else:
+                    listToSort.append([b, utils.distance(destination, b.position) ])
+
+        sortedList = sorted(listToSort,  key=lambda tup: tup[1])
+        result = []
+        for i in range(min(nb, len(sortedList))):
+            result.append(sortedList[i][0])
+        
+        return result
+        
     def iterate(self):
         print "--------------------"
         for p in self.villagers:
@@ -78,7 +103,9 @@ class LittleVillage:
                 #~ print self.toDoList[i].name, " finished"
                 self.toDoList.pop(i)
             elif self.toDoList[i].status == "fail":
-                #~ if random.randint(0, 9) == 0:
+                if not self.toDoList[i].mandatory:
+                    self.toDoList.pop(i)
+                elif random.randint(0, 9) == 0:
                     t = self.toDoList.pop(i)
                     t.status = "to start"
                     self.toDoList.append(t)
