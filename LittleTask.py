@@ -109,13 +109,16 @@ class LittleBuildTask(LittleTask):
                     return True
         elif self.status == "waiting for materials":
             #check if remaining materials
-            canContinue = True
-            for m in self.materials:
-                if self.materials[m] > 0:
-                    canContinue = False
-            if canContinue:
-                self.status = "building"
+            self.status = "building"
             return True
+            #~ canContinue = True
+            #~ for m in self.materials:
+                #~ if self.materials[m] > 0:
+                    #~ canContinue = False
+            #~ if canContinue:
+                #~ print "continuing construction"
+                #~ self.status = "building"
+            #~ return True
         elif self.status == "building":
             #check if remaining time
             self.remainingTime -=1
@@ -134,7 +137,12 @@ class LittleBuildTask(LittleTask):
     def canPerform(self):
         if self.status == "waiting for materials" and self.state == "to do":
             for m in self.materials:
-                if self.materials[m] > 0:
+                #~ if self.materials[m] > 0:
+                if m not in self.building.content.keys():
+                    #~ print self.id," cant parform : ",m," not known in ", self.building.id
+                    return False
+                if self.building.content[m] < self.materials[m]:
+                    #~ print self.id," cant perform, not enough ",m," in ",self.building.id
                     #~ print "cannot perform"
                     return False
         #~ print "can perform"
@@ -178,8 +186,10 @@ class LittleCarryTask(LittleTask):
             #~ print "before goto2 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.goal.position):
             #~ if self.villager.goto(self.goalBuilding.position):
-                self.initial.setMaterial(self.material, 1)
+                self.goal.setMaterial(self.material, 1)
                 self.villager.carrying = ""
+                #~ if self.dependantTask is not None:
+                    #~ self.dependantTask.setMaterial(self.material, 1)
                 print self.material, "carried in ", self.goal.name
                 self.status = "done"
                 self.villager.money += self.salary

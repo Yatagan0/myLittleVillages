@@ -32,6 +32,7 @@ class LittlePlace:
             self.content[mat] = num
         else:
             self.content[mat] += num
+        print "adding ",num," ",mat," in ",self.id," there is now ",self.content[mat]
 
 
 class LittleExternalPlace(LittlePlace):
