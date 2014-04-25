@@ -33,6 +33,12 @@ class LittlePlace:
         else:
             self.content[mat] += num
         print "adding ",num," ",mat," in ",self.id," there is now ",self.content[mat]
+        
+    def __str__(self):
+        s = self.name+ " "+ str(self.position)
+        for m in self.content.keys():
+            s += "\n  "+m+" "+str(self.content[m])
+        return s
 
 
 class LittleExternalPlace(LittlePlace):

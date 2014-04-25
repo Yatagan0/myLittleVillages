@@ -86,21 +86,14 @@ class LittleBuildTask(LittleTask):
                     self.pos = []
                 else:
                     self.building = newBuilding(self.type, self.name, self.pos, "in construction", self.village)
-                    
-                    #~ self.building= LittleBuilding(self.name, self.village)
-                    #~ self.building.state =  "in construction"
-                    #~ self.building.position = self.pos
-                    #~ if self.isBuilding:
-                        #~ self.village.buildings.append(self.building)
-                    #~ else:
-                        #~ self.village.places.append(self.building)
+
 
                     for m in self.materials:
                         for i in range(self.materials[m]):
                             lct = LittleCarryTask(self.village, "warehouse", self.building, m)
                             #~ lct.material = m
                             #~ lct.destination = self.building.position 
-                            lct.dependantTask = self
+                            #~ lct.dependantTask = self
                             lct.salary = 1
                             self.village.toDoList.append(lct)
                            
@@ -111,19 +104,16 @@ class LittleBuildTask(LittleTask):
             #check if remaining materials
             self.status = "building"
             return True
-            #~ canContinue = True
-            #~ for m in self.materials:
-                #~ if self.materials[m] > 0:
-                    #~ canContinue = False
-            #~ if canContinue:
-                #~ print "continuing construction"
-                #~ self.status = "building"
-            #~ return True
+
         elif self.status == "building":
             #check if remaining time
             self.remainingTime -=1
             self.villager.money += 1
             if self.remainingTime == 0:
+                for m in self.materials:
+                    self.building.getMaterial(m, self.materials[m])
+                
+                
                 self.building.state = "ok"
                 
                 print self.building.name, "finished in ", self.building.position
@@ -154,7 +144,7 @@ class LittleCarryTask(LittleTask):
     def __init__(self, village, initial, goal, material):
         LittleTask.__init__(self, village)
         self.name = "carryTask"
-        self.dependantTask = None
+        #~ self.dependantTask = None
         self.material = material
         self.goal = goal
         self.initial = initial
@@ -231,7 +221,7 @@ class LittleWorkTask(LittleTask):
             
 
             lct = LittleCarryTask(self.village, self.workshop,  "warehouse",  self.workshop.production)
-            lct.dependantTask = self
+            #~ lct.dependantTask = self
             lct.salary = 1
             self.village.toDoList.append(lct)
             

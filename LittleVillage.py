@@ -32,13 +32,8 @@ class LittleVillage:
             self.villagers.append(lv)
             
         newBuilding("storage", "warehouse", [0, 0], "ok", self)
-        #~ entrepot = LittleStorage("warehouse", self)
-        #~ self.buildings.append(entrepot)
-        
-        #~ entrepot2 = LittleBuilding()
-        #~ entrepot2.name = "warehouse"
-        #~ entrepot2.position=[1, 0]
-        #~ self.buildings.append(entrepot2)
+        self.buildings[0].setMaterial("stone", 40)
+        self.buildings[0].setMaterial("wood", 40)
         
     def __str__(self):
         s = "This is the village of "+self.name
@@ -46,7 +41,8 @@ class LittleVillage:
         for v in self.villagers:
             s += "\n"+v.name+ " "+ str(v.position)+" "+str(v.money)
         for b in self.buildings:
-            s += "\n"+b.name+ " "+ str(b.position)
+            #~ s += "\n"+b.name+ " "+ str(b.position)
+            s+= "\n"+str(b)
         return s
         
     def positionFree(self, x, y):
