@@ -12,6 +12,7 @@ class LittleTask:
         self.status = "to start"
         self.village=village
         self.name ="defaultTaskName"
+        self.type = "task"
         self.villager = None
         self.salary = 0.0
         
@@ -28,6 +29,38 @@ class LittleTask:
         #~ print "default perform"
         return self.status != "done" and self.state == "to do"
         #~ return True
+        
+
+    def readTask(self, elem):
+        att = elem.attrib
+        self.name = att["name"]
+        self.type = att["type"]
+        self.state = att["state"]
+        self.status = att["status"]
+        self.villager = int(att["villager"])
+        self.salary = float(att["salary"])
+        self.mandatory = bool(att["mandatory"])
+        
+        self.id = int(att["id"])
+        
+        global taskID
+        if self.id >= taskID:
+            taskID = self.id +1
+            
+    def writeTask(self, root):
+        building = ET.SubElement(root, 'task')
+        building.set("name", self.name)
+        building.set("type", self.type)
+        building.set("state", self.state)
+        building.set("id", str(self.id))
+        building.set("positionX", str(self.position[0]))
+        building.set("positionY", str(self.position[1]))
+        for m in self.content.keys():
+            mat = ET.SubElement(building, 'material')
+            mat.set("name", m)
+            mat.set("quantity", str(self.content[m]))
+            
+        return building  
 
 
 class LittleBuildTask(LittleTask):
@@ -36,36 +69,38 @@ class LittleBuildTask(LittleTask):
         self.name = name
         self.materials = {}
         self.building = None
-        self.type = ""
+        self.buildingtype = ""
         self.pos = []
+        
+        self.type = "build"
         
         if name == "warehouse":
             self.remainingTime = 10
             self.materials["wood"] = 10
             self.materials["stone"] = 10
-            self.type = "storage"
+            self.buildingtype = "storage"
         elif name == "house":
             self.remainingTime = 10
             self.materials["wood"] = 8
             self.materials["stone"] = 8
-            self.type = "house"
+            self.buildingtype = "house"
         elif name == "field":
             self.remainingTime = 3
             self.materials["wood"] = 1
-            self.type = "field"
+            self.buildingtype = "field"
         elif name == "forest":
             self.remainingTime = 1
-            self.type = "field"
+            self.buildingtype = "field"
         elif name == "woodcutter":
             self.remainingTime = 10
             self.materials["wood"] = 10
             self.materials["stone"] = 10
-            self.type = "production"
+            self.buildingtype = "production"
         elif name == "stonecutter":
             self.remainingTime = 10
             self.materials["wood"] = 10
             self.materials["stone"] = 10
-            self.type = "production"
+            self.buildingtype = "production"
             
         
         self.salary = 1 + 1*self.materials["wood"]  + 1*self.materials["stone"]  + 1*self.remainingTime
@@ -89,7 +124,7 @@ class LittleBuildTask(LittleTask):
                 if not self.village.positionFree(self.pos[0], self.pos[1]):
                     self.pos = []
                 else:
-                    self.building = newBuilding(self.type, self.name, self.pos, "in construction", self.village)
+                    self.building = newBuilding(buildingtype, self.name, self.pos, "in construction", self.village)
 
 
                     for m in self.materials:
@@ -156,6 +191,7 @@ class LittleCarryTask(LittleTask):
         self.material = material
         self.goal = goal
         self.initial = initial
+        self.type = "carry"
         
     def execute(self):
         #~ print self.name, " executing"
@@ -212,6 +248,7 @@ class LittleWorkTask(LittleTask):
         LittleTask.__init__(self, workshop.village)
         self.workshop = workshop
         self.remainingTime = self.workshop.productionTime
+        self.type = "production"
         
     def execute(self):
         if self.status == "to start":

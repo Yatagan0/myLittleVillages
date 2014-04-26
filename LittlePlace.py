@@ -74,8 +74,8 @@ class LittlePlace:
         
     def __str__(self):
         s = self.name+ " "+ str(self.position)
-        print "printing ",self.name
-        s=" "+str(self.id)
+        #~ print "printing ",self.name
+        #~ s=" "+str(self.id)
         if not self.state == "ok":
                 s+= " ("+self.state+")"
         for m in self.content.keys():

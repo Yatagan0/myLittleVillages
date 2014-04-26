@@ -34,7 +34,6 @@ class LittleVillage:
                 type = child.attrib["type"] 
                 name = ""
                  
-                 
                 if type == "storage":
                     b =  LittleStorage(name, self)
                 elif type == "house":
@@ -43,11 +42,22 @@ class LittleVillage:
                     b = LittleExternalPlace(name, self)
                 elif type == "production":
                     b =  LittleWorkshop(name, self)
+                    
+            if(child.tag == "task"):
+                type = child.attrib["type"] 
+                name = ""
+                 
+                if type == "build":
+                    t =  LittleBuildTask(name, self)
+                elif type == "carry":
+                    t = LittleCarryTask(name, self)
+                elif type == "production":
+                    t = LittleWorkTask(name, self)
 
                  
                  
-                b.readBuilding(child)
-                self.buildings.append(b)
+                t.readTask(child)
+                self.toDoList.append(t)
                 
         for v in self.villagers:
             v.busy = False
@@ -64,6 +74,9 @@ class LittleVillage:
             v.writeVillager(root)
         for b in self.buildings:
             b.writeBuilding(root)
+            
+        for t in self.toDoList:
+            t.writeTask(root)
             
         rough_string = ET.tostring(root, 'utf-8')
         reparsed = minidom.parseString(rough_string)
