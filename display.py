@@ -103,7 +103,7 @@ lv.toDoList.append(lbt)
 #~ lbt = LittleBuildTask(lv, "field")
 #~ lv.toDoList.append(lbt)
 
-#~ lv.createRandomVillage(10)
+lv.createRandomVillage(10)
 path = "village.xml"
 lv.readVillage(path)
 

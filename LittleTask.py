@@ -1,6 +1,7 @@
 import utils, random
 
 from LittlePlace import *
+import xml.etree.ElementTree as ET
 
 global taskID 
 taskID = 0

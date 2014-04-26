@@ -1,5 +1,5 @@
 import utils, random
-#~ from LittleTask import LittleWorkTask
+import xml.etree.ElementTree as ET
 
 global taskID 
 taskID = 0
@@ -14,9 +14,34 @@ class LittlePlace:
         
         self.village = village
         
-        global taskID
-        self.id = taskID
-        taskID += 1
+
+        
+    def writeBuilding(self, root):
+        building = ET.SubElement(root, 'building')
+        building.set("name", self.name)
+        building.set("type", self.type)
+        building.set("state", self.state)
+        building.set("id", str(self.id))
+        building.set("positionX", str(self.position[0]))
+        building.set("positionY", str(self.position[1]))
+        for m in self.content.keys():
+            mat = ET.SubElement(building, 'material')
+            mat.set("name", m)
+            mat.set("quantity", str(self.content[m]))
+
+
+    def readBuilding(self, elem):
+        att = elem.attrib
+        self.name = att["name"]
+        self.type = att["type"]
+        self.state = att["state"]
+        self.id = int(att["id"])
+        self.position[0] = int(att["positionX"])
+        self.position[1] = int(att["positionY"])
+        for child in elem:
+            if (child.tag == "material"):
+                attm = child.attrib
+                self.content[attm["name"]] = int(attm["quantity"])
         
     def getMaterial(self, mat, num):
         if mat not in self.content.keys():
@@ -120,6 +145,9 @@ def newBuilding(type, name, position, state, village):
         
     b.state = state
     b.position = position
+    global taskID
+    b.id = taskID
+    taskID += 1
     village.buildings.append(b)
     return b
     

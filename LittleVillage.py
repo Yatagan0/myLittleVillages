@@ -23,14 +23,29 @@ class LittleVillage:
         root = tree.getroot()
         mainAttrib = root.attrib
         self.name = mainAttrib["name"]
+        for child in root:
+            if (child.tag == "villager"):
+                #~ print "object ",child.attrib["name"], " added"
+                lv = LittleVillager()
+                lv.readVillager(child)
+                self.villagers.append(lv)
+                
+                
+        for v in self.villagers:
+            v.busy = False
+            #~ tid = v.task
+            #~ for t in self.toDoList:
+                #~ if t.id == tid:
+                    #~ v.task = t
+                    #~ break
         
     def writeVillage(self, path):
         root = ET.Element('village')
         root.set("name", self.name)
         for v in self.villagers:
             v.writeVillager(root)
-        #~ for r in self.recipes:
-            #~ r.addSubElement(root)
+        for b in self.buildings:
+            b.writeBuilding(root)
             
         rough_string = ET.tostring(root, 'utf-8')
         reparsed = minidom.parseString(rough_string)
@@ -43,15 +58,15 @@ class LittleVillage:
         file.close()
         
     def createRandomVillage(self, num):
-        startName = utils.allU 
-        middleName = utils.allL 
-        endName = ["touille", "mont", "vert", "gny", "leaux", "rrand", "lieu", "guen"]
-        self.name= startName[random.randint(0, len(startName)-1)]+middleName[random.randint(0, len(middleName)-1)]+endName[random.randint(0, len(endName)-1)]
+        #~ startName = utils.allU 
+        #~ middleName = utils.allL 
+        #~ endName = ["touille", "mont", "vert", "gny", "leaux", "rrand", "lieu", "guen"]
+        #~ self.name= startName[random.randint(0, len(startName)-1)]+middleName[random.randint(0, len(middleName)-1)]+endName[random.randint(0, len(endName)-1)]
 
-        for i in range(num):
-            lv = LittleVillager()
-            lv.generate()
-            self.villagers.append(lv)
+        #~ for i in range(num):
+            #~ lv = LittleVillager()
+            #~ lv.generate()
+            #~ self.villagers.append(lv)
             
         newBuilding("storage", "warehouse", [0, -2], "ok", self)
         self.buildings[0].setMaterial("stone", 40)

@@ -24,6 +24,16 @@ class LittleVillager:
         villager.set("speed", str(self.speed))
         villager.set("money", str(self.money))
 
+    def readVillager(self, elem):
+        att = elem.attrib
+        self.name = att["name"]
+        self.gender = int(att["gender"])
+        self.busy = bool(att["busy"])
+        self.task = int(att["task"])
+        self.position[0] = float(att["positionX"])
+        self.position[1] = float(att["positionY"])
+        self.speed = float(att["speed"])
+        self.money = float(att["money"])
         
     def generate(self):
         self.name = utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] + " "+utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] +utils.allL[random.randint(0, len(utils.allL)-1)]
