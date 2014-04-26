@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<village name="Siponguen">
+  <villager busy="True" gender="0" money="7.0" name="Rupi Quastoufen" positionX="0.0" positionY="-0.16" speed="0.04"/>
+  <villager busy="True" gender="0" money="0.0" name="Bejo Tenjenchi" positionX="0.0" positionY="3.8" speed="0.04"/>
+  <villager busy="True" gender="1" money="0.0" name="Befo Garenra" positionX="0.0" positionY="0.2" speed="0.04"/>
+  <villager busy="True" gender="1" money="0.0" name="Faipa Dochaiquu" positionX="0.0" positionY="0.2" speed="0.04"/>
+  <villager busy="True" gender="0" money="1.0" name="Babo Pisacho" positionX="0.0" positionY="-0.36" speed="0.04"/>
+  <villager busy="True" gender="1" money="1.0" name="Ponlou Quusenbon" positionX="0.0" positionY="-0.36" speed="0.04"/>
+  <villager busy="True" gender="0" money="1.0" name="Jaimi Baifonce" positionX="0.0" positionY="-0.36" speed="0.04"/>
+  <villager busy="True" gender="1" money="1.0" name="Copo Tovaigin" positionX="0.0" positionY="-0.36" speed="0.04"/>
+  <villager busy="True" gender="1" money="1.0" name="Fenni Roufichen" positionX="0.0" positionY="-0.36" speed="0.04"/>
+  <villager busy="True" gender="1" money="1.0" name="Maira Fedenti" positionX="0.0" positionY="-0.36" speed="0.04"/>
+  <building id="0" name="warehouse" positionX="0" positionY="-2" state="ok" type="storage">
+    <material name="stone" quantity="40"/>
+    <material name="wood" quantity="10"/>
+  </building>
+  <building id="1" name="woodcutter" positionX="0" positionY="4" state="ok" type="production">
+    <material name="wood" quantity="1"/>
+  </building>
+  <building id="2" name="warehouse" positionX="0" positionY="3" state="ok" type="storage"/>
+  <building id="3" name="stonecutter" positionX="0" positionY="0" state="in construction" type="production"/>
+</village>

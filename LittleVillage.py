@@ -29,7 +29,11 @@ class LittleVillage:
                 lv = LittleVillager()
                 lv.readVillager(child)
                 self.villagers.append(lv)
-                
+            if (child.tag == "building"):
+                #~ print "object ",child.attrib["name"], " added"
+                lb = LittleBuilding(self)
+                lb.readBuilding(child)
+                self.buildings.append(lb)
                 
         for v in self.villagers:
             v.busy = False

@@ -28,7 +28,8 @@ class LittlePlace:
             mat = ET.SubElement(building, 'material')
             mat.set("name", m)
             mat.set("quantity", str(self.content[m]))
-
+        if self.type == "production":
+            self.writeWorkshop(building)
 
     def readBuilding(self, elem):
         att = elem.attrib
@@ -128,6 +129,9 @@ class LittleWorkshop(LittleBuilding):
         #~ task = LittleWorkTask(self)
         #~ self.village.toDoList.append(task)
         self.village.addProductionTask(self)
+        
+    def writeWorkshop(self, elem):
+        print "bla in writeworkshop"
         
 def newBuilding(type, name, position, state, village):
     #~ print "new building"
