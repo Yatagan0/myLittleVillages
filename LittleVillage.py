@@ -31,9 +31,23 @@ class LittleVillage:
                 self.villagers.append(lv)
             if (child.tag == "building"):
                 #~ print "object ",child.attrib["name"], " added"
-                lb = LittleBuilding(self)
-                lb.readBuilding(child)
-                self.buildings.append(lb)
+                type = child.attrib["type"] 
+                name = ""
+                 
+                 
+                if type == "storage":
+                    b =  LittleStorage(name, self)
+                elif type == "house":
+                    b =  LittleHouse(name, self)
+                elif type == "field":
+                    b = LittleExternalPlace(name, self)
+                elif type == "production":
+                    b =  LittleWorkshop(name, self)
+
+                 
+                 
+                b.readBuilding(child)
+                self.buildings.append(b)
                 
         for v in self.villagers:
             v.busy = False
@@ -72,12 +86,13 @@ class LittleVillage:
             #~ lv.generate()
             #~ self.villagers.append(lv)
             
-        newBuilding("storage", "warehouse", [0, -2], "ok", self)
-        self.buildings[0].setMaterial("stone", 40)
-        self.buildings[0].setMaterial("wood", 10)
-        newBuilding("production", "woodcutter", [0, 4], "ok", self)
-        self.buildings[1].startProducing("wood", 3, 1)
-        newBuilding("storage", "warehouse", [0, 3], "ok", self)
+        #~ newBuilding("storage", "warehouse", [0, -2], "ok", self)
+        #~ self.buildings[0].setMaterial("stone", 40)
+        #~ self.buildings[0].setMaterial("wood", 10)
+        #~ newBuilding("production", "woodcutter", [0, 4], "ok", self)
+        #~ self.buildings[1].startProducing("wood", 3, 1)
+        #~ newBuilding("storage", "warehouse", [0, 3], "ok", self)
+        pass
         
     def __str__(self):
         s = "This is the village of "+self.name

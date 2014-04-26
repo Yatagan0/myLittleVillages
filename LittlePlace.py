@@ -28,21 +28,32 @@ class LittlePlace:
             mat = ET.SubElement(building, 'material')
             mat.set("name", m)
             mat.set("quantity", str(self.content[m]))
-        if self.type == "production":
-            self.writeWorkshop(building)
+            
+        return building
+        
 
     def readBuilding(self, elem):
         att = elem.attrib
         self.name = att["name"]
         self.type = att["type"]
+        
+        
         self.state = att["state"]
         self.id = int(att["id"])
+        
+        global taskID
+        if self.id >= taskID:
+            taskID = self.id +1
+        
+        
         self.position[0] = int(att["positionX"])
         self.position[1] = int(att["positionY"])
         for child in elem:
             if (child.tag == "material"):
                 attm = child.attrib
                 self.content[attm["name"]] = int(attm["quantity"])
+        
+            #~ self.writeWorkshop(building)
         
     def getMaterial(self, mat, num):
         if mat not in self.content.keys():
@@ -63,6 +74,8 @@ class LittlePlace:
         
     def __str__(self):
         s = self.name+ " "+ str(self.position)
+        print "printing ",self.name
+        s=" "+str(self.id)
         if not self.state == "ok":
                 s+= " ("+self.state+")"
         for m in self.content.keys():
@@ -130,8 +143,19 @@ class LittleWorkshop(LittleBuilding):
         #~ self.village.toDoList.append(task)
         self.village.addProductionTask(self)
         
-    def writeWorkshop(self, elem):
-        print "bla in writeworkshop"
+    def writeBuilding(self, elem):
+        subelem = LittlePlace.writeBuilding(self,elem)
+        #~ print "bla in writeworkshop"
+        subelem.set("production", self.production)
+        subelem.set("productionTime", str(self.productionTime))
+        
+    def readBuilding(self, elem):
+        LittlePlace.readBuilding(self,elem)
+        att = elem.attrib
+        self.production = att["production"]
+        self.productionTime = att["productionTime"]
+
+        
         
 def newBuilding(type, name, position, state, village):
     #~ print "new building"

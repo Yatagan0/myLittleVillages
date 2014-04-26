@@ -29,7 +29,7 @@ class LittleVillager:
         self.name = att["name"]
         self.gender = int(att["gender"])
         self.busy = bool(att["busy"])
-        self.task = int(att["task"])
+        self.task = -1 #int(att["task"])
         self.position[0] = float(att["positionX"])
         self.position[1] = float(att["positionY"])
         self.speed = float(att["speed"])

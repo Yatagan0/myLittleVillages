@@ -1,22 +1,28 @@
 <?xml version="1.0" ?>
 <village name="Siponguen">
-  <villager busy="True" gender="0" money="7.0" name="Rupi Quastoufen" positionX="0.0" positionY="-0.16" speed="0.04"/>
-  <villager busy="True" gender="0" money="0.0" name="Bejo Tenjenchi" positionX="0.0" positionY="3.8" speed="0.04"/>
-  <villager busy="True" gender="1" money="0.0" name="Befo Garenra" positionX="0.0" positionY="0.2" speed="0.04"/>
-  <villager busy="True" gender="1" money="0.0" name="Faipa Dochaiquu" positionX="0.0" positionY="0.2" speed="0.04"/>
-  <villager busy="True" gender="0" money="1.0" name="Babo Pisacho" positionX="0.0" positionY="-0.36" speed="0.04"/>
-  <villager busy="True" gender="1" money="1.0" name="Ponlou Quusenbon" positionX="0.0" positionY="-0.36" speed="0.04"/>
-  <villager busy="True" gender="0" money="1.0" name="Jaimi Baifonce" positionX="0.0" positionY="-0.36" speed="0.04"/>
-  <villager busy="True" gender="1" money="1.0" name="Copo Tovaigin" positionX="0.0" positionY="-0.36" speed="0.04"/>
-  <villager busy="True" gender="1" money="1.0" name="Fenni Roufichen" positionX="0.0" positionY="-0.36" speed="0.04"/>
-  <villager busy="True" gender="1" money="1.0" name="Maira Fedenti" positionX="0.0" positionY="-0.36" speed="0.04"/>
+  <villager busy="True" gender="0" money="18.0" name="Rupi Quastoufen" positionX="0.0" positionY="0.6" speed="0.04"/>
+  <villager busy="True" gender="0" money="0.0" name="Bejo Tenjenchi" positionX="0.0" positionY="-1.32" speed="0.04"/>
+  <villager busy="True" gender="1" money="3.0" name="Befo Garenra" positionX="-0.0876842651801" positionY="2.82463146964" speed="0.04"/>
+  <villager busy="True" gender="1" money="0.0" name="Faipa Dochaiquu" positionX="0.0" positionY="-0.8" speed="0.04"/>
+  <villager busy="True" gender="0" money="2.0" name="Babo Pisacho" positionX="0.0" positionY="-1.44" speed="0.04"/>
+  <villager busy="True" gender="1" money="1.0" name="Ponlou Quusenbon" positionX="0.0" positionY="-1.44" speed="0.04"/>
+  <villager busy="True" gender="0" money="5.0" name="Jaimi Baifonce" positionX="-0.380193578607" positionY="-0.859419264179" speed="0.04"/>
+  <villager busy="True" gender="1" money="5.0" name="Copo Tovaigin" positionX="-0.380193578607" positionY="-0.859419264179" speed="0.04"/>
+  <villager busy="True" gender="1" money="5.0" name="Fenni Roufichen" positionX="-0.380193578607" positionY="-0.859419264179" speed="0.04"/>
+  <villager busy="True" gender="1" money="5.0" name="Maira Fedenti" positionX="-0.392842689248" positionY="-0.821471932257" speed="0.04"/>
   <building id="0" name="warehouse" positionX="0" positionY="-2" state="ok" type="storage">
-    <material name="stone" quantity="40"/>
+    <material name="stone" quantity="30"/>
     <material name="wood" quantity="10"/>
   </building>
-  <building id="1" name="woodcutter" positionX="0" positionY="4" state="ok" type="production">
+  <building id="1" name="woodcutter" positionX="0" positionY="4" production="wood" productionTime="3" state="ok" type="production">
     <material name="wood" quantity="1"/>
   </building>
-  <building id="2" name="warehouse" positionX="0" positionY="3" state="ok" type="storage"/>
-  <building id="3" name="stonecutter" positionX="0" positionY="0" state="in construction" type="production"/>
+  <building id="2" name="warehouse" positionX="0" positionY="3" state="ok" type="storage">
+    <material name="stone" quantity="0"/>
+    <material name="wood" quantity="0"/>
+  </building>
+  <building id="3" name="stonecutter" positionX="0" positionY="0" production="" productionTime="0" state="in construction" type="production"/>
+  <building id="4" name="stonecutter" positionX="-1" positionY="1" production="" productionTime="0" state="in construction" type="production">
+    <material name="stone" quantity="5"/>
+  </building>
 </village>
