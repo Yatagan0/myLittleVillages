@@ -43,29 +43,67 @@ class LittleVillage:
                 elif type == "production":
                     b =  LittleWorkshop(name, self)
                     
+                b.readBuilding(child)
+                self.buildings.append(b)
+                    
             if(child.tag == "task"):
                 type = child.attrib["type"] 
                 name = ""
                  
                 if type == "build":
-                    t =  LittleBuildTask(name, self)
+                    t =  LittleBuildTask( self, name)
                 elif type == "carry":
-                    t = LittleCarryTask(name, self)
+                    t = LittleCarryTask( self)
                 elif type == "production":
-                    t = LittleWorkTask(name, self)
+                    t = LittleWorkTask( None, self)
 
-                 
                  
                 t.readTask(child)
                 self.toDoList.append(t)
                 
         for v in self.villagers:
-            v.busy = False
-            #~ tid = v.task
-            #~ for t in self.toDoList:
-                #~ if t.id == tid:
-                    #~ v.task = t
-                    #~ break
+            #~ v.busy = False
+            tid = v.task
+            for t in self.toDoList:
+                #~ print t.id
+                if t.id == tid:
+                    v.task = t
+                    t.villager = v
+                    break
+                #~ print "warning, ",v.name," did not find task ",tid
+                
+        for t in self.toDoList:
+            if t.type == "build" and t.building is not None:
+                print "task ",t.id
+                for b in self.buildings:
+                    if b.id == t.building:
+                        t.building = b
+                        print "has a building"
+                        break
+            elif t.type == "carry":
+                print "task ",t.id
+                if isinstance(t.initial, int):
+                    for b in self.buildings:
+                        if t.initial == b.id:
+                            t.initial = b
+                            print "has a initial"
+                            break
+                            
+                if isinstance(t.goal, int):
+                    for b in self.buildings:
+                        if t.goal == b.id:
+                            t.goal= b
+                            print "has a goal"
+                            break
+            elif t.type == "production":
+                if t.workshop is not None:
+                    print "task ",t.id
+                    for b in self.buildings:
+                        if t.workshop == b.id:
+                            t.workshop = b
+                            print "has a workshop"
+                            break
+                    
         
     def writeVillage(self, path):
         root = ET.Element('village')
@@ -89,22 +127,22 @@ class LittleVillage:
         file.close()
         
     def createRandomVillage(self, num):
-        #~ startName = utils.allU 
-        #~ middleName = utils.allL 
-        #~ endName = ["touille", "mont", "vert", "gny", "leaux", "rrand", "lieu", "guen"]
-        #~ self.name= startName[random.randint(0, len(startName)-1)]+middleName[random.randint(0, len(middleName)-1)]+endName[random.randint(0, len(endName)-1)]
+        startName = utils.allU 
+        middleName = utils.allL 
+        endName = ["touille", "mont", "vert", "gny", "leaux", "rrand", "lieu", "guen"]
+        self.name= startName[random.randint(0, len(startName)-1)]+middleName[random.randint(0, len(middleName)-1)]+endName[random.randint(0, len(endName)-1)]
 
-        #~ for i in range(num):
-            #~ lv = LittleVillager()
-            #~ lv.generate()
-            #~ self.villagers.append(lv)
+        for i in range(num):
+            lv = LittleVillager()
+            lv.generate()
+            self.villagers.append(lv)
             
-        #~ newBuilding("storage", "warehouse", [0, -2], "ok", self)
-        #~ self.buildings[0].setMaterial("stone", 40)
-        #~ self.buildings[0].setMaterial("wood", 10)
-        #~ newBuilding("production", "woodcutter", [0, 4], "ok", self)
-        #~ self.buildings[1].startProducing("wood", 3, 1)
-        #~ newBuilding("storage", "warehouse", [0, 3], "ok", self)
+        newBuilding("storage", "warehouse", [0, -2], "ok", self)
+        self.buildings[0].setMaterial("stone", 40)
+        self.buildings[0].setMaterial("wood", 10)
+        newBuilding("production", "woodcutter", [0, 4], "ok", self)
+        self.buildings[1].startProducing("wood", 3, 1)
+        newBuilding("storage", "warehouse", [0, 3], "ok", self)
         pass
         
     def __str__(self):
@@ -125,7 +163,7 @@ class LittleVillage:
         return True
 
     def addProductionTask(self, workshop):
-        lwt = LittleWorkTask(workshop)
+        lwt = LittleWorkTask(workshop, workshop.village)
         self.toDoList.append(lwt)
         
     def addCarryTask(self, fromB,toB, mat, mandatory = True):

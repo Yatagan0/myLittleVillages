@@ -18,7 +18,7 @@ class LittleVillager:
         villager.set("name", self.name)
         villager.set("gender", str(self.gender))
         villager.set("busy", str(self.busy))
-        #~ villager.set("task", str(self.task.id))
+        villager.set("task", str(self.task.id))
         villager.set("positionX", str(self.position[0]))
         villager.set("positionY", str(self.position[1]))
         villager.set("speed", str(self.speed))
@@ -29,7 +29,7 @@ class LittleVillager:
         self.name = att["name"]
         self.gender = int(att["gender"])
         self.busy = bool(att["busy"])
-        self.task = -1 #int(att["task"])
+        self.task =int(att["task"])
         self.position[0] = float(att["positionX"])
         self.position[1] = float(att["positionY"])
         self.speed = float(att["speed"])

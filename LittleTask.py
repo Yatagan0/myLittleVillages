@@ -36,12 +36,12 @@ class LittleTask:
         self.name = att["name"]
         self.type = att["type"]
         self.state = att["state"]
-        self.status = att["status"]
-        self.villager = int(att["villager"])
+        #~ self.villager = att["villager"]
         self.salary = float(att["salary"])
         self.mandatory = bool(att["mandatory"])
         
         self.id = int(att["id"])
+        print "created task ",self.id
         
         global taskID
         if self.id >= taskID:
@@ -53,12 +53,11 @@ class LittleTask:
         building.set("type", self.type)
         building.set("state", self.state)
         building.set("id", str(self.id))
-        building.set("positionX", str(self.position[0]))
-        building.set("positionY", str(self.position[1]))
-        for m in self.content.keys():
-            mat = ET.SubElement(building, 'material')
-            mat.set("name", m)
-            mat.set("quantity", str(self.content[m]))
+        #~ building.set("villager", str(self.villager.name))
+        building.set("salary", str(self.salary))
+
+        building.set("mandatory", str(self.mandatory))
+
             
         return building  
 
@@ -102,8 +101,51 @@ class LittleBuildTask(LittleTask):
             self.materials["stone"] = 10
             self.buildingtype = "production"
             
+        #WARNING, to redo !
+        self.salary = 1
+        #~ self.salary = 1 + 1*self.materials["wood"]  + 1*self.materials["stone"]  + 1*self.remainingTime
+
+
+    def readTask(self, elem):
+        att = elem.attrib
+        LittleTask.readTask(self, elem)
+        if int(att["building"]) == -1:
+            self.building = None
+            self.pos = [0, 0]
+            self.pos[0] = int(att["positionX"])
+            self.pos[1] = int(att["positionY"])
+        else:
+            self.building = int(att["building"])
+            
+        self.buildingtype = att["buildingType"]
         
-        self.salary = 1 + 1*self.materials["wood"]  + 1*self.materials["stone"]  + 1*self.remainingTime
+        self.remainingTime = int(att["remainingTime"])
+        for child in elem:
+            if (child.tag == "material"):
+                attm = child.attrib
+                self.materials[attm["name"]] = int(attm["quantity"])
+
+            
+    def writeTask(self, root):
+        subelem = LittleTask.writeTask(self, root)
+
+        if self.building is not None:
+            subelem.set("building", str(self.building.id))
+            
+        else:
+            subelem.set("building", -1)
+        
+        subelem.set("buildingType", self.buildingtype)
+        subelem.set("positionX", str(self.pos[0]))
+        subelem.set("positionY", str(self.pos[1]))
+        subelem.set("remainingTime", str(self.remainingTime))
+        
+        for m in self.materials.keys():
+            mat = ET.SubElement(subelem, 'material')
+            mat.set("name", m)
+            mat.set("quantity", str(self.materials[m]))
+
+
             
     def execute(self):
         #~ print self.name, " executing"
@@ -124,7 +166,7 @@ class LittleBuildTask(LittleTask):
                 if not self.village.positionFree(self.pos[0], self.pos[1]):
                     self.pos = []
                 else:
-                    self.building = newBuilding(buildingtype, self.name, self.pos, "in construction", self.village)
+                    self.building = newBuilding(self.buildingtype, self.name, self.pos, "in construction", self.village)
 
 
                     for m in self.materials:
@@ -184,7 +226,7 @@ class LittleBuildTask(LittleTask):
             
 
 class LittleCarryTask(LittleTask):
-    def __init__(self, village, initial, goal, material):
+    def __init__(self, village, initial = None, goal = None, material = None):
         LittleTask.__init__(self, village)
         self.name = "carryTask"
         #~ self.dependantTask = None
@@ -192,6 +234,36 @@ class LittleCarryTask(LittleTask):
         self.goal = goal
         self.initial = initial
         self.type = "carry"
+ 
+    def readTask(self, elem):
+        att = elem.attrib
+        LittleTask.readTask(self, elem)
+        self.material = att["material"]
+        if "initialName" in att.keys():
+            self.initial = att["initialName"]
+        else:
+            self.initial = int(att["initial"])
+            
+        if "goalName" in att.keys():
+            self.goal = att["goalName"]
+        else:
+            self.goal = int(att["goal"])
+
+            
+    def writeTask(self, root):
+        subelem = LittleTask.writeTask(self, root)
+
+        subelem.set("material", self.material)
+        if isinstance(self.initial, basestring):
+            subelem.set("initialName", self.initial)
+        else:
+            subelem.set("initial", str(self.initial.id))
+            
+        if isinstance(self.goal, basestring):
+            subelem.set("goalName", self.goal)
+        else:
+            subelem.set("goal", str(self.goal.id))
+
         
     def execute(self):
         #~ print self.name, " executing"
@@ -244,11 +316,33 @@ class LittleCarryTask(LittleTask):
 
         
 class LittleWorkTask(LittleTask):
-    def __init__(self, workshop):
-        LittleTask.__init__(self, workshop.village)
-        self.workshop = workshop
-        self.remainingTime = self.workshop.productionTime
+    def __init__(self, workshop, village):
+        LittleTask.__init__(self, village)
+        if workshop is not None:
+            self.workshop = workshop
+            self.remainingTime = self.workshop.productionTime
+        else:
+            self.workshop = None
         self.type = "production"
+
+    def readTask(self, elem):
+        att = elem.attrib
+        LittleTask.readTask(self, elem)
+        #~ if "workshop" in att.keys():
+        self.workshop = int(att["workshop"])
+        self.remainingTime = int(att["remainingTime"])
+
+            
+    def writeTask(self, root):
+        print "wrinting work task"
+        subelem = LittleTask.writeTask(self, root)
+        if self.workshop is not None:
+            subelem.set("workshop", str(self.workshop.id))
+            subelem.set("remainingTime", str(self.remainingTime))
+        else:
+            print "warning, workTask ",self.id," has no workshop"
+        print "finished wrinting work atsk"
+
         
     def execute(self):
         if self.status == "to start":
