@@ -36,9 +36,11 @@ class LittleTask:
         self.name = att["name"]
         self.type = att["type"]
         self.state = att["state"]
+        self.status = att["status"]
         #~ self.villager = att["villager"]
         self.salary = float(att["salary"])
-        self.mandatory = bool(att["mandatory"])
+        self.mandatory = att["mandatory"]=="True"
+        #~ print "read ",att["mandatory"], " understood ", self.mandatory 
         
         self.id = int(att["id"])
         #~ print "created task ",self.id
@@ -53,6 +55,7 @@ class LittleTask:
         building.set("type", self.type)
         building.set("state", self.state)
         building.set("id", str(self.id))
+        building.set("status", self.status)
         #~ building.set("villager", str(self.villager.name))
         building.set("salary", str(self.salary))
 
@@ -295,7 +298,7 @@ class LittleCarryTask(LittleTask):
             #~ print "before goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.initial.position):
                 
-                if self.initial.getMaterial(self.material, 1):
+                if self.initial.getMaterial(self.material, 1, self.mandatory):
                     self.status = "carrying material"
                     self.villager.carrying = self.material
                 else:
