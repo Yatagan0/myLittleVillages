@@ -153,7 +153,7 @@ class LittleWorkshop(LittleBuilding):
         LittlePlace.readBuilding(self,elem)
         att = elem.attrib
         self.production = att["production"]
-        self.productionTime = att["productionTime"]
+        self.productionTime = int(att["productionTime"])
 
         
         

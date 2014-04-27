@@ -41,7 +41,7 @@ class LittleTask:
         self.mandatory = bool(att["mandatory"])
         
         self.id = int(att["id"])
-        print "created task ",self.id
+        #~ print "created task ",self.id
         
         global taskID
         if self.id >= taskID:
@@ -111,11 +111,14 @@ class LittleBuildTask(LittleTask):
         LittleTask.readTask(self, elem)
         if int(att["building"]) == -1:
             self.building = None
+            
+        else:
+            self.building = int(att["building"])
+            
+        if "positionX" in att.keys():
             self.pos = [0, 0]
             self.pos[0] = int(att["positionX"])
             self.pos[1] = int(att["positionY"])
-        else:
-            self.building = int(att["building"])
             
         self.buildingtype = att["buildingType"]
         
@@ -133,11 +136,14 @@ class LittleBuildTask(LittleTask):
             subelem.set("building", str(self.building.id))
             
         else:
-            subelem.set("building", -1)
+            subelem.set("building", str(-1))
+            
+        if len(self.pos)==2:
+            subelem.set("positionX", str(self.pos[0]))
+            subelem.set("positionY", str(self.pos[1]))
         
         subelem.set("buildingType", self.buildingtype)
-        subelem.set("positionX", str(self.pos[0]))
-        subelem.set("positionY", str(self.pos[1]))
+        
         subelem.set("remainingTime", str(self.remainingTime))
         
         for m in self.materials.keys():
@@ -331,17 +337,18 @@ class LittleWorkTask(LittleTask):
         #~ if "workshop" in att.keys():
         self.workshop = int(att["workshop"])
         self.remainingTime = int(att["remainingTime"])
+        #~ print "read remaining time ",self.remainingTime
 
             
     def writeTask(self, root):
-        print "wrinting work task"
+        #~ print "wrinting work task"
         subelem = LittleTask.writeTask(self, root)
         if self.workshop is not None:
             subelem.set("workshop", str(self.workshop.id))
             subelem.set("remainingTime", str(self.remainingTime))
         else:
             print "warning, workTask ",self.id," has no workshop"
-        print "finished wrinting work atsk"
+        #~ print "finished wrinting work atsk"
 
         
     def execute(self):
@@ -352,6 +359,7 @@ class LittleWorkTask(LittleTask):
         elif self.status == "producing":
             if self.remainingTime > 0:
                 print "producing ",self.workshop.production
+                print "remaining time ",self.remainingTime
                 self.remainingTime -=1
                 return False
             

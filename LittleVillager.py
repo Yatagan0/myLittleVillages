@@ -69,6 +69,7 @@ class LittleVillager:
 
         
     def performTask(self):
+        #~ print "perform ",self.task
         toReturn = self.task.execute()
         if toReturn:
             print self.name, " finished ", self.task.name, " ", self.task.id

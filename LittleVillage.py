@@ -70,38 +70,40 @@ class LittleVillage:
                     v.task = t
                     t.villager = v
                     break
-                #~ print "warning, ",v.name," did not find task ",tid
+            if  isinstance(v.task, int):
+                v.busy = False
+                print "warning, ",v.name," did not find task ",tid
                 
         for t in self.toDoList:
             if t.type == "build" and t.building is not None:
-                print "task ",t.id
+                #~ print "task ",t.id
                 for b in self.buildings:
                     if b.id == t.building:
                         t.building = b
-                        print "has a building"
+                        #~ print "has a building"
                         break
             elif t.type == "carry":
-                print "task ",t.id
+                #~ print "task ",t.id
                 if isinstance(t.initial, int):
                     for b in self.buildings:
                         if t.initial == b.id:
                             t.initial = b
-                            print "has a initial"
+                            #~ print "has a initial"
                             break
                             
                 if isinstance(t.goal, int):
                     for b in self.buildings:
                         if t.goal == b.id:
                             t.goal= b
-                            print "has a goal"
+                            #~ print "has a goal"
                             break
             elif t.type == "production":
                 if t.workshop is not None:
-                    print "task ",t.id
+                    #~ print "task ",t.id
                     for b in self.buildings:
                         if t.workshop == b.id:
                             t.workshop = b
-                            print "has a workshop"
+                            #~ print "has a workshop"
                             break
                     
         
