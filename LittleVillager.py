@@ -75,10 +75,11 @@ class LittleVillager:
             return
         choice =  sorted(choice, key=lambda k: k[1]) 
         choice.reverse()
+        print "best value ",choice[0][1]
         self.busy=True
         self.task = choice[0][0]
         print "chose task ",self.task.id
-        t.villager = self
+        self.task.villager = self
         self.task.state = "in progress"
         return
             
@@ -101,7 +102,7 @@ class LittleVillager:
 
         
     def performTask(self):
-        print "perform ",self.task.id
+        #~ print "perform ",self.task.id
         toReturn = self.task.execute()
         if toReturn:
             print self.name, " finished ", self.task.name, " ", self.task.id
