@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 
 class LittleVillager:
-    def __init__(self):
+    def __init__(self, village):
         self.name = "defaultVillagerName"
         self.gender = 0
         self.object = None
@@ -12,6 +12,7 @@ class LittleVillager:
         self.position = [0., 0.]
         self.speed = 0.04 #1.0
         self.money = 0.0
+        self.village = village
         
     def writeVillager(self, root):
         villager = ET.SubElement(root, 'villager')
@@ -39,16 +40,47 @@ class LittleVillager:
         self.name = utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] + " "+utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] +utils.allL[random.randint(0, len(utils.allL)-1)]
         self.gender = random.randint(0,1)
         
+    def estimateTask(self, t):
+        salary = t.salary
+        cost = 0.
+        if t.type == "carry":
+            if not isinstance(t.initial, basestring):
+                cost = utils.distance(self.position, t.initial.position) 
+            else:
+                cost = utils.distance(self.position, t.goal.position) 
+        elif t.type == "build":
+            if t.pos == []:
+                cost = 1.
+            else:
+                cost = utils.distance(self.position, t.pos) 
+        elif t.type == "production":
+            cost = utils.distance(self.position, t.workshop.position) + t.remainingTime
+        if cost == 0:
+            return 0
+
+        return salary/cost
+        
     def selectTask(self, taskList):
+        choice = []
         for t in taskList:
             #~ print t.name, "in state ", t.state
             if t.state== "to do" and t.canPerform():
                 #~ print self.name, " executing ", t.name, " ", t.id
-                self.busy=True
-                self.task = t
-                t.villager = self
-                self.task.state = "in progress"
-                return
+                p = self.estimateTask(t)
+                choice.append([t, p])
+                if len(choice) >= 10:
+                    break
+                
+        if len(choice) ==0:
+            return
+        choice =  sorted(choice, key=lambda k: k[1]) 
+        choice.reverse()
+        self.busy=True
+        self.task = choice[0][0]
+        print "chose task ",self.task.id
+        t.villager = self
+        self.task.state = "in progress"
+        return
             
     def goto(self, target):
         #~ return True
@@ -69,7 +101,7 @@ class LittleVillager:
 
         
     def performTask(self):
-        #~ print "perform ",self.task
+        print "perform ",self.task.id
         toReturn = self.task.execute()
         if toReturn:
             print self.name, " finished ", self.task.name, " ", self.task.id

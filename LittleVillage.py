@@ -26,7 +26,7 @@ class LittleVillage:
         for child in root:
             if (child.tag == "villager"):
                 #~ print "object ",child.attrib["name"], " added"
-                lv = LittleVillager()
+                lv = LittleVillager(self)
                 lv.readVillager(child)
                 self.villagers.append(lv)
             if (child.tag == "building"):
@@ -75,6 +75,9 @@ class LittleVillage:
                 print "warning, ",v.name," did not find task ",tid
                 
         for t in self.toDoList:
+            if isinstance(t.villager,basestring):
+                print "warning, task ",t.id, " has not his villager ",t.villager
+            
             if t.type == "build" and t.building is not None:
                 #~ print "task ",t.id
                 for b in self.buildings:
@@ -82,6 +85,8 @@ class LittleVillage:
                         t.building = b
                         #~ print "has a building"
                         break
+                if  isinstance(t.building, int):
+                    print "warning, ",t.name," did not find building ", t.building
             elif t.type == "carry":
                 #~ print "task ",t.id
                 if isinstance(t.initial, int):
@@ -90,13 +95,18 @@ class LittleVillage:
                             t.initial = b
                             #~ print "has a initial"
                             break
-                            
+                    if  isinstance(t.initial, int):
+                        print "warning, ",t.name," did not find initial building ", t.initial
+                    
                 if isinstance(t.goal, int):
                     for b in self.buildings:
                         if t.goal == b.id:
                             t.goal= b
                             #~ print "has a goal"
                             break
+                    if  isinstance(t.goal, int):
+                        print "warning, ",t.name," did not find goal building ", t.goal
+                            
             elif t.type == "production":
                 if t.workshop is not None:
                     #~ print "task ",t.id
@@ -105,6 +115,9 @@ class LittleVillage:
                             t.workshop = b
                             #~ print "has a workshop"
                             break
+                    if  isinstance(t.workshop, int):
+                        print "warning, ",t.name," did not find workshop ", t.workshop
+                 
                     
         
     def writeVillage(self, path):
@@ -135,7 +148,7 @@ class LittleVillage:
         self.name= startName[random.randint(0, len(startName)-1)]+middleName[random.randint(0, len(middleName)-1)]+endName[random.randint(0, len(endName)-1)]
 
         for i in range(num):
-            lv = LittleVillager()
+            lv = LittleVillager(self)
             lv.generate()
             self.villagers.append(lv)
             

@@ -257,6 +257,9 @@ class LittleCarryTask(LittleTask):
             self.goal = att["goalName"]
         else:
             self.goal = int(att["goal"])
+            
+        #~ print "read initial ",self.initial
+        #~ print "read goal ", self.goal
 
             
     def writeTask(self, root):
@@ -285,7 +288,8 @@ class LittleCarryTask(LittleTask):
                 if self.goal == self.initial.name:
                     self.goallist.pop(0)
                 self.goal = self.goallist[0]
-            elif isinstance(self.initial, basestring):
+            
+            if isinstance(self.initial, basestring):
                 #~ self.initiallist = self.getClosestBuilding(self.initial, self.goal.position, 1)
                 self.initiallist = self.village.getClosestBuilding(self.initial, self.goal.position, self.villager.position)
                 if self.goal.name == self.initial and not  self.goal.state == "in construction":
@@ -295,6 +299,8 @@ class LittleCarryTask(LittleTask):
             self.status = "getting material"
             
         elif self.status == "getting material":
+            #~ print "getting material of task ",self.id
+            #~ print "initial ",self.initial
             #~ print "before goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.initial.position):
                 
