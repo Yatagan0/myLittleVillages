@@ -41,7 +41,8 @@ class LittleVillager:
         self.gender = random.randint(0,1)
         
     def estimateTask(self, t):
-        salary = t.salary
+        salary = float(t.salary)
+        #~ print "salary ",salary
         cost = 0.
         if t.type == "carry":
             if not isinstance(t.initial, basestring):
@@ -50,15 +51,24 @@ class LittleVillager:
                 cost = utils.distance(self.position, t.goal.position) 
         elif t.type == "build":
             if t.pos == []:
+                
                 cost = 1.
             else:
                 cost = utils.distance(self.position, t.pos) 
         elif t.type == "production":
             cost = utils.distance(self.position, t.workshop.position) + t.remainingTime
-        if cost == 0:
-            return 0
-
-        return salary/cost
+        else:
+            print t.type
+            
+        if cost == 0.:
+            if t.mandatory:
+                return 1.
+            else:
+                return 0.
+        result = salary/cost
+        if not t.mandatory:
+            result = 0.8*result
+        return result
         
     def selectTask(self, taskList):
         choice = []

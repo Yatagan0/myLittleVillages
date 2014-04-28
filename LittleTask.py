@@ -105,7 +105,7 @@ class LittleBuildTask(LittleTask):
             self.buildingtype = "production"
             
         #WARNING, to redo !
-        self.salary = 1
+        self.salary = 1.
         #~ self.salary = 1 + 1*self.materials["wood"]  + 1*self.materials["stone"]  + 1*self.remainingTime
 
 
@@ -184,7 +184,7 @@ class LittleBuildTask(LittleTask):
                             #~ lct.material = m
                             #~ lct.destination = self.building.position 
                             #~ lct.dependantTask = self
-                            lct.salary = 1
+                            lct.salary = 1.
                             self.village.toDoList.append(lct)
                            
                     self.status = "waiting for materials"
@@ -193,6 +193,7 @@ class LittleBuildTask(LittleTask):
         elif self.status == "waiting for materials":
             #check if remaining materials
             self.status = "building"
+            
             return True
 
         elif self.status == "building":
@@ -212,6 +213,7 @@ class LittleBuildTask(LittleTask):
                         self.building.startProducing("wood", 3, 1)
                 print self.building.name, "finished in ", self.building.position
                 self.status = "done"
+                
                 
                 return True
             return True
@@ -243,6 +245,7 @@ class LittleCarryTask(LittleTask):
         self.goal = goal
         self.initial = initial
         self.type = "carry"
+        self.salary = 1.0
  
     def readTask(self, elem):
         att = elem.attrib
@@ -336,9 +339,11 @@ class LittleWorkTask(LittleTask):
         if workshop is not None:
             self.workshop = workshop
             self.remainingTime = self.workshop.productionTime
+            self.salary = self.remainingTime
         else:
             self.workshop = None
         self.type = "production"
+         
 
     def readTask(self, elem):
         att = elem.attrib
@@ -346,6 +351,7 @@ class LittleWorkTask(LittleTask):
         #~ if "workshop" in att.keys():
         self.workshop = int(att["workshop"])
         self.remainingTime = int(att["remainingTime"])
+        self.salary = self.remainingTime
         #~ print "read remaining time ",self.remainingTime
 
             
