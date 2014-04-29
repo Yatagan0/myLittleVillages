@@ -286,18 +286,22 @@ class LittleCarryTask(LittleTask):
             #both can't be string
             if isinstance(self.goal, basestring):
                 #~ self.goallist = self.getClosestBuilding(self.goal, self.initial.position, 1)
-                self.goallist = self.village.getClosestBuilding(self.goal, self.initial.position)
+                goallist = self.village.getClosestBuilding(self.goal, self.initial.position)
 
                 if self.goal == self.initial.name:
-                    self.goallist.pop(0)
-                self.goal = self.goallist[0]
+                    goallist.pop(0)
+                if len(goallist)==0:
+                    print "warning, could not find a ",self.goal," to set for goal"
+                self.goal = goallist[0]
             
             if isinstance(self.initial, basestring):
                 #~ self.initiallist = self.getClosestBuilding(self.initial, self.goal.position, 1)
-                self.initiallist = self.village.getClosestBuilding(self.initial, self.goal.position, self.villager.position)
+                initiallist = self.village.getClosestBuilding(self.initial, self.goal.position, self.villager.position)
                 if self.goal.name == self.initial and not  self.goal.state == "in construction":
-                    self.initiallist.pop(0)
-                self.initial = self.initiallist[0]
+                    initiallist.pop(0)
+                if len(initiallist)==0:
+                    print "warning, could not find a ",self.initial," to set for initial"
+                self.initial = initiallist[0]
             #~ print "goal position ",self.goalBuilding.name ," ",self.goalBuilding.position
             self.status = "getting material"
             
@@ -306,9 +310,10 @@ class LittleCarryTask(LittleTask):
             #~ print "initial ",self.initial
             #~ print "before goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.initial.position):
-                
+                print "test1"
                 if self.initial.getMaterial(self.material, 1, self.mandatory):
                     self.status = "carrying material"
+                    #~ print "i got some ",self.material," here"
                     self.villager.carrying = self.material
                 else:
                     print "there is no ",self.material," here"
@@ -318,6 +323,7 @@ class LittleCarryTask(LittleTask):
         elif self.status == "carrying material":
             #~ print "before goto2 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.goal.position):
+                print "test2"
             #~ if self.villager.goto(self.goalBuilding.position):
                 self.goal.setMaterial(self.material, 1)
                 self.villager.carrying = ""
