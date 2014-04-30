@@ -57,6 +57,8 @@ def displayVillage(village):
     people  = cv2.imread('people.jpg')#,cv2.IMREAD_UNCHANGED)
     place  = cv2.imread('field_s.jpg')
     materials  = cv2.imread('materials.jpg')
+    woodcutter  = cv2.imread('woodcutter.jpg')
+    stonecutter  = cv2.imread('stonecutter.jpg')
     
     for b in village.buildings:
         if b.state == "in construction":
@@ -69,7 +71,12 @@ def displayVillage(village):
             elif b.type == "field":
                 printBuilding(bg, place, b.position)
             elif b.type == "production":
-                printBuilding(bg, building, b.position)
+                if b.name =="stonecutter":
+                    printBuilding(bg, stonecutter, b.position)
+                elif b.name =="woodcutter":
+                    printBuilding(bg, woodcutter, b.position)
+                else:
+                    printBuilding(bg, building, b.position)
             #~ printBuilding(bg, building, b.position)
     #~ for p in village.places:
         #~ if p.state == "in construction":
