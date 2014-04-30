@@ -85,7 +85,8 @@ class LittleVillager:
             return
         choice =  sorted(choice, key=lambda k: k[1]) 
         choice.reverse()
-        #~ print "best value ",choice[0][1]
+        print "best value ",choice[0][1]
+        print "worst value ",choice[-1][1]
         self.busy=True
         self.task = choice[0][0]
         #~ print "chose task ",self.task.id

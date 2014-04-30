@@ -99,6 +99,7 @@ lv.readVillage(path)
 #~ lbt = LittleBuildTask(lv, "house")
 #~ lv.toDoList.append(lbt)
 #~ lbt = LittleBuildTask(lv, "house")
+#~ lv.toDoList.append(lbt)
 
 
 

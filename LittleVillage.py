@@ -152,13 +152,13 @@ class LittleVillage:
             lv.generate()
             self.villagers.append(lv)
             
-        newBuilding("storage", "warehouse", [0, -2], "ok", self)
+        newBuilding("storage", "warehouse", [0, 0], "ok", self)
         self.buildings[0].setMaterial("stone", 40)
         self.buildings[0].setMaterial("wood", 10)
-        newBuilding("production", "woodcutter", [0, 4], "ok", self)
+        newBuilding("production", "woodcutter", [0, 2], "ok", self)
         self.buildings[1].startProducing("wood", 3, 1)
-        newBuilding("storage", "warehouse", [0, 3], "ok", self)
-        pass
+        newBuilding("production", "stonecutter", [0, -2], "ok", self)
+        self.buildings[2].startProducing("stone", 9, 2)
         
     def __str__(self):
         s = "This is the village of "+self.name

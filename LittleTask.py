@@ -357,7 +357,7 @@ class LittleWorkTask(LittleTask):
         #~ if "workshop" in att.keys():
         self.workshop = int(att["workshop"])
         self.remainingTime = int(att["remainingTime"])
-        self.salary = self.remainingTime
+        #~ self.salary = self.workshop.productionTime
         #~ print "read remaining time ",self.remainingTime
 
             
