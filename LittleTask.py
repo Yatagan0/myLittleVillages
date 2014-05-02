@@ -66,13 +66,14 @@ class LittleTask:
 
 
 class LittleBuildTask(LittleTask):
-    def __init__(self, village, name):
+    def __init__(self, village, name, position = [0,0]):
         LittleTask.__init__(self, village)
         self.name = name
         self.materials = {}
         self.building = None
         self.buildingtype = ""
-        self.pos = []
+        self.pos = position
+        self.hasPos = False
         
         self.type = "build"
         
@@ -118,10 +119,11 @@ class LittleBuildTask(LittleTask):
         else:
             self.building = int(att["building"])
             
-        if "positionX" in att.keys():
-            self.pos = [0, 0]
-            self.pos[0] = int(att["positionX"])
-            self.pos[1] = int(att["positionY"])
+        #~ if "positionX" in att.keys():
+        self.pos = [0, 0]
+        self.pos[0] = int(att["positionX"])
+        self.pos[1] = int(att["positionY"])
+        self.hasPos = att["hasPos"]=="True"
             
         self.buildingtype = att["buildingType"]
         
@@ -141,9 +143,9 @@ class LittleBuildTask(LittleTask):
         else:
             subelem.set("building", str(-1))
             
-        if len(self.pos)==2:
-            subelem.set("positionX", str(self.pos[0]))
-            subelem.set("positionY", str(self.pos[1]))
+        subelem.set("positionX", str(self.pos[0]))
+        subelem.set("positionY", str(self.pos[1]))
+        subelem.set("hasPos", str(self.hasPos))
         
         subelem.set("buildingType", self.buildingtype)
         
@@ -161,19 +163,20 @@ class LittleBuildTask(LittleTask):
         if self.status == "to start":
             #select position
             #add bring items
-            if self.pos == []:
-                posX = 0
-                posY = 0
+            if not self.hasPos:
+                posX = self.pos[0]
+                posY = self.pos[1]
                 size = 0
                 while( not self.village.positionFree(posX, posY)):
                     size +=1
-                    posX = random.randint(-size, size)
-                    posY= random.randint(-size, size)
+                    posX = random.randint(-size+self.pos[0], size+self.pos[0])
+                    posY= random.randint(-size+self.pos[1], size+self.pos[1])
                 self.pos = [posX, posY]
+                self.hasPos = True
                 #~ print "end pos for ", self.name, " ", self.building.position 
             elif self.villager.goto(self.pos):
                 if not self.village.positionFree(self.pos[0], self.pos[1]):
-                    self.pos = []
+                    self.hasPos = False
                 else:
                     self.building = newBuilding(self.buildingtype, self.name, self.pos, "in construction", self.village)
 
@@ -310,7 +313,7 @@ class LittleCarryTask(LittleTask):
             #~ print "initial ",self.initial
             #~ print "before goto1 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.initial.position):
-                print "test1"
+                #~ print "test1"
                 if self.initial.getMaterial(self.material, 1, self.mandatory):
                     self.status = "carrying material"
                     #~ print "i got some ",self.material," here"

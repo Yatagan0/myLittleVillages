@@ -1,18 +1,18 @@
 <?xml version="1.0" ?>
-<village name="Fenstuguen">
-  <villager busy="True" gender="1" money="34.0" name="Baifen Recougen" positionX="0.0" positionY="0.04" speed="0.04" task="490"/>
-  <villager busy="True" gender="0" money="32.0" name="Henpai Goubinquou" positionX="-1.44" positionY="-1.0" speed="0.04" task="486"/>
-  <villager busy="True" gender="1" money="37.0" name="Linnin Chehonto" positionX="0.0" positionY="-1.04" speed="0.04" task="492"/>
-  <villager busy="True" gender="1" money="36.0" name="Quajo Rafentou" positionX="-1.24" positionY="-1.0" speed="0.04" task="510"/>
-  <villager busy="True" gender="1" money="30.0" name="Rennon Dasitou" positionX="0.0" positionY="0.32" speed="0.04" task="508"/>
-  <villager busy="True" gender="1" money="20.0" name="Tonvon Henfonsi" positionX="0.0" positionY="0.48" speed="0.04" task="496"/>
-  <villager busy="True" gender="0" money="27.0" name="Quaiqui Sencudai" positionX="0" positionY="-1" speed="0.04" task="504"/>
-  <villager busy="True" gender="0" money="34.0" name="Jinho Pouquiquin" positionX="0.0" positionY="-1.08" speed="0.04" task="488"/>
-  <villager busy="True" gender="1" money="25.0" name="Caipon Noupuhen" positionX="0.0" positionY="1.8" speed="0.04" task="512"/>
-  <villager busy="True" gender="0" money="26.0" name="Vinvon Donbonci" positionX="0.0" positionY="-1.88" speed="0.04" task="514"/>
+<village name="Dudoutouille">
+  <villager busy="True" gender="1" money="12.0" name="Cuce Vonbepon" positionX="0" positionY="0" speed="0.04" task="76"/>
+  <villager busy="True" gender="0" money="11.0" name="Tajou Jenhola" positionX="0" positionY="0" speed="0.04" task="51"/>
+  <villager busy="True" gender="1" money="13.0" name="Faba Quensencin" positionX="0.0" positionY="-1.96" speed="0.04" task="232"/>
+  <villager busy="True" gender="1" money="12.0" name="Raisou Jouminfou" positionX="0.0" positionY="1.52" speed="0.04" task="50"/>
+  <villager busy="True" gender="1" money="11.0" name="Ceba Sensaisti" positionX="0.0" positionY="-0.16" speed="0.04" task="235"/>
+  <villager busy="True" gender="0" money="12.0" name="Nahon Quinquensa" positionX="0.0" positionY="1.24" speed="0.04" task="230"/>
+  <villager busy="True" gender="1" money="15.0" name="Gonfon Piquegou" positionX="0" positionY="0" speed="0.04" task="53"/>
+  <villager busy="True" gender="0" money="12.0" name="Ninren Monvisa" positionX="0.0" positionY="-0.96" speed="0.04" task="56"/>
+  <villager busy="True" gender="1" money="11.0" name="Dipen Dotoho" positionX="0.0" positionY="-1.44" speed="0.04" task="233"/>
+  <villager busy="True" gender="0" money="12.0" name="Joulai Cesuni" positionX="0" positionY="0" speed="0.04" task="54"/>
   <building id="0" name="warehouse" positionX="0" positionY="0" state="ok" type="storage">
-    <material name="stone" quantity="56"/>
-    <material name="wood" quantity="26"/>
+    <material name="stone" quantity="20"/>
+    <material name="wood" quantity="0"/>
   </building>
   <building id="1" name="woodcutter" positionX="0" positionY="2" production="wood" productionTime="3" state="ok" type="production">
     <material name="wood" quantity="2"/>
@@ -20,47 +20,73 @@
   <building id="2" name="stonecutter" positionX="0" positionY="-2" production="stone" productionTime="9" state="ok" type="production">
     <material name="stone" quantity="3"/>
   </building>
-  <building id="3" name="house" positionX="-1" positionY="0" state="ok" type="house">
+  <building id="3" name="house" positionX="1" positionY="0" state="ok" type="house">
     <material name="stone" quantity="0"/>
     <material name="wood" quantity="0"/>
   </building>
-  <building id="4" name="woodcutter" positionX="0" positionY="1" production="wood" productionTime="3" state="ok" type="production">
-    <material name="stone" quantity="0"/>
+  <building id="4" name="house" positionX="-1" positionY="0" state="in construction" type="house">
+    <material name="stone" quantity="8"/>
     <material name="wood" quantity="4"/>
   </building>
-  <building id="5" name="house" positionX="-1" positionY="-1" state="ok" type="house">
-    <material name="stone" quantity="0"/>
-    <material name="wood" quantity="0"/>
+  <building id="5" name="warehouse" positionX="0" positionY="1" state="in construction" type="storage">
+    <material name="stone" quantity="10"/>
+    <material name="wood" quantity="3"/>
   </building>
-  <building id="6" name="warehouse" positionX="0" positionY="-1" state="ok" type="storage">
-    <material name="stone" quantity="28"/>
-    <material name="wood" quantity="1"/>
+  <building id="6" name="stonecutter" positionX="-1" positionY="-1" production="" productionTime="0" state="in construction" type="production">
+    <material name="stone" quantity="10"/>
+    <material name="wood" quantity="2"/>
   </building>
-  <building id="7" name="stonecutter" positionX="-2" positionY="-1" production="stone" productionTime="5" state="ok" type="production">
-    <material name="stone" quantity="1"/>
-    <material name="wood" quantity="0"/>
+  <building id="7" name="woodcutter" positionX="1" positionY="-2" production="" productionTime="0" state="in construction" type="production">
+    <material name="stone" quantity="10"/>
+    <material name="wood" quantity="5"/>
   </building>
-  <task goalName="warehouse" id="430" initial="7" mandatory="True" material="stone" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
-  <task goalName="warehouse" id="444" initial="1" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
-  <task goal="6" id="486" initial="7" mandatory="True" material="stone" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task goal="6" id="488" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task goal="0" id="490" initial="4" mandatory="True" material="wood" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task goal="6" id="492" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task goalName="warehouse" id="494" initial="4" mandatory="True" material="wood" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
-  <task goal="0" id="496" initial="4" mandatory="True" material="wood" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task goalName="warehouse" id="498" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
-  <task goalName="warehouse" id="500" initial="4" mandatory="True" material="wood" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
-  <task goalName="warehouse" id="502" initial="4" mandatory="True" material="wood" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
-  <task goalName="warehouse" id="504" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="in progress" status="to start" type="carry"/>
-  <task goal="0" id="508" initial="4" mandatory="True" material="wood" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task goal="6" id="510" initial="7" mandatory="True" material="stone" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task id="511" mandatory="True" name="defaultTaskName" remainingTime="5" salary="5" state="to do" status="to start" type="production" workshop="7"/>
-  <task goal="0" id="512" initial="4" mandatory="True" material="wood" name="carryTask" salary="1" state="in progress" status="getting material" type="carry"/>
-  <task id="513" mandatory="True" name="defaultTaskName" remainingTime="3" salary="3" state="to do" status="to start" type="production" workshop="4"/>
-  <task goal="6" id="514" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
-  <task id="515" mandatory="True" name="defaultTaskName" remainingTime="9" salary="9" state="to do" status="to start" type="production" workshop="2"/>
-  <task goalName="warehouse" id="516" initial="1" mandatory="True" material="wood" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
-  <task id="517" mandatory="True" name="defaultTaskName" remainingTime="3" salary="3" state="to do" status="to start" type="production" workshop="1"/>
-  <task goalName="warehouse" id="518" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
-  <task id="519" mandatory="True" name="defaultTaskName" remainingTime="9" salary="9" state="to do" status="to start" type="production" workshop="2"/>
+  <task building="6" buildingType="production" hasPos="True" id="3" mandatory="True" name="stonecutter" positionX="-1" positionY="-1" remainingTime="10" salary="1.0" state="to do" status="waiting for materials" type="build">
+    <material name="stone" quantity="10"/>
+    <material name="wood" quantity="10"/>
+  </task>
+  <task building="7" buildingType="production" hasPos="True" id="4" mandatory="True" name="woodcutter" positionX="1" positionY="-2" remainingTime="10" salary="1.0" state="to do" status="waiting for materials" type="build">
+    <material name="stone" quantity="10"/>
+    <material name="wood" quantity="10"/>
+  </task>
+  <task building="5" buildingType="storage" hasPos="True" id="5" mandatory="True" name="warehouse" positionX="0" positionY="1" remainingTime="10" salary="1.0" state="to do" status="waiting for materials" type="build">
+    <material name="stone" quantity="10"/>
+    <material name="wood" quantity="10"/>
+  </task>
+  <task building="4" buildingType="house" hasPos="True" id="7" mandatory="True" name="house" positionX="-1" positionY="0" remainingTime="10" salary="1.0" state="to do" status="waiting for materials" type="build">
+    <material name="stone" quantity="8"/>
+    <material name="wood" quantity="8"/>
+  </task>
+  <task goalName="warehouse" id="224" initial="1" mandatory="True" material="wood" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
+  <task goalName="warehouse" id="228" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
+  <task goal="0" id="230" initial="1" mandatory="True" material="wood" name="carryTask" salary="1" state="in progress" status="carrying material" type="carry"/>
+  <task goal="0" id="232" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="in progress" status="getting material" type="carry"/>
+  <task id="233" mandatory="True" name="defaultTaskName" remainingTime="9" salary="9" state="in progress" status="to start" type="production" workshop="2"/>
+  <task goal="4" id="39" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="5" id="56" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="in progress" status="getting material" type="carry"/>
+  <task goal="5" id="54" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="in progress" status="fail" type="carry"/>
+  <task goal="6" id="76" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="in progress" status="fail" type="carry"/>
+  <task goal="5" id="55" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="fail" type="carry"/>
+  <task goal="5" id="53" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="in progress" status="fail" type="carry"/>
+  <task goal="4" id="35" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="fail" type="carry"/>
+  <task goal="5" id="50" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="in progress" status="getting material" type="carry"/>
+  <task goal="6" id="77" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goalName="warehouse" id="234" initial="2" mandatory="True" material="stone" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
+  <task id="235" mandatory="True" name="defaultTaskName" remainingTime="9" salary="9" state="in progress" status="to start" type="production" workshop="2"/>
+  <task goal="7" id="101" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="fail" type="carry"/>
+  <task goal="6" id="78" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="fail" type="carry"/>
+  <task goal="6" id="79" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="4" id="32" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="7" id="96" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="6" id="72" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="6" id="73" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goalName="warehouse" id="236" initial="1" mandatory="True" material="wood" name="carryTask" salary="1" state="to do" status="to start" type="carry"/>
+  <task id="237" mandatory="True" name="defaultTaskName" remainingTime="3" salary="3" state="to do" status="to start" type="production" workshop="1"/>
+  <task goal="7" id="92" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="7" id="99" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="fail" type="carry"/>
+  <task goal="4" id="34" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="fail" type="carry"/>
+  <task goal="7" id="94" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="6" id="75" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="6" id="74" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="5" id="58" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+  <task goal="5" id="51" initial="0" mandatory="True" material="wood" name="carryTask" salary="1.0" state="in progress" status="getting material" type="carry"/>
 </village>

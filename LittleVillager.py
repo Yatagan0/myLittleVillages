@@ -13,6 +13,7 @@ class LittleVillager:
         self.speed = 0.04 #1.0
         self.money = 0.0
         self.village = village
+
         
     def writeVillager(self, root):
         villager = ET.SubElement(root, 'villager')
@@ -85,10 +86,17 @@ class LittleVillager:
             return
         choice =  sorted(choice, key=lambda k: k[1]) 
         choice.reverse()
-        print "best value ",choice[0][1]
-        print "worst value ",choice[-1][1]
+        #~ print "best value ",choice[0][1]
+        #~ print "worst value ",choice[-1][1]
+    
+        r = random.randint(0, min(10, len(choice)-1))
+        #~ print "r ",r
+        rr = random.randint(0, r)
+        #~ print "rr ",rr
+        #~ print "len ", len(choice)
+    
         self.busy=True
-        self.task = choice[0][0]
+        self.task = choice[rr][0]
         #~ print "chose task ",self.task.id
         self.task.villager = self
         self.task.state = "in progress"

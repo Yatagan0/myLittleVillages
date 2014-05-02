@@ -58,10 +58,10 @@ class LittlePlace:
     def getMaterial(self, mat, num, notMandatory=False):
         if mat not in self.content.keys():
             self.content[mat] = 0
-            print "no ",mat," here"
+            #~ print "no ",mat," here"
             return False
         if self.content[mat] < num:
-            print "no ",mat," here"
+            #~ print "no ",mat," here"
             return False
         self.content[mat] -= num
         print "got ",num," ",mat," from ",self.id," remaining : ",self.content[mat]
