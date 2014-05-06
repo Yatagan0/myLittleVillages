@@ -1,4 +1,4 @@
-import random, utils
+import random, utils, copy
 
 from LittleVillager import *
 from LittleTask import *
@@ -61,10 +61,16 @@ class LittleVillage:
                 t.readTask(child)
                 self.toDoList.append(t)
                 
+        allTasks = copy.copy(self.toDoList)
+        
+        for b in self.buildings:
+            for t in b.taskList:
+                allTasks.append(t)
+                
         for v in self.villagers:
             #~ v.busy = False
             tid = v.task
-            for t in self.toDoList:
+            for t in allTasks:
                 #~ print t.id
                 if t.id == tid:
                     v.task = t
@@ -74,7 +80,7 @@ class LittleVillage:
                 v.busy = False
                 print "warning, ",v.name," did not find task ",tid
                 
-        for t in self.toDoList:
+        for t in allTasks:
             if isinstance(t.villager,basestring):
                 print "warning, task ",t.id, " has not his villager ",t.villager
             

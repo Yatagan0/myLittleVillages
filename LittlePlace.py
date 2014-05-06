@@ -13,6 +13,7 @@ class LittlePlace:
         self.state = "ok"
         
         self.village = village
+        self.taskList = []
         
 
         
@@ -28,6 +29,9 @@ class LittlePlace:
             mat = ET.SubElement(building, 'material')
             mat.set("name", m)
             mat.set("quantity", str(self.content[m]))
+            
+        for t in self.taskList:
+            t.writeTask(building)
             
         return building
         
@@ -52,6 +56,22 @@ class LittlePlace:
             if (child.tag == "material"):
                 attm = child.attrib
                 self.content[attm["name"]] = int(attm["quantity"])
+                
+            if(child.tag == "task"):
+                type = child.attrib["type"] 
+                name = ""
+                 
+                if type == "build":
+                    t =  LittleBuildTask( self, name)
+                elif type == "carry":
+                    t = LittleCarryTask( self)
+                elif type == "production":
+                    t = LittleWorkTask( None, self)
+
+                 
+                t.readTask(child)
+                self.taskList.append(t)
+                #TODO : identify villagers and buildings
         
             #~ self.writeWorkshop(building)
         
