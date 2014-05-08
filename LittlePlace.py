@@ -1,6 +1,8 @@
 import utils, random
 import xml.etree.ElementTree as ET
 
+from LittleTask import *
+
 global taskID 
 taskID = 0
 
@@ -62,11 +64,11 @@ class LittlePlace:
                 name = ""
                  
                 if type == "build":
-                    t =  LittleBuildTask( self, name)
+                    t =  LittleBuildTask( self.village, name)
                 elif type == "carry":
-                    t = LittleCarryTask( self)
+                    t = LittleCarryTask( self.village)
                 elif type == "production":
-                    t = LittleWorkTask( None, self)
+                    t = LittleWorkTask( None, self.village)
 
                  
                 t.readTask(child)

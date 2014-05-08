@@ -1,6 +1,6 @@
 import utils, random
 
-from LittlePlace import *
+#from LittlePlace import *
 import xml.etree.ElementTree as ET
 
 global taskID 
@@ -178,7 +178,7 @@ class LittleBuildTask(LittleTask):
                 if not self.village.positionFree(self.pos[0], self.pos[1]):
                     self.hasPos = False
                 else:
-                    self.building = newBuilding(self.buildingtype, self.name, self.pos, "in construction", self.village)
+                    self.building = self.village.addNewBuilding(self.buildingtype, self.name, self.pos, "in construction")
 
 
                     for m in self.materials:
@@ -188,7 +188,8 @@ class LittleBuildTask(LittleTask):
                             #~ lct.destination = self.building.position 
                             #~ lct.dependantTask = self
                             lct.salary = 1.
-                            self.village.toDoList.append(lct)
+                            #~ self.village.toDoList.append(lct)
+                            self.building.taskList.append(lct)
                            
                     self.status = "waiting for materials"
                     self.villager.money += 1

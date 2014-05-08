@@ -194,6 +194,9 @@ class LittleVillage:
         lct.mandatory = mandatory
         self.toDoList.append(lct)
 
+    def addNewBuilding(self, type, name, position, state):
+        return newBuilding(type, name, position, state, self)
+
 
     def getClosestBuilding(self, buildingName, destination, villagerpos = None, nb=1):
         listToSort = []
@@ -211,12 +214,35 @@ class LittleVillage:
         
         return result
         
+    def getClosestBuilding2(self, position):
+        nb = 30
+        listToSort = []
+        for b in self.buildings:
+            listToSort.append([b, utils.distance(position, b.position) ])
+
+        sortedList = sorted(listToSort,  key=lambda tup: tup[1])
+        result = []
+        for i in range(min(nb, len(sortedList))):
+            result.append(sortedList[i][0])
+        
+        return result
+        
+    def getClosestTasks(self, position, dist = 1.5, nb=10):
+        blist = self.getClosestBuilding2(position)
+        tlist = []
+        for b in blist:
+            for t in b.taskList:
+                if t.canPerform():
+                    tlist.append(t)
+        
+        return tlist+self.toDoList
+        
     def iterate(self):
         print "--------------------"
         for p in self.villagers:
             if not p.busy:
                 #~ print "select"
-                p.selectTask(self.toDoList)
+                p.selectTask(self.getClosestTasks(p.position))
             else:
                 #~ print "perform"
                 toDoNow = p.performTask()

@@ -94,19 +94,19 @@ def displayVillage(village):
 lv = LittleVillage()
 path = "village.xml"
 
-lv.readVillage(path)
+#~ lv.readVillage(path)
 
-#~ lv.createRandomVillage(10)
-#~ lbt = LittleBuildTask(lv, "stonecutter")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "woodcutter")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "warehouse")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "house")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "house")
-#~ lv.toDoList.append(lbt)
+lv.createRandomVillage(10)
+lbt = LittleBuildTask(lv, "stonecutter")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "woodcutter")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "warehouse")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "house")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "house")
+lv.toDoList.append(lbt)
 
 
 
