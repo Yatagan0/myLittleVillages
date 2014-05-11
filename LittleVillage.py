@@ -240,12 +240,8 @@ class LittleVillage:
     def iterate(self):
         print "--------------------"
         for p in self.villagers:
-            if not p.busy:
-                #~ print "select"
-                p.selectTask(self.getClosestTasks(p.position))
-            else:
-                #~ print "perform"
-                toDoNow = p.performTask()
+            p.execute()
+
                
                 
         

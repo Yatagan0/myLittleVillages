@@ -13,6 +13,7 @@ class LittleVillager:
         self.speed = 0.04 #1.0
         self.money = 0.0
         self.village = village
+        self.destination = []
 
         
     def writeVillager(self, root):
@@ -20,22 +21,33 @@ class LittleVillager:
         villager.set("name", self.name)
         villager.set("gender", str(self.gender))
         villager.set("busy", str(self.busy))
-        villager.set("task", str(self.task.id))
+        if self.task is not None:
+            villager.set("task", str(self.task.id))
         villager.set("positionX", str(self.position[0]))
         villager.set("positionY", str(self.position[1]))
         villager.set("speed", str(self.speed))
         villager.set("money", str(self.money))
+        if len(self.destination) > 0 :
+            villager.set("destinationX", str(self.destination[0]))
+            villager.set("destinationY", str(self.destination[1]))
 
     def readVillager(self, elem):
         att = elem.attrib
         self.name = att["name"]
         self.gender = int(att["gender"])
         self.busy = bool(att["busy"])
-        self.task =int(att["task"])
+        
         self.position[0] = float(att["positionX"])
         self.position[1] = float(att["positionY"])
         self.speed = float(att["speed"])
         self.money = float(att["money"])
+        if "task" in att.keys():
+            self.task =int(att["task"])
+        else:
+            self.task = -1
+        if "destinationX" in att.keys():
+            self.destination[0] = float(att["destinationX"])
+            self.destination[1] = float(att["destinationY"])         
         
     def generate(self):
         self.name = utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] + " "+utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] +utils.allL[random.randint(0, len(utils.allL)-1)]
@@ -132,6 +144,12 @@ class LittleVillager:
             return toReturn
         #~ print self.task.name, "not finished"
         return []
+        
+    def execute(self):
+        if not self.busy:
+            self.selectTask(self.village.getClosestTasks(self.position))
+        else:
+            toDoNow = self.performTask()
 
 if __name__ == '__main__':
     lv = LittleVillager()
