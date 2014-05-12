@@ -146,8 +146,15 @@ class LittleVillager:
         return []
         
     def execute(self):
+        if len(self.destination) > 0:
+            if self.goto(self.destination):
+                self.destination = []
         if not self.busy:
             self.selectTask(self.village.getClosestTasks(self.position))
+            if not self.busy:
+                self.destination = self.position
+                self.destination[0] += random.randint(-1, 1)
+                self.destination[1] += random.randint(-1, 1)
         else:
             toDoNow = self.performTask()
 
