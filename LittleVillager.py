@@ -1,4 +1,4 @@
-import utils, random
+import utils, random, copy
 import xml.etree.ElementTree as ET
 
 
@@ -150,9 +150,13 @@ class LittleVillager:
             if self.goto(self.destination):
                 self.destination = []
         if not self.busy:
-            self.selectTask(self.village.getClosestTasks(self.position))
+            #~ print len(self.village.toDoList), " tasks in village villager1"
+            list = self.village.getClosestTasks(self.position)
+            #~ print len(self.village.toDoList), " tasks in village villager2"
+            self.selectTask(list)
+            #~ print len(self.village.toDoList), " tasks in village villager3"
             if not self.busy:
-                self.destination = self.position
+                self.destination = copy.copy(self.position)
                 self.destination[0] += random.randint(-1, 1)
                 self.destination[1] += random.randint(-1, 1)
         else:

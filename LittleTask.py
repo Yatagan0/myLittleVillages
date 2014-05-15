@@ -183,13 +183,16 @@ class LittleBuildTask(LittleTask):
 
                     for m in self.materials:
                         for i in range(self.materials[m]):
+                            print "adding carry tasks"
                             lct = LittleCarryTask(self.village, "warehouse", self.building, m)
                             #~ lct.material = m
                             #~ lct.destination = self.building.position 
                             #~ lct.dependantTask = self
                             lct.salary = 1.
                             #~ self.village.toDoList.append(lct)
-                            self.building.taskList.append(lct)
+                            self.building.addTask(lct)
+                           
+                    print len(self.village.toDoList), " tasks in village task"
                            
                     self.status = "waiting for materials"
                     self.villager.money += 1

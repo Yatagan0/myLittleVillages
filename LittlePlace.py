@@ -113,7 +113,7 @@ class LittlePlace:
     def addTask(self, task):
         #~ print "bla"
         self.taskList.append(task)
-        self.village.toDoList.append(task)
+        #~ self.village.toDoList.append(task)
 
 
 class LittleExternalPlace(LittlePlace):
@@ -140,10 +140,10 @@ class LittleStorage(LittleBuilding):
         result = LittlePlace.getMaterial(self, mat, num, notMandatory)
         if notMandatory and random.randint(0, 2) <2:
             return result
-        if not result:
-            neighbors = self.village.getClosestBuilding( "warehouse", self.position, nb=3)
-            for n in neighbors:
-                self.village.addCarryTask( n, self, mat, mandatory=False)
+        #~ if not result:
+            #~ neighbors = self.village.getClosestBuilding( "warehouse", self.position, nb=3)
+            #~ for n in neighbors:
+                #~ self.village.addCarryTask( n, self, mat, mandatory=False)
                 #~ print "warehouse ",self.id," is asking ",mat," to warehouse ",n.id
 
         return result
