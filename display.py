@@ -26,6 +26,8 @@ def printBuilding(bg, building, pos):
     
  
     rows,cols,channels = building.shape
+    
+    rows2,cols2,channels2 = bg.shape
     #http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_core/py_image_arithmetics/py_image_arithmetics.html#image-arithmetics
     #~ roi = bg[pixel[0]:(pixel[0]+rows), pixel[1]:(cols+pixel[1]) ]
     # Now create a mask of logo and create its inverse mask also
@@ -41,15 +43,26 @@ def printBuilding(bg, building, pos):
     # Put logo in ROI and modify the main image
     #~ dst = cv2.add(img1_bg,img2_fg)
     #~ dst = cv2.add(roi, building)
-    bg[pixel[0]:(pixel[0]+rows), pixel[1]:(cols+pixel[1]) ] = building  
+    
+    if pixel[0] > 0 and pixel[0]+rows < rows2:
+         if pixel[1] > 0 and pixel[1]+cols < cols2:
+             try:
+                bg[pixel[0]:(pixel[0]+rows), pixel[1]:(cols+pixel[1]) ] = building  
+             except Exception, e:
+                print "bla ",e
         
         
 def printPeople(bg, people, pos):
     pixel = posToPixel(bg, pos)
-    
+    rows2,cols2,channels2 = bg.shape
 
     rows,cols,channels = people.shape
-    bg[pixel[0]:(pixel[0]+rows), pixel[1]:(cols+pixel[1]) ] = people 
+    if pixel[0] > 0 and pixel[0]+rows < rows2:
+         if pixel[1] > 0 and pixel[1]+cols < cols2:
+             try:
+                bg[pixel[0]:(pixel[0]+rows), pixel[1]:(cols+pixel[1]) ] = people 
+             except Exception, e:
+                print "blu ",e
     
 def displayVillage(village):
     bg = cv2.imread('plain_s.jpg')#,cv2.IMREAD_UNCHANGED)
@@ -61,6 +74,7 @@ def displayVillage(village):
     stonecutter  = cv2.imread('stonecutter.jpg')
     
     for b in village.buildings:
+        #~ print "printing ",b.name
         if b.state == "in construction":
             printBuilding(bg, materials, b.position)
         else:
@@ -94,19 +108,19 @@ def displayVillage(village):
 lv = LittleVillage()
 path = "village.xml"
 
-lv.readVillage(path)
+#~ lv.readVillage(path)
 
-#~ lv.createRandomVillage(10)
-#~ lbt = LittleBuildTask(lv, "stonecutter")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "woodcutter")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "warehouse")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "house")
-#~ lv.toDoList.append(lbt)
-#~ lbt = LittleBuildTask(lv, "house")
-#~ lv.toDoList.append(lbt)
+lv.createRandomVillage(10)
+lbt = LittleBuildTask(lv, "stonecutter")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "woodcutter")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "warehouse")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "house")
+lv.toDoList.append(lbt)
+lbt = LittleBuildTask(lv, "house")
+lv.toDoList.append(lbt)
 
 
 
@@ -118,7 +132,7 @@ while mustRun:
     bg = displayVillage(lv)
     cv2.imshow('image',bg)
     key = cv2.waitKey(33)
-    if key == 27:
+    if (key & 255) == 27:
         mustRun = False
     
     

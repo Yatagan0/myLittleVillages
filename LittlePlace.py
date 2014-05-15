@@ -72,7 +72,8 @@ class LittlePlace:
 
                  
                 t.readTask(child)
-                self.taskList.append(t)
+                self.addTask(t)
+                #~ self.taskList.append(t)
                 #TODO : identify villagers and buildings
         
             #~ self.writeWorkshop(building)
@@ -107,6 +108,12 @@ class LittlePlace:
             s += "\n  "+m+" "+str(self.content[m])
             
         return s
+        
+        
+    def addTask(self, task):
+        #~ print "bla"
+        self.taskList.append(task)
+        self.village.toDoList.append(task)
 
 
 class LittleExternalPlace(LittlePlace):
@@ -166,9 +173,10 @@ class LittleWorkshop(LittleBuilding):
             self.addProductionTask()
             
     def addProductionTask(self):
-        #~ task = LittleWorkTask(self)
+        task = LittleWorkTask(self, self.village)
+        self.addTask(task)
         #~ self.village.toDoList.append(task)
-        self.village.addProductionTask(self)
+        #~ self.village.addProductionTask(self)
         
     def writeBuilding(self, elem):
         subelem = LittlePlace.writeBuilding(self,elem)

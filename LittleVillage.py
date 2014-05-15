@@ -63,9 +63,9 @@ class LittleVillage:
                 
         allTasks = copy.copy(self.toDoList)
         
-        for b in self.buildings:
-            for t in b.taskList:
-                allTasks.append(t)
+        #~ for b in self.buildings:
+            #~ for t in b.taskList:
+                #~ allTasks.append(t)
                 
         for v in self.villagers:
             #~ v.busy = False
@@ -229,7 +229,8 @@ class LittleVillage:
         
     def getClosestTasks(self, position, dist = 1.5, nb=10):
         blist = self.getClosestBuilding2(position)
-        tlist = []
+        #tlist = []
+        tlist = self.toDoList
         for b in blist:
             for t in b.taskList:
                 if t.canPerform():
