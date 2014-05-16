@@ -239,14 +239,7 @@ class LittleVillage:
         
         return tlist+self.toDoList
         
-    def iterate(self):
-        print "--------------------"
-        for p in self.villagers:
-            p.execute()
-
-               
-                
-        
+    def cleanTasks(self):
         inds = range(len(self.toDoList))
         inds.reverse()
         for i in inds:
@@ -261,6 +254,20 @@ class LittleVillage:
                     t.status = "to start"
                     self.toDoList.append(t)
                     print "postponning task ",t.id
+        
+    def iterate(self):
+        print "--------------------"
+        for p in self.villagers:
+            #~ print p.position
+            p.execute()
+            #~ print p.position
+            #~ print "&&&&"
+
+        for b in self.buildings:
+            b.cleanTasks()
+                
+        self.cleanTasks()
+
                     
             
 

@@ -115,6 +115,21 @@ class LittlePlace:
         self.taskList.append(task)
         #~ self.village.toDoList.append(task)
 
+    def cleanTasks(self):
+        inds = range(len(self.taskList))
+        inds.reverse()
+        for i in inds:
+            if self.taskList[i].status == "done":
+                #~ print self.toDoList[i].name, " finished"
+                self.taskList.pop(i)
+            elif self.taskList[i].status == "fail":
+                if not self.taskList[i].mandatory:
+                    self.taskList.pop(i)
+                elif random.randint(0, 9) == 0:
+                    t = self.taskList.pop(i)
+                    t.status = "to start"
+                    self.taskList.append(t)
+                    print "postponning task ",t.id
 
 class LittleExternalPlace(LittlePlace):
     def __init__(self,name,  village):

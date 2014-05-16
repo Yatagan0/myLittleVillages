@@ -46,6 +46,7 @@ class LittleVillager:
         else:
             self.task = -1
         if "destinationX" in att.keys():
+            self.destination = [0.0, 0.0]
             self.destination[0] = float(att["destinationX"])
             self.destination[1] = float(att["destinationY"])         
         
@@ -100,6 +101,9 @@ class LittleVillager:
         choice.reverse()
         #~ print "best value ",choice[0][1]
         #~ print "worst value ",choice[-1][1]
+        
+        
+    
     
         r = random.randint(0, min(10, len(choice)-1))
         #~ print "r ",r
@@ -109,6 +113,11 @@ class LittleVillager:
     
         self.busy=True
         self.task = choice[rr][0]
+        
+        
+        #~ rr = random.randint(0, len(taskList) - 1)
+        #~ self.task = taskList[rr]
+        
         #~ print "chose task ",self.task.id
         self.task.villager = self
         self.task.state = "in progress"
@@ -145,22 +154,36 @@ class LittleVillager:
         #~ print self.task.name, "not finished"
         return []
         
+
+        
     def execute(self):
         if len(self.destination) > 0:
+            #~ print "wandering"
+            #~ print self.position
             if self.goto(self.destination):
+                
+                print "end of wandering"
                 self.destination = []
-        if not self.busy:
-            #~ print len(self.village.toDoList), " tasks in village villager1"
-            list = self.village.getClosestTasks(self.position)
-            #~ print len(self.village.toDoList), " tasks in village villager2"
-            self.selectTask(list)
-            #~ print len(self.village.toDoList), " tasks in village villager3"
-            if not self.busy:
-                self.destination = copy.copy(self.position)
-                self.destination[0] += random.randint(-1, 1)
-                self.destination[1] += random.randint(-1, 1)
+            #~ print self.position
         else:
-            toDoNow = self.performTask()
+            if not self.busy:
+                #~ print len(self.village.toDoList), " tasks in village villager1"
+                list = self.village.getClosestTasks(self.position)
+                #~ print len(self.village.toDoList), " tasks in village villager2"
+                self.selectTask(list)
+                #~ print len(self.village.toDoList), " tasks in village villager3"
+                if not self.busy:
+                    print "no task found. looking around"
+                    self.destination = copy.copy(self.position)
+                    self.destination[0] += random.randint(-1, 1)
+                    self.destination[1] += random.randint(-1, 1)
+            else:
+                toDoNow = self.performTask()
+                if not toDoNow and self.task.status == "fail":
+                    print "task failed. looking around"
+                    self.destination = copy.copy(self.position)
+                    self.destination[0] += random.randint(-1, 1)
+                    self.destination[1] += random.randint(-1, 1)            
 
 if __name__ == '__main__':
     lv = LittleVillager()

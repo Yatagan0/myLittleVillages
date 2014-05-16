@@ -396,7 +396,7 @@ class LittleWorkTask(LittleTask):
             lct = LittleCarryTask(self.village, self.workshop,  "warehouse",  self.workshop.production)
             #~ lct.dependantTask = self
             lct.salary = 1
-            self.village.toDoList.append(lct)
+            self.workshop.addTask(lct)
             self.village.addProductionTask(self.workshop)
             
             self.status = "done"
