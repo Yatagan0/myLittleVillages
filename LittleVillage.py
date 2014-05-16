@@ -186,7 +186,8 @@ class LittleVillage:
 
     def addProductionTask(self, workshop):
         lwt = LittleWorkTask(workshop, workshop.village)
-        self.toDoList.append(lwt)
+        workshop.addTask(lwt)
+        #self.toDoList.append(lwt)
         
     def addCarryTask(self, fromB,toB, mat, mandatory = True):
         if fromB.id == toB.id:
