@@ -115,10 +115,10 @@ class LittleVillager:
         self.task = choice[rr][0]
         
         
-        #~ rr = random.randint(0, len(taskList) - 1)
-        #~ self.task = taskList[rr]
+        rr = random.randint(0, len(taskList) - 1)
+        self.task = taskList[rr]
         
-        #~ print "chose task ",self.task.id
+        print self.name, " starts ", self.task.name, " ", self.task.id
         self.task.villager = self
         self.task.state = "in progress"
         return
@@ -145,14 +145,13 @@ class LittleVillager:
         #~ print "perform ",self.task.id
         toReturn = self.task.execute()
         if toReturn:
-            print self.name, " finished ", self.task.name, " ", self.task.id
+            
             #~ print "finished"
             self.task.state = "to do"
             #~ print self.task.name, " status ", self.task.status
             self.busy = False
-            return toReturn
-        #~ print self.task.name, "not finished"
-        return []
+        return toReturn
+
         
 
         
@@ -162,16 +161,13 @@ class LittleVillager:
             #~ print self.position
             if self.goto(self.destination):
                 
-                print "end of wandering"
+                #~ print "end of wandering"
                 self.destination = []
             #~ print self.position
         else:
             if not self.busy:
-                #~ print len(self.village.toDoList), " tasks in village villager1"
                 list = self.village.getClosestTasks(self.position)
-                #~ print len(self.village.toDoList), " tasks in village villager2"
                 self.selectTask(list)
-                #~ print len(self.village.toDoList), " tasks in village villager3"
                 if not self.busy:
                     print "no task found. looking around"
                     self.destination = copy.copy(self.position)
@@ -179,11 +175,16 @@ class LittleVillager:
                     self.destination[1] += random.randint(-1, 1)
             else:
                 toDoNow = self.performTask()
-                if not toDoNow and self.task.status == "fail":
-                    print "task failed. looking around"
-                    self.destination = copy.copy(self.position)
-                    self.destination[0] += random.randint(-1, 1)
-                    self.destination[1] += random.randint(-1, 1)            
+                if toDoNow:
+                    if self.task.status == "fail":
+                    
+                        print self.name, " failed ", self.task.name, " ", self.task.id
+                        self.destination = copy.copy(self.position)
+                        self.destination[0] += random.randint(-1, 1)
+                        self.destination[1] += random.randint(-1, 1)   
+                    else:
+                        print self.name, " finished ", self.task.name, " ", self.task.id
+                        
 
 if __name__ == '__main__':
     lv = LittleVillager()

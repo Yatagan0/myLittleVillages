@@ -129,7 +129,7 @@ class LittlePlace:
                     t = self.taskList.pop(i)
                     t.status = "to start"
                     self.taskList.append(t)
-                    print "postponning task ",t.id
+                    #~ print "postponning task ",t.id
 
 class LittleExternalPlace(LittlePlace):
     def __init__(self,name,  village):

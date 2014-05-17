@@ -183,7 +183,7 @@ class LittleBuildTask(LittleTask):
 
                     for m in self.materials:
                         for i in range(self.materials[m]):
-                            print "adding carry tasks"
+                            #~ print "adding carry tasks"
                             lct = LittleCarryTask(self.village, "warehouse", self.building, m)
                             #~ lct.material = m
                             #~ lct.destination = self.building.position 
@@ -353,9 +353,11 @@ class LittleWorkTask(LittleTask):
             self.workshop = workshop
             self.remainingTime = self.workshop.productionTime
             self.salary = self.remainingTime
+            self.name = "produce"+self.workshop.production
         else:
             self.workshop = None
         self.type = "production"
+        
          
 
     def readTask(self, elem):
