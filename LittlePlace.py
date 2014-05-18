@@ -78,7 +78,7 @@ class LittlePlace:
         
             #~ self.writeWorkshop(building)
         
-    def getMaterial(self, mat, num, notMandatory=False):
+    def getMaterial(self, mat, num, mandatory=True):
         if mat not in self.content.keys():
             self.content[mat] = 0
             #~ print "no ",mat," here"
@@ -151,15 +151,17 @@ class LittleStorage(LittleBuilding):
         self.type = "storage"
 
 #someone gets material from storage
-    def getMaterial(self, mat, num, notMandatory = False):
-        result = LittlePlace.getMaterial(self, mat, num, notMandatory)
-        if notMandatory and random.randint(0, 2) <2:
-            return result
-        #~ if not result:
-            #~ neighbors = self.village.getClosestBuilding( "warehouse", self.position, nb=3)
-            #~ for n in neighbors:
-                #~ self.village.addCarryTask( n, self, mat, mandatory=False)
-                #~ print "warehouse ",self.id," is asking ",mat," to warehouse ",n.id
+    def getMaterial(self, mat, num, mandatory = True):
+        if not mandatory and self.content[mat] - num < 1:
+            print "NIET"
+            result =  False
+        else :
+            result = LittlePlace.getMaterial(self, mat, num, mandatory)
+        if not result and (mandatory or random.randint(0, 1) == 0):
+            neighbors = self.village.getClosestBuilding( "warehouse", self.position, nb=1)
+            for n in neighbors:
+                self.village.addCarryTask( n, self, mat, mandatory=False)
+                print "warehouse ",self.id," is asking ",mat," to warehouse ",n.id
 
         return result
 

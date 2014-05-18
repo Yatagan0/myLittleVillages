@@ -192,7 +192,7 @@ class LittleBuildTask(LittleTask):
                             #~ self.village.toDoList.append(lct)
                             self.building.addTask(lct)
                            
-                    print len(self.village.toDoList), " tasks in village task"
+                    #~ print len(self.village.toDoList), " tasks in village task"
                            
                     self.status = "waiting for materials"
                     self.villager.money += 1
@@ -204,26 +204,24 @@ class LittleBuildTask(LittleTask):
             return True
 
         elif self.status == "building":
-            #check if remaining time
-            self.remainingTime -=1
-            self.villager.money += 1
-            if self.remainingTime == 0:
-                for m in self.materials:
-                    self.building.getMaterial(m, self.materials[m])
-                
-                
-                self.building.state = "ok"
-                if self.building.type == "production":
-                    if self.name == "stonecutter":
-                        self.building.startProducing("stone", 5, 1)
-                    elif self.name == "woodcutter":
-                        self.building.startProducing("wood", 3, 1)
-                print self.building.name, "finished in ", self.building.position
-                self.status = "done"
-                
-                
+            if self.villager.goto(self.pos):
+                #check if remaining time
+                self.remainingTime -=1
+                self.villager.money += 1
+                if self.remainingTime == 0:
+                    for m in self.materials:
+                        self.building.getMaterial(m, self.materials[m])
+                    
+                    
+                    self.building.state = "ok"
+                    if self.building.type == "production":
+                        if self.name == "stonecutter":
+                            self.building.startProducing("stone", 5, 1)
+                        elif self.name == "woodcutter":
+                            self.building.startProducing("wood", 3, 1)
+                    print self.building.name, "finished in ", self.building.position
+                    self.status = "done"
                 return True
-            return True
                 
         return False
         
@@ -295,8 +293,8 @@ class LittleCarryTask(LittleTask):
                 #~ self.goallist = self.getClosestBuilding(self.goal, self.initial.position, 1)
                 goallist = self.village.getClosestBuilding(self.goal, self.initial.position)
 
-                if self.goal == self.initial.name:
-                    goallist.pop(0)
+                #~ if self.goal == self.initial.name:
+                    #~ goallist.pop(0)
                 if len(goallist)==0:
                     print "warning, could not find a ",self.goal," to set for goal"
                 self.goal = goallist[0]
@@ -304,8 +302,8 @@ class LittleCarryTask(LittleTask):
             if isinstance(self.initial, basestring):
                 #~ self.initiallist = self.getClosestBuilding(self.initial, self.goal.position, 1)
                 initiallist = self.village.getClosestBuilding(self.initial, self.goal.position, self.villager.position)
-                if self.goal.name == self.initial and not  self.goal.state == "in construction":
-                    initiallist.pop(0)
+                #~ if self.goal.name == self.initial and not  self.goal.state == "in construction":
+                    #~ initiallist.pop(0)
                 if len(initiallist)==0:
                     print "warning, could not find a ",self.initial," to set for initial"
                 self.initial = initiallist[0]

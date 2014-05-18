@@ -121,6 +121,10 @@ lv.readVillage(path)
 #~ lv.toDoList.append(lbt)
 #~ lbt = LittleBuildTask(lv, "house")
 #~ lv.toDoList.append(lbt)
+#~ lbt = LittleBuildTask(lv, "house")
+#~ lv.toDoList.append(lbt)
+#~ lbt = LittleBuildTask(lv, "house")
+#~ lv.toDoList.append(lbt)
 
 
 

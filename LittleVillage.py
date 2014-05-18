@@ -160,12 +160,15 @@ class LittleVillage:
             self.villagers.append(lv)
             
         newBuilding("storage", "warehouse", [0, 0], "ok", self)
-        self.buildings[0].setMaterial("stone", 40)
+        self.buildings[0].setMaterial("stone", 0)
         self.buildings[0].setMaterial("wood", 10)
-        newBuilding("production", "woodcutter", [0, 2], "ok", self)
-        self.buildings[1].startProducing("wood", 3, 1)
-        newBuilding("production", "stonecutter", [0, -2], "ok", self)
-        self.buildings[2].startProducing("stone", 9, 2)
+        newBuilding("storage", "warehouse", [1, 1], "ok", self)
+        self.buildings[1].setMaterial("stone", 10)
+        self.buildings[1].setMaterial("wood", 0)
+        newBuilding("production", "woodcutter", [0, -1], "ok", self)
+        self.buildings[2].startProducing("wood", 3, 1)
+        newBuilding("production", "stonecutter", [1, 2], "ok", self)
+        self.buildings[3].startProducing("stone", 3, 1)
         
     def __str__(self):
         s = "This is the village of "+self.name
@@ -194,7 +197,8 @@ class LittleVillage:
             return
         lct = LittleCarryTask(self, fromB, toB, mat)
         lct.mandatory = mandatory
-        self.toDoList.append(lct)
+        #~ self.toDoList.append(lct)
+        fromB.taskList.append(lct)
 
     def addNewBuilding(self, type, name, position, state):
         return newBuilding(type, name, position, state, self)
@@ -210,6 +214,10 @@ class LittleVillage:
                     listToSort.append([b, utils.distance(destination, b.position) ])
 
         sortedList = sorted(listToSort,  key=lambda tup: tup[1])
+        #~ print "closest ",sortedList[0][1]
+        if sortedList[0][1] == 0:
+            sortedList = sortedList[1:] #dont find yourself
+            print "don't find yourself"
         result = []
         for i in range(min(nb, len(sortedList))):
             result.append(sortedList[i][0])
