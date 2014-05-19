@@ -182,8 +182,8 @@ class LittleVillager:
                         self.destination = copy.copy(self.position)
                         self.destination[0] += random.randint(-1, 1)
                         self.destination[1] += random.randint(-1, 1)   
-                    else:
-                        print self.name, " finished ", self.task.name, " ", self.task.id
+                    #~ else:
+                        #~ print self.name, " finished ", self.task.name, " ", self.task.id
                         
 
 if __name__ == '__main__':

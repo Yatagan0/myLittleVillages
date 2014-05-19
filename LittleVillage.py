@@ -239,14 +239,18 @@ class LittleVillage:
         
     def getClosestTasks(self, position, dist = 1.5, nb=10):
         blist = self.getClosestBuilding2(position)
-        #tlist = []
-        tlist = copy.copy(self.toDoList)
+        tlist = []
+        #~ tlist = copy.copy(self.toDoList)
+        for t in self.toDoList:
+            if t.canPerform():
+                tlist.append(t)
+        
         for b in blist:
             for t in b.taskList:
                 if t.canPerform():
                     tlist.append(t)
         
-        return tlist+self.toDoList
+        return tlist #+self.toDoList
         
     def cleanTasks(self):
         inds = range(len(self.toDoList))

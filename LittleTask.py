@@ -193,26 +193,28 @@ class LittleBuildTask(LittleTask):
                             self.building.addTask(lct)
                            
                     #~ print len(self.village.toDoList), " tasks in village task"
-                           
+                    print self.building.id, " is now waiting for materials"
                     self.status = "waiting for materials"
                     self.villager.money += 1
                     return True
         elif self.status == "waiting for materials":
             #check if remaining materials
             self.status = "building"
-            
-            return True
+            print  self.building.name, self.building.id," passing to state building"
+            for m in self.materials:
+                
+                if not self.building.getMaterial(m, self.materials[m]):
+                    print "WARNING, could not remove materials from ", self.building.name, self.building.id
+            return False
 
         elif self.status == "building":
             if self.villager.goto(self.pos):
                 #check if remaining time
                 self.remainingTime -=1
                 self.villager.money += 1
+                print "finishing ",self.building.name
                 if self.remainingTime == 0:
-                    for m in self.materials:
-                        self.building.getMaterial(m, self.materials[m])
-                    
-                    
+
                     self.building.state = "ok"
                     if self.building.type == "production":
                         if self.name == "stonecutter":
@@ -226,18 +228,20 @@ class LittleBuildTask(LittleTask):
         return False
         
     def canPerform(self):
+        print "can perform ? ",self.status,self.id
         if self.status == "waiting for materials" and self.state == "to do":
+            print "testing if all materials are present"
             for m in self.materials:
                 #~ if self.materials[m] > 0:
                 if m not in self.building.content.keys():
-                    #~ print self.id," cant parform : ",m," not known in ", self.building.id
+                    print self.id," cant parform : ",m," not known in ", self.building.id
                     return False
                 if self.building.content[m] < self.materials[m]:
-                    #~ print self.id," cant perform, not enough ",m," in ",self.building.id
+                    print self.id," cant perform, not enough ",m," in ",self.building.id
                     #~ print "cannot perform"
                     return False
-        #~ print "can perform"
-        return self.status != "done" and self.state == "to do"
+            print "can perform"
+        return  LittleTask.canPerform(self) #  self.status != "done" and self.state == "to do"
 
             
 
@@ -328,7 +332,7 @@ class LittleCarryTask(LittleTask):
         elif self.status == "carrying material":
             #~ print "before goto2 ",self.goalBuilding.name ," ",self.goalBuilding.position
             if self.villager.goto(self.goal.position):
-                print "test2"
+                #~ print "test2"
             #~ if self.villager.goto(self.goalBuilding.position):
                 self.goal.setMaterial(self.material, 1)
                 self.villager.carrying = ""
