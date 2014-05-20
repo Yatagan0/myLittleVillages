@@ -68,6 +68,7 @@ def displayVillage(village):
     bg = cv2.imread('plain_s.jpg')#,cv2.IMREAD_UNCHANGED)
     building  = cv2.imread('building_s.jpg')#,cv2.IMREAD_UNCHANGED)
     people  = cv2.imread('people.jpg')#,cv2.IMREAD_UNCHANGED)
+    peopleB  = cv2.imread('peopleB.jpg')
     place  = cv2.imread('field_s.jpg')
     materials  = cv2.imread('materials.jpg')
     woodcutter  = cv2.imread('woodcutter.jpg')
@@ -98,7 +99,10 @@ def displayVillage(village):
         #~ else:
             #~ printBuilding(bg, place, p.position)       
     for p in village.villagers:
-        printPeople(bg, people, p.position)
+        if p.busy :
+            printPeople(bg, peopleB, p.position)
+        else:
+            printPeople(bg, people, p.position)
         
     return bg
 

@@ -21,7 +21,7 @@ class LittleVillager:
         villager.set("name", self.name)
         villager.set("gender", str(self.gender))
         villager.set("busy", str(self.busy))
-        if self.task is not None:
+        if self.task is not None and self.busy:
             villager.set("task", str(self.task.id))
         villager.set("positionX", str(self.position[0]))
         villager.set("positionY", str(self.position[1]))
@@ -115,8 +115,8 @@ class LittleVillager:
         self.task = choice[rr][0]
         
         
-        rr = random.randint(0, len(taskList) - 1)
-        self.task = taskList[rr]
+        #~ rr = random.randint(0, len(taskList) - 1)
+        #~ self.task = taskList[rr]
         
         print self.name, " starts ", self.task.name, " ", self.task.id
         self.task.villager = self

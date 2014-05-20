@@ -175,7 +175,7 @@ class LittleBuildTask(LittleTask):
                 self.hasPos = True
                 #~ print "end pos for ", self.name, " ", self.building.position 
             elif self.villager.goto(self.pos):
-                if not self.village.positionFree(self.pos[0], self.pos[1]):
+                if not self.village.positionFree(self.pos[0], self.pos[1]): #position has been occupied the imewe arrive
                     self.hasPos = False
                 else:
                     self.building = self.village.addNewBuilding(self.buildingtype, self.name, self.pos, "in construction")
@@ -228,19 +228,19 @@ class LittleBuildTask(LittleTask):
         return False
         
     def canPerform(self):
-        print "can perform ? ",self.status,self.id
+        #~ print "can perform ? ",self.status,self.id
         if self.status == "waiting for materials" and self.state == "to do":
-            print "testing if all materials are present"
+            #~ print "testing if all materials are present"
             for m in self.materials:
                 #~ if self.materials[m] > 0:
                 if m not in self.building.content.keys():
-                    print self.id," cant parform : ",m," not known in ", self.building.id
+                    #~ print self.id," cant parform : ",m," not known in ", self.building.id
                     return False
                 if self.building.content[m] < self.materials[m]:
-                    print self.id," cant perform, not enough ",m," in ",self.building.id
+                    #~ print self.id," cant perform, not enough ",m," in ",self.building.id
                     #~ print "cannot perform"
                     return False
-            print "can perform"
+            #~ print "can perform"
         return  LittleTask.canPerform(self) #  self.status != "done" and self.state == "to do"
 
             
