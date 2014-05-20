@@ -23,3 +23,14 @@ time = 0
 def iterateTime():
     global time
     time += 1
+    
+    
+    
+    
+prestigeObjects = {}
+
+cabane = {"prestige":10, "price":10}
+prestigeObjects["hut"] = cabane
+
+maison = {"prestige":40, "price":30}
+prestigeObjects["house"] = maison

@@ -80,6 +80,13 @@ class LittleVillage:
                 v.busy = False
                 print "warning, ",v.name," did not find task ",tid
                 
+            if v.home is not None:
+                for b in self.buildings:
+                    if b.id == v.home:
+                        v.home = b
+                        break
+                
+                
         for t in allTasks:
             if isinstance(t.villager,basestring):
                 print "warning, task ",t.id, " has not his villager ",t.villager

@@ -14,6 +14,7 @@ class LittleVillager:
         self.money = 0.0
         self.village = village
         self.destination = []
+        self.home = None
 
         
     def writeVillager(self, root):
@@ -30,6 +31,9 @@ class LittleVillager:
         if len(self.destination) > 0 :
             villager.set("destinationX", str(self.destination[0]))
             villager.set("destinationY", str(self.destination[1]))
+            
+        if self.home is not None:
+            villager.set("home", str(self.home.id))
 
     def readVillager(self, elem):
         att = elem.attrib
@@ -48,7 +52,10 @@ class LittleVillager:
         if "destinationX" in att.keys():
             self.destination = [0.0, 0.0]
             self.destination[0] = float(att["destinationX"])
-            self.destination[1] = float(att["destinationY"])         
+            self.destination[1] = float(att["destinationY"])      
+
+        if "home" in att.keys():
+            self.home =   int(att["home"])    
         
     def generate(self):
         self.name = utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] + " "+utils.allU[random.randint(0, len(utils.allU)-1)]+utils.allL[random.randint(0, len(utils.allL)-1)] +utils.allL[random.randint(0, len(utils.allL)-1)]
