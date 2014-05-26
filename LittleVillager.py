@@ -1,6 +1,6 @@
 import utils, random, copy
 import xml.etree.ElementTree as ET
-
+from LittleTask import *
 
 class LittleVillager:
     def __init__(self, village):
@@ -160,7 +160,14 @@ class LittleVillager:
         return toReturn
 
         
-
+    def improvePrestige(self):
+        if self.money > 10:
+            pos = [0, 0]
+            pos[0] = int(self.position[0])
+            pos[1] = int(self.position[1])
+            lbt = LittleBuildTask(self.village, "house", position=pos)
+            self.village.toDoList.append(lbt)
+            self.money -= 10
         
     def execute(self):
         if len(self.destination) > 0:
@@ -173,6 +180,9 @@ class LittleVillager:
             #~ print self.position
         else:
             if not self.busy:
+                if random.randint(0, 19) == 0:
+                    self.improvePrestige()
+                
                 list = self.village.getClosestTasks(self.position)
                 self.selectTask(list)
                 if not self.busy:

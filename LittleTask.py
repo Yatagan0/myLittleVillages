@@ -164,8 +164,9 @@ class LittleBuildTask(LittleTask):
             #select position
             #add bring items
             if not self.hasPos:
-                posX = self.pos[0]
-                posY = self.pos[1]
+                print "self.pos ",self.pos
+                posX = int(self.pos[0])
+                posY = int(self.pos[1])
                 size = 0
                 while( not self.village.positionFree(posX, posY)):
                     size +=1
