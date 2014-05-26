@@ -66,7 +66,7 @@ class LittleTask:
 
 
 class LittleBuildTask(LittleTask):
-    def __init__(self, village, name, position = [0,0]):
+    def __init__(self, village, name, position = [0,0], owner=None):
         LittleTask.__init__(self, village)
         self.name = name
         self.materials = {}
@@ -74,6 +74,8 @@ class LittleBuildTask(LittleTask):
         self.buildingtype = ""
         self.pos = position
         self.hasPos = False
+        
+        self.owner = owner
         
         self.type = "build"
         
@@ -132,6 +134,9 @@ class LittleBuildTask(LittleTask):
             if (child.tag == "material"):
                 attm = child.attrib
                 self.materials[attm["name"]] = int(attm["quantity"])
+                
+        if "owner" in att.keys():
+            self.owner = att["owner"]
 
             
     def writeTask(self, root):
@@ -155,6 +160,9 @@ class LittleBuildTask(LittleTask):
             mat = ET.SubElement(subelem, 'material')
             mat.set("name", m)
             mat.set("quantity", str(self.materials[m]))
+        
+        if self.owner is not None:
+            subelem.set("owner", str(self.owner.name))
 
 
             
