@@ -7,7 +7,7 @@ global taskID
 taskID = 0
 
 class LittleTask:
-    def __init__(self, village):
+    def __init__(self, village, owner=None):
         self.state = "to do"
         self.status = "to start"
         self.village=village
@@ -17,6 +17,8 @@ class LittleTask:
         self.salary = 0.0
         
         self.mandatory = True
+        
+        self.owner = owner
         
         global taskID
         self.id = taskID
@@ -45,6 +47,9 @@ class LittleTask:
         self.id = int(att["id"])
         #~ print "created task ",self.id
         
+        if "owner" in att.keys():
+            self.owner = att["owner"]
+        
         global taskID
         if self.id >= taskID:
             taskID = self.id +1
@@ -60,6 +65,9 @@ class LittleTask:
         building.set("salary", str(self.salary))
 
         building.set("mandatory", str(self.mandatory))
+        
+        if self.owner is not None:
+            subelem.set("owner", str(self.owner.name))
 
             
         return building  
@@ -67,7 +75,7 @@ class LittleTask:
 
 class LittleBuildTask(LittleTask):
     def __init__(self, village, name, position = [0,0], owner=None):
-        LittleTask.__init__(self, village)
+        LittleTask.__init__(self, village, owner)
         self.name = name
         self.materials = {}
         self.building = None
@@ -75,7 +83,7 @@ class LittleBuildTask(LittleTask):
         self.pos = position
         self.hasPos = False
         
-        self.owner = owner
+        
         
         self.type = "build"
         
@@ -135,8 +143,7 @@ class LittleBuildTask(LittleTask):
                 attm = child.attrib
                 self.materials[attm["name"]] = int(attm["quantity"])
                 
-        if "owner" in att.keys():
-            self.owner = att["owner"]
+
 
             
     def writeTask(self, root):
@@ -161,8 +168,7 @@ class LittleBuildTask(LittleTask):
             mat.set("name", m)
             mat.set("quantity", str(self.materials[m]))
         
-        if self.owner is not None:
-            subelem.set("owner", str(self.owner.name))
+
 
 
             
@@ -231,6 +237,10 @@ class LittleBuildTask(LittleTask):
                         elif self.name == "woodcutter":
                             self.building.startProducing("wood", 3, 1)
                     print self.building.name, "finished in ", self.building.position
+                    
+                    if self.owner is not None:
+                        self.owner.addProperty(self.building)
+                    
                     self.status = "done"
                 return True
                 

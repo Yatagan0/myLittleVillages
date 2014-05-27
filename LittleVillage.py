@@ -75,8 +75,14 @@ class LittleVillage:
                 try:
                     if t.owner == v.name:
                         t.owner = v
+                    else :
+                        #~ print v.name, " is not ",t.owner
+                        pass
                 except:
                     pass
+                
+
+                
                 
                 if t.id == tid:
                     v.task = t
@@ -94,6 +100,9 @@ class LittleVillage:
                 
                 
         for t in allTasks:
+            if isinstance(t.owner, basestring):
+                    print "warning, owner ",t.owner," not found"
+            
             if isinstance(t.villager,basestring):
                 print "warning, task ",t.id, " has not his villager ",t.villager
             
