@@ -72,6 +72,12 @@ class LittleVillage:
             tid = v.task
             for t in allTasks:
                 #~ print t.id
+                try:
+                    if t.owner == v.name:
+                        t.owner = v
+                except:
+                    pass
+                
                 if t.id == tid:
                     v.task = t
                     t.villager = v

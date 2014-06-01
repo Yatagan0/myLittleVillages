@@ -11,7 +11,7 @@ class LittleVillager:
         self.task = None
         self.position = [0., 0.]
         self.speed = 0.04 #1.0
-        self.money = 0.0
+        self.money = 10.0
         self.village = village
         self.destination = []
         self.home = None
@@ -165,7 +165,7 @@ class LittleVillager:
             pos = [0, 0]
             pos[0] = int(self.position[0])
             pos[1] = int(self.position[1])
-            lbt = LittleBuildTask(self.village, "house", position=pos)
+            lbt = LittleBuildTask(self.village, "house", position=pos, owner=self)
             self.village.toDoList.append(lbt)
             self.money -= 10
         
