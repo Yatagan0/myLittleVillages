@@ -168,13 +168,15 @@ class LittleVillager:
         self.properties[obj.name] = obj
         
     def improvePrestige(self):
-        if self.money > 10:
+        if self.home == None and self.money > 10:
             pos = [0, 0]
             pos[0] = int(self.position[0])
             pos[1] = int(self.position[1])
             lbt = LittleBuildTask(self.village, "house", position=pos, owner=self)
             self.village.toDoList.append(lbt)
             self.money -= 10
+        #~ elif "table" not in self.properties.keys() and self.money > 10:
+            
         
     def execute(self):
         if len(self.destination) > 0:
