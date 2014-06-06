@@ -67,7 +67,7 @@ class LittleTask:
         building.set("mandatory", str(self.mandatory))
         
         if self.owner is not None:
-            subelem.set("owner", str(self.owner.name))
+            building.set("owner", str(self.owner.name))
 
             
         return building  
