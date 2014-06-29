@@ -75,25 +75,14 @@ class LittleVillage:
                 try:
                     if t.owner == v.name:
                         t.owner = v
-<<<<<<< HEAD
-                except:
-                    pass
-                
-=======
-                    else :
-                        #~ print v.name, " is not ",t.owner
-                        pass
-                except:
-                    pass
-                
 
-                
-                
->>>>>>> origin/master
+                except:
+                    pass
+
                 if t.id == tid:
                     v.task = t
                     t.villager = v
-                    break
+                    #~ break
             if  isinstance(v.task, int):
                 v.busy = False
                 print "warning, ",v.name," did not find task ",tid

@@ -67,7 +67,7 @@ class LittleTask:
         building.set("mandatory", str(self.mandatory))
         
         if self.owner is not None:
-            subelem.set("owner", str(self.owner.name))
+            building.set("owner", str(self.owner.name))
 
             
         return building  
@@ -199,7 +199,8 @@ class LittleBuildTask(LittleTask):
                     self.hasPos = False
                 else:
                     self.building = self.village.addNewBuilding(self.buildingtype, self.name, self.pos, "in construction")
-
+                    if self.owner is not None:
+                        self.owner.addProperty(self.building)
 
                     for m in self.materials:
                         for i in range(self.materials[m]):
@@ -243,8 +244,7 @@ class LittleBuildTask(LittleTask):
                             self.building.startProducing("wood", 3, 1)
                     print self.building.name, "finished in ", self.building.position
                     
-                    if self.owner is not None:
-                        self.owner.addProperty(self.building)
+                    
                     
                     self.status = "done"
                 return True
