@@ -15,6 +15,7 @@ class LittleVillager:
         self.village = village
         self.destination = []
         self.home = None
+        self.properties = {}
 
         
     def writeVillager(self, root):
@@ -159,6 +160,11 @@ class LittleVillager:
             self.busy = False
         return toReturn
 
+    def addProperty(self, obj):
+        print "I HAVE A NEW ", obj.name
+        if obj.name == "house":
+            self.home = obj
+        self.properties[obj.name] = obj
         
     def improvePrestige(self):
         if self.money > 10:

@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <village name="Senroguen">
+
   <villager busy="True" gender="0" money="2.0" name="Pencin Dagehe" positionX="1.0" positionY="1.4" speed="0.04" task="301"/>
   <villager busy="False" destinationX="1" destinationY="1" gender="0" money="13.0" name="Fouquin Techenquu" positionX="0.735391052434" positionY="0.735391052434" speed="0.04"/>
   <villager busy="True" gender="0" money="22.0" name="Quinquon Monaijo" positionX="-0.321177490061" positionY="0.321177490061" speed="0.04" task="242"/>
@@ -34,10 +35,12 @@
     <task goal="1" id="350" initial="0" mandatory="False" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
     <task goal="1" id="351" initial="0" mandatory="False" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
     <task goal="1" id="352" initial="0" mandatory="False" material="stone" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
+
   </building>
   <building id="1" name="warehouse" positionX="1" positionY="1" state="ok" type="storage">
     <material name="stone" quantity="0"/>
     <material name="wood" quantity="0"/>
+
     <task goal="0" id="260" initial="1" mandatory="False" material="stone" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
     <task goal="0" id="336" initial="1" mandatory="False" material="wood" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
     <task goal="0" id="337" initial="1" mandatory="False" material="stone" name="carryTask" salary="1.0" state="to do" status="to start" type="carry"/>
@@ -157,6 +160,7 @@
     <material name="wood" quantity="8"/>
   </task>
   <task building="10" buildingType="house" hasPos="True" id="334" mandatory="True" name="house" owner="Pencin Dagehe" positionX="4" positionY="-2" remainingTime="10" salary="1.0" state="to do" status="waiting for materials" type="build">
+
     <material name="stone" quantity="8"/>
     <material name="wood" quantity="8"/>
   </task>
