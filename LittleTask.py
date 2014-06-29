@@ -277,6 +277,7 @@ class LittleCarryTask(LittleTask):
         self.material = material
         self.goal = goal
         self.initial = initial
+        self.knownGoal = (goal is not None)
         self.type = "carry"
         self.salary = 1.0
  
@@ -293,6 +294,8 @@ class LittleCarryTask(LittleTask):
             self.goal = att["goalName"]
         else:
             self.goal = int(att["goal"])
+            
+        self.knownGoal = bool(att["knownGoal"])
             
         #~ print "read initial ",self.initial
         #~ print "read goal ", self.goal
@@ -311,6 +314,8 @@ class LittleCarryTask(LittleTask):
             subelem.set("goalName", self.goal)
         else:
             subelem.set("goal", str(self.goal.id))
+            
+        subelem.set("knownGoal", str(self.knownGoal))
 
         
     def execute(self):
@@ -351,6 +356,22 @@ class LittleCarryTask(LittleTask):
                 else:
                     print "there is no ",self.material," here"
                     self.status = "fail"
+                    if self.mandatory:
+                        if self.knownGoal:
+                            askingName = self.material
+                            askingPos = [self.goal.position[0], self.goal.position[1]] 
+                        else:
+                            askingName = self.materials
+                            askingPos = [self.initial.position[0], self.initial.position[1]]
+                            
+                            
+                            
+                        print "adding ",askingName," to asked buildngs in pos ",askingPos
+                        if askingName in self.village.askedBuildings:
+                                self.village.askedBuildings[askingName].append(askingPos)
+                        else:
+                            self.village.askedBuildings[askingName] = [askingPos]
+                    
                     return True
 
         elif self.status == "carrying material":

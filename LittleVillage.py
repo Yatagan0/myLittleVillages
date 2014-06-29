@@ -16,6 +16,8 @@ class LittleVillage:
         self.buildings=[]
         #~ self.globalPosition = [0.,0.]
         self.name = "defaultVillageName"
+        self.askedBuildings = {}
+        #self.askedBuildings['warehouse'] = [[0, 1], [-1, 2]]
         #~ self.carrying = ""
         
     def readVillage(self, path):
@@ -56,10 +58,20 @@ class LittleVillage:
                     t = LittleCarryTask( self)
                 elif type == "production":
                     t = LittleWorkTask( None, self)
-
-                 
+                    
                 t.readTask(child)
                 self.toDoList.append(t)
+                    
+                    
+            if child.tag == "askingBuilding":
+                self.askedBuildings[child.attrib["building"] ] = []
+                for subchild in child:
+                    if subchild.tag == "asking":
+                        self.askedBuildings[child.attrib["building"] ].append([int(subchild.attrib["askingX"]), int(subchild.attrib["askingY"]) ])
+                    
+
+                 
+
                 
         allTasks = copy.copy(self.toDoList)
         
@@ -154,6 +166,17 @@ class LittleVillage:
         print len(self.toDoList)," tasks in village"
         for t in self.toDoList:
             t.writeTask(root)
+            
+            
+        print "askedBuildings ", self.askedBuildings
+            
+        for b in self.askedBuildings.keys():
+            ab = ET.SubElement(root, 'askingBuilding')
+            ab.set("building", str(b))
+            for p in self.askedBuildings[b]:
+                aabb =  ET.SubElement(ab, 'asking')
+                aabb.set("askingX", str(p[0]))
+                aabb.set("askingY", str(p[1]))
             
         rough_string = ET.tostring(root, 'utf-8')
         reparsed = minidom.parseString(rough_string)

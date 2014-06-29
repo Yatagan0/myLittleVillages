@@ -167,7 +167,7 @@ class LittleVillager:
         self.properties[obj.name] = obj
         
     def improvePrestige(self):
-        if self.home == None and self.money > 10:
+        if self.home is None and self.money > 10:
             pos = [0, 0]
             pos[0] = int(self.position[0])
             pos[1] = int(self.position[1])
@@ -176,6 +176,18 @@ class LittleVillager:
             self.money -= 10
         #~ elif "table" not in self.properties.keys() and self.money > 10:
             
+        
+    def selectRandomDestination(self):
+        if self.home is not None and random.randint(0,9)==0:
+            self.destination = [0, 0]
+            print "going home"
+            print self.home.position
+            self.destination[0] = self.home.position[0]
+            self.destination[1] = self.home.position[1]
+        else:
+            self.destination = copy.copy(self.position)
+            self.destination[0] += random.randint(-1, 1)
+            self.destination[1] += random.randint(-1, 1)
         
     def execute(self):
         if len(self.destination) > 0:
@@ -195,18 +207,14 @@ class LittleVillager:
                 self.selectTask(list)
                 if not self.busy:
                     print "no task found. looking around"
-                    self.destination = copy.copy(self.position)
-                    self.destination[0] += random.randint(-1, 1)
-                    self.destination[1] += random.randint(-1, 1)
+                    self.selectRandomDestination()
             else:
                 toDoNow = self.performTask()
                 if toDoNow:
                     if self.task.status == "fail":
                     
                         print self.name, " failed ", self.task.name, " ", self.task.id
-                        self.destination = copy.copy(self.position)
-                        self.destination[0] += random.randint(-1, 1)
-                        self.destination[1] += random.randint(-1, 1)   
+                        self.selectRandomDestination()
                     #~ else:
                         #~ print self.name, " finished ", self.task.name, " ", self.task.id
                         
