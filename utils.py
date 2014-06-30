@@ -24,8 +24,21 @@ def iterateTime():
     global time
     time += 1
     
+workshopName = {}
+workshopName["wood"] = "woodcutter"
+workshopName["stone"] = "stonecutter"
+
+def getMeanPos(posList):
+    result = [0,0]
+    if len(posList) == 0:
+        return result
     
-    
+    for p in posList:
+        result[0] += p[0]
+        result[1] += p[1]
+    result[0] = float(result[0])/len(posList)
+    result[1] = float(result[1])/len(posList)
+    return result
     
 prestigeObjects = {}
 

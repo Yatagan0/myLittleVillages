@@ -17,7 +17,7 @@ class LittleVillage:
         #~ self.globalPosition = [0.,0.]
         self.name = "defaultVillageName"
         self.askedBuildings = {}
-        #self.askedBuildings['warehouse'] = [[0, 1], [-1, 2]]
+        self.askedBuildings['warehouse'] = []
         #~ self.carrying = ""
         
     def readVillage(self, path):
@@ -307,9 +307,44 @@ class LittleVillage:
                     t.status = "to start"
                     self.toDoList.append(t)
                     print "postponning task ",t.id
+                    
+                    
+    def seeAskedBuildings(self):
+        if random.randint(0, 99) > 0:
+            return
+        building = random.choice(self.askedBuildings.keys())
+        print "looking for a new building ", building
+        
+        mean = utils.getMeanPos(self.askedBuildings[building])
+        #~ print mean
+        mean = map(int, mean)
+        print mean
+        
+        close = []
+        far = []
+        for p in self.askedBuildings[building]:
+            if p[0] > mean[0] -3 and p[0] < mean[0] + 3 and p[1] > mean[1] -3 and p[1] < mean[1] + 3:
+                close.append(p)
+            else:
+                far.append(p)
+        print len(close), " close askers"
+        if len(close) > 100:
+            print "village decided to print a new ",utils.workshopName[building]," at position ", mean
+            self.askedBuildings[building] = far
+            lbt = LittleBuildTask(self, utils.workshopName[building], mean)
+            self.toDoList.append(lbt)
+            
+        #TODO:
+        #remove too far askers and redo mean
+        #check that the same building is not already present close
+        # warehouse
+        
         
     def iterate(self):
         print "--------------------"
+        
+        self.seeAskedBuildings()
+        
         for p in self.villagers:
             #~ print p.position
             p.execute()
