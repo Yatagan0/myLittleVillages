@@ -49,3 +49,15 @@ prestigeObjects["hut"] = cabane
 
 maison = {"prestige":40, "price":30}
 prestigeObjects["house"] = maison
+
+global allMaterials
+allMaterials = {}
+
+global allWorkshops
+allWorkshops = {}
+
+class workshopData:
+    def __init__(self, ET):
+        print "test"
+        
+
