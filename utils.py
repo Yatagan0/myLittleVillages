@@ -27,6 +27,8 @@ def iterateTime():
 workshopName = {}
 workshopName["wood"] = "woodcutter"
 workshopName["stone"] = "stonecutter"
+workshopName["gold"] = "goldminer"
+workshopName["jewel"] = "jeweler"
 
 def getMeanPos(posList):
     result = [0,0]

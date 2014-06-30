@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<workshops>
+<workshop name="woodcutter">
+<build>
+<material name="wood" quantity = "10"/>
+<material name="stone" quantity = "10"/>
+</build>
+<production name="wood" time="5">
+<!-- <needed name="stone" quantity="1" /> -->
+</production>
+</workshop>
+</workshops>
