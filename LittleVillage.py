@@ -315,8 +315,13 @@ class LittleVillage:
         building = random.choice(self.askedBuildings.keys())
         print "looking for a new building ", building
         
-        mean = utils.getMeanPos(self.askedBuildings[building])
+        if building is "warehouse":
+            for k in self.askedBuildings.keys():
+                if k is not "warehouse":
+                    self.askedBuildings["warehouse"] += self.askedBuildings[k]
         #~ print mean
+        
+        mean = utils.getMeanPos(self.askedBuildings[building])
         mean = map(int, mean)
         print mean
         
@@ -328,11 +333,19 @@ class LittleVillage:
             else:
                 far.append(p)
         print len(close), " close askers"
-        if len(close) > 100:
+        
+        limit = 50
+        if building is "warehouse":
+            limit = 100
+        
+        if len(close) > limit:
             print "village decided to print a new ",utils.workshopName[building]," at position ", mean
             self.askedBuildings[building] = far
             lbt = LittleBuildTask(self, utils.workshopName[building], mean)
             self.toDoList.append(lbt)
+            
+        if building is "warehouse":
+            self.askedBuildings[building] = []
             
         #TODO:
         #remove too far askers and redo mean

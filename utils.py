@@ -30,6 +30,7 @@ workshopName["wood"] = "woodcutter"
 workshopName["stone"] = "stonecutter"
 workshopName["gold"] = "goldminer"
 workshopName["jewel"] = "jeweler"
+workshopName["warehouse"] = "warehouse"
 
 def getMeanPos(posList):
     result = [0,0]

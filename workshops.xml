@@ -6,6 +6,12 @@
 <material name="stone" quantity = "8"/>
 </build>
 </workshop>
+<workshop name="warehouse">
+<build time="15">
+<material name="wood" quantity = "12"/>
+<material name="stone" quantity = "12"/>
+</build>
+</workshop>
 <workshop name="woodcutter">
 <build time="20">
 <material name="wood" quantity = "10"/>

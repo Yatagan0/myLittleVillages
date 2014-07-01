@@ -1,4 +1,4 @@
-import utils, random
+import utils, random, copy
 
 #from LittlePlace import *
 import xml.etree.ElementTree as ET
@@ -89,15 +89,24 @@ class LittleBuildTask(LittleTask):
 
         self.type = "build"
         
+        if name in utils.allWorkshops.keys():
+            tobuild = utils.allWorkshops[name]
+            
+            self.remainingTime = tobuild.buildTime
+            
+            self.materials = copy.deepcopy(tobuild.build)
+            
+            print "need ",self.remainingTime," time to build"
+        
         if name == "warehouse":
-            self.remainingTime = 10
-            self.materials["wood"] = 10
-            self.materials["stone"] = 10
+            #~ self.remainingTime = 10
+            #~ self.materials["wood"] = 10
+            #~ self.materials["stone"] = 10
             self.buildingtype = "storage"
         elif name == "house":
-            self.remainingTime = 10
-            self.materials["wood"] = 8
-            self.materials["stone"] = 8
+            #~ self.remainingTime = 10
+            #~ self.materials["wood"] = 8
+            #~ self.materials["stone"] = 8
             self.buildingtype = "house"
         elif name == "field":
             self.remainingTime = 3
@@ -107,14 +116,14 @@ class LittleBuildTask(LittleTask):
             self.remainingTime = 1
             self.buildingtype = "field"
         elif name == "woodcutter":
-            self.remainingTime = 10
-            self.materials["wood"] = 10
-            self.materials["stone"] = 10
+            #~ self.remainingTime = 10
+            #~ self.materials["wood"] = 10
+            #~ self.materials["stone"] = 10
             self.buildingtype = "production"
         elif name == "stonecutter":
-            self.remainingTime = 10
-            self.materials["wood"] = 10
-            self.materials["stone"] = 10
+            #~ self.remainingTime = 10
+            #~ self.materials["wood"] = 10
+            #~ self.materials["stone"] = 10
             self.buildingtype = "production"
             
         #WARNING, to redo !
