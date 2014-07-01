@@ -5,8 +5,32 @@
 <material name="wood" quantity = "10"/>
 <material name="stone" quantity = "10"/>
 </build>
-<production name="wood" time="5">
+<production  time="5">
+<produced name="wood" quantity="1" />
 <!-- <needed name="stone" quantity="1" /> -->
+</production>
+</workshop>
+<workshop name="stonecutter">
+<build>
+<material name="wood" quantity = "10"/>
+<material name="stone" quantity = "10"/>
+</build>
+<production  time="5">
+<produced name="stone" quantity="1" />
+</production>
+</workshop>
+<workshop name="supercutter">
+<build>
+<material name="wood" quantity = "15"/>
+<material name="stone" quantity = "15"/>
+</build>
+<production  time="5">
+<produced name="stone" quantity="1" />
+<needed name="wine" quantity="2" />
+</production>
+<production  time="5">
+<produced name="wood" quantity="1" />
+<needed name="bier" quantity="2" />
 </production>
 </workshop>
 </workshops>
