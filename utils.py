@@ -82,15 +82,22 @@ class workshopData:
         self.name = elem.attrib["name"]
         self.productions = []
         
+        self.build = {}
+        self.buildTime = 0
+        
+        
         for child in elem:
             if child.tag == "build":
+                self.buildTime = int(child.attrib["time"])
                 self.addBuild(child)
             if child.tag == "production":
                 self.addProduction(child)
                 
                 
     def addBuild(self, elem):
-        print "prout"
+        for child in elem:
+            if child.tag == "material":
+                self.build[child.attrib["name"]] = int(child.attrib["quantity"])
         
     def addProduction(self, elem):
         pd = productionData(elem)

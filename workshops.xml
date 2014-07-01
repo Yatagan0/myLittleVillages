@@ -1,7 +1,13 @@
 <?xml version="1.0" ?>
 <workshops>
+<workshop name="house">
+<build time="10">
+<material name="wood" quantity = "8"/>
+<material name="stone" quantity = "8"/>
+</build>
+</workshop>
 <workshop name="woodcutter">
-<build>
+<build time="20">
 <material name="wood" quantity = "10"/>
 <material name="stone" quantity = "10"/>
 </build>
@@ -11,7 +17,7 @@
 </production>
 </workshop>
 <workshop name="stonecutter">
-<build>
+<build  time="20">
 <material name="wood" quantity = "10"/>
 <material name="stone" quantity = "10"/>
 </build>
@@ -20,17 +26,17 @@
 </production>
 </workshop>
 <workshop name="supercutter">
-<build>
+<build  time="20">
 <material name="wood" quantity = "15"/>
 <material name="stone" quantity = "15"/>
 </build>
 <production  time="5">
 <produced name="stone" quantity="1" />
-<needed name="wine" quantity="2" />
+<!--<needed name="wine" quantity="2" /> -->
 </production>
 <production  time="5">
 <produced name="wood" quantity="1" />
-<needed name="bier" quantity="2" />
+<!--<needed name="bier" quantity="2" />-->
 </production>
 </workshop>
 </workshops>
