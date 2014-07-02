@@ -114,7 +114,7 @@ path = "village.xml"
 
 lv.readVillage(path)
 
-#~ lv.createRandomVillage(20)
+#~ lv.createRandomVillage(10)
 #~ lbt = LittleBuildTask(lv, "stonecutter")
 #~ lv.toDoList.append(lbt)
 #~ lbt = LittleBuildTask(lv, "woodcutter")

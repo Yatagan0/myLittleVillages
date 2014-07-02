@@ -25,12 +25,12 @@ def iterateTime():
     global time
     time += 1
     
-workshopName = {}
-workshopName["wood"] = "woodcutter"
-workshopName["stone"] = "stonecutter"
-workshopName["gold"] = "goldminer"
-workshopName["jewel"] = "jeweler"
-workshopName["warehouse"] = "warehouse"
+#~ workshopName = {}
+#~ workshopName["wood"] = "woodcutter"
+#~ workshopName["stone"] = "stonecutter"
+#~ workshopName["gold"] = "goldminer"
+#~ workshopName["jewel"] = "jeweler"
+#~ workshopName["warehouse"] = "warehouse"
 
 def getMeanPos(posList):
     result = [0,0]

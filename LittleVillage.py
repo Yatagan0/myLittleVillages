@@ -339,9 +339,18 @@ class LittleVillage:
             limit = 100
         
         if len(close) > limit:
-            print "village decided to print a new ",utils.workshopName[building]," at position ", mean
             self.askedBuildings[building] = far
-            lbt = LittleBuildTask(self, utils.workshopName[building], mean)
+            if not building in utils.allWorkshops.keys():
+                print building, " is not a building name"
+                w = random.choice(utils.allMaterials[building])
+                #~ print w
+                print "selected ",w.name," to build ",building
+                building = w.name
+            
+            print "village decided to print a new ",building," at position ", mean
+
+            
+            lbt = LittleBuildTask(self, building, mean)
             self.toDoList.append(lbt)
             
         if building is "warehouse":
