@@ -227,10 +227,10 @@ class LittleVillage:
                 return False
         return True
 
-    def addProductionTask(self, workshop):
-        lwt = LittleWorkTask(workshop, workshop.village)
-        workshop.addTask(lwt)
-        #self.toDoList.append(lwt)
+    #~ def addProductionTask(self, workshop):
+        #~ lwt = LittleWorkTask(workshop, workshop.village)
+        #~ workshop.addTask(lwt)
+
         
     def addCarryTask(self, fromB,toB, mat, mandatory = True):
         if fromB.id == toB.id:

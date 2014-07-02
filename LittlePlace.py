@@ -68,7 +68,7 @@ class LittlePlace:
                 elif type == "carry":
                     t = LittleCarryTask( self.village)
                 elif type == "production":
-                    t = LittleWorkTask( None, self.village)
+                    t = LittleWorkTask( None, None, self.village)
 
                  
                 t.readTask(child)
@@ -180,14 +180,24 @@ class LittleWorkshop(LittleBuilding):
     def __init__(self, name, village):
         LittleBuilding.__init__(self, name, village)
         self.type = "production"   
+        
         self.production = ""
         self.productionTime = 0
 
     def startProducing(self, prod, time, num):
+        
         self.production = prod
         self.productionTime = time
-        for i in range(0, num):
-            self.addProductionTask()
+        
+        for p in utils.allWorkshops[self.name].productions:
+            task = LittleWorkTask(self, p, self.village)
+            self.addTask(task)
+            
+        
+        
+
+        #~ for i in range(0, num):
+            #~ self.addProductionTask()
             
     def addProductionTask(self):
         task = LittleWorkTask(self, self.village)

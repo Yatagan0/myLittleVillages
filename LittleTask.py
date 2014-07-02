@@ -93,38 +93,38 @@ class LittleBuildTask(LittleTask):
             tobuild = utils.allWorkshops[name]
             
             self.remainingTime = tobuild.buildTime
-            
+            self.buildingtype = tobuild.type
             self.materials = copy.deepcopy(tobuild.build)
             
             print "need ",self.remainingTime," time to build"
         
-        if name == "warehouse":
+        #~ if name == "warehouse":
             #~ self.remainingTime = 10
             #~ self.materials["wood"] = 10
             #~ self.materials["stone"] = 10
-            self.buildingtype = "storage"
-        elif name == "house":
+            #~ self.buildingtype = "storage"
+        #~ elif name == "house":
             #~ self.remainingTime = 10
             #~ self.materials["wood"] = 8
             #~ self.materials["stone"] = 8
-            self.buildingtype = "house"
-        elif name == "field":
-            self.remainingTime = 3
-            self.materials["wood"] = 1
-            self.buildingtype = "field"
-        elif name == "forest":
-            self.remainingTime = 1
-            self.buildingtype = "field"
-        elif name == "woodcutter":
+            #~ self.buildingtype = "house"
+        #~ elif name == "field":
+            #~ self.remainingTime = 3
+            #~ self.materials["wood"] = 1
+            #~ self.buildingtype = "field"
+        #~ elif name == "forest":
+            #~ self.remainingTime = 1
+            #~ self.buildingtype = "field"
+        #~ elif name == "woodcutter":
             #~ self.remainingTime = 10
             #~ self.materials["wood"] = 10
             #~ self.materials["stone"] = 10
-            self.buildingtype = "production"
-        elif name == "stonecutter":
+            #~ self.buildingtype = "production"
+        #~ elif name == "stonecutter":
             #~ self.remainingTime = 10
             #~ self.materials["wood"] = 10
             #~ self.materials["stone"] = 10
-            self.buildingtype = "production"
+            #~ self.buildingtype = "production"
             
         #WARNING, to redo !
         self.salary = 1.
@@ -403,7 +403,7 @@ class LittleCarryTask(LittleTask):
 
         
 class LittleWorkTask(LittleTask):
-    def __init__(self, workshop, village):
+    def __init__(self, workshop, production, village):
         LittleTask.__init__(self, village)
         if workshop is not None:
             self.workshop = workshop
@@ -414,7 +414,13 @@ class LittleWorkTask(LittleTask):
             self.workshop = None
         self.type = "production"
         
-         
+
+    def setData(self, workshop, needed, producing, time):
+        self.workshop = workshop
+        self.remainingTime = time
+        self.needed = copy.deepcopy(needed)
+        self.producing = copy.deepcopy(producing)
+
 
     def readTask(self, elem):
         att = elem.attrib
@@ -455,7 +461,9 @@ class LittleWorkTask(LittleTask):
             #~ lct.dependantTask = self
             lct.salary = 1
             self.workshop.addTask(lct)
-            self.village.addProductionTask(self.workshop)
+            #~ self.village.addProductionTask(self.workshop)
+            wt = LittleWorkTask(self.workshop, None, self.village)
+            self.workshop.addTask(lwt)
             
             self.status = "done"
             #~ self.villager.money += self.salary

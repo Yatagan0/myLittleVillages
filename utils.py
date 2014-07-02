@@ -81,6 +81,7 @@ class productionData:
 class workshopData:
     def __init__(self, elem):
         self.name = elem.attrib["name"]
+        self.type = elem.attrib["type"]
         self.productions = []
         
         self.build = {}
