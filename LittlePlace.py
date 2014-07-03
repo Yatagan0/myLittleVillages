@@ -184,13 +184,14 @@ class LittleWorkshop(LittleBuilding):
         self.production = ""
         self.productionTime = 0
 
-    def startProducing(self, prod, time, num):
+    def startProducing(self):
         
-        self.production = prod
-        self.productionTime = time
+        #~ self.production = prod
+        #~ self.productionTime = int(utils.allWorkshops[self.name].time)
         
         for p in utils.allWorkshops[self.name].productions:
             task = LittleWorkTask(self, p, self.village)
+            task.setData(self, p.needed, p.produced, int(p.time))
             self.addTask(task)
             
         
@@ -199,9 +200,9 @@ class LittleWorkshop(LittleBuilding):
         #~ for i in range(0, num):
             #~ self.addProductionTask()
             
-    def addProductionTask(self):
-        task = LittleWorkTask(self, self.village)
-        self.addTask(task)
+    #~ def addProductionTask(self):
+        #~ task = LittleWorkTask(self, self.village)
+        #~ self.addTask(task)
         #~ self.village.toDoList.append(task)
         #~ self.village.addProductionTask(self)
         

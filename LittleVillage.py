@@ -206,9 +206,12 @@ class LittleVillage:
         self.buildings[1].setMaterial("stone", 10)
         self.buildings[1].setMaterial("wood", 0)
         newBuilding("production", "woodcutter", [0, -1], "ok", self)
-        self.buildings[2].startProducing("wood", 3, 1)
+        #~ self.buildings[2].startProducing("wood", 3, 1)
+        self.buildings[2].startProducing()
         newBuilding("production", "stonecutter", [1, 2], "ok", self)
-        self.buildings[3].startProducing("stone", 3, 1)
+        #~ self.buildings[3].startProducing("stone", 3, 1)
+        self.buildings[3].startProducing()
+        
         
     def __str__(self):
         s = "This is the village of "+self.name
@@ -356,10 +359,16 @@ class LittleVillage:
         if building is "warehouse":
             self.askedBuildings[building] = []
             
+        #forget old asks
+        for b in self.askedBuildings.keys():
+            i = int(0.05*len(self.askedBuildings[b]))
+            print "removing ",i," asks for ",b
+            self.askedBuildings[b] = self.askedBuildings[b][i:]
+            
         #TODO:
         #remove too far askers and redo mean
         #check that the same building is not already present close
-        # warehouse
+
         
         
     def iterate(self):

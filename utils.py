@@ -63,7 +63,7 @@ class productionData:
         self.produced = {}
         self.tools = {}
         self.needed = {}
-        #~ self.time = int(elem.attrib["time"])
+        self.time = int(elem.attrib["time"])
         
         for child in elem:
             if child.tag == "produced":

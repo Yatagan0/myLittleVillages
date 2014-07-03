@@ -412,6 +412,8 @@ class LittleWorkTask(LittleTask):
             self.name = "produce"+self.workshop.production
         else:
             self.workshop = None
+        self.needed = {}
+        self.producing ={}
         self.type = "production"
         
 
@@ -430,6 +432,11 @@ class LittleWorkTask(LittleTask):
         self.remainingTime = int(att["remainingTime"])
         #~ self.salary = self.workshop.productionTime
         #~ print "read remaining time ",self.remainingTime
+        for child in elem:
+            if child.tag == "needed":
+                self.needed[child.attrib["name"]] = int(child.attrib["quantity"])
+            if child.tag == "producing":
+                self.producing[child.attrib["name"]] = int(child.attrib["quantity"])
 
             
     def writeTask(self, root):
@@ -438,6 +445,14 @@ class LittleWorkTask(LittleTask):
         if self.workshop is not None:
             subelem.set("workshop", str(self.workshop.id))
             subelem.set("remainingTime", str(self.remainingTime))
+            for n in self.needed.keys():
+                nelem = ET.SubElement(subelem, 'needed')
+                nelem.set("name", n )
+                nelem.set("quantity", str( self.needed[n]))
+            for p in self.producing.keys():
+                nelem = ET.SubElement(subelem, 'producing')
+                nelem.set("name", p )
+                nelem.set("quantity", str( self.producing[p]))          
         else:
             print "warning, workTask ",self.id," has no workshop"
         #~ print "finished wrinting work atsk"
@@ -462,7 +477,7 @@ class LittleWorkTask(LittleTask):
             lct.salary = 1
             self.workshop.addTask(lct)
             #~ self.village.addProductionTask(self.workshop)
-            wt = LittleWorkTask(self.workshop, None, self.village)
+            lwt = LittleWorkTask(self.workshop, None, self.village)
             self.workshop.addTask(lwt)
             
             self.status = "done"

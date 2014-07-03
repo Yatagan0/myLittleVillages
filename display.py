@@ -14,8 +14,8 @@ maxy = 10.
 def posToPixel(img, pos):
     rows,cols,channels = img.shape
     
-    pixelx =int( (pos[0] - minx)*cols/(maxx - minx))
-    pixely =int( (pos[1] - miny)*rows/(maxy - miny))
+    pixely =int( (pos[1] - minx)*cols/(maxx - minx))
+    pixelx =int( (pos[0] - miny)*rows/(maxy - miny))
     return [pixelx, pixely]
     
 def pixelToPos(img, pixel):

@@ -12,7 +12,7 @@
 <material name="stone" quantity = "12"/>
 </build>
 </workshop>
-<!-- <workshop name="woodcutter" type="production">
+ <workshop name="woodcutter" type="production">
 <build time="20">
 <material name="wood" quantity = "10"/>
 <material name="stone" quantity = "10"/>
@@ -29,7 +29,7 @@
 <production  time="5">
 <produced name="stone" quantity="1" />
 </production>
-</workshop> -->
+</workshop> 
 <workshop name="supercutter" type="production">
 <build  time="20">
 <material name="wood" quantity = "15"/>
