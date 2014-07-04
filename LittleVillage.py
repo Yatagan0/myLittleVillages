@@ -200,17 +200,17 @@ class LittleVillage:
             self.villagers.append(lv)
             
         newBuilding("storage", "warehouse", [0, 0], "ok", self)
-        self.buildings[0].setMaterial("stone", 0)
+        self.buildings[0].setMaterial("stone", 10)
         self.buildings[0].setMaterial("wood", 10)
-        newBuilding("storage", "warehouse", [1, 1], "ok", self)
-        self.buildings[1].setMaterial("stone", 10)
-        self.buildings[1].setMaterial("wood", 0)
+        #~ newBuilding("storage", "warehouse", [1, 1], "ok", self)
+        #~ self.buildings[1].setMaterial("stone", 10)
+        #~ self.buildings[1].setMaterial("wood", 0)
         newBuilding("production", "woodcutter", [0, -1], "ok", self)
         #~ self.buildings[2].startProducing("wood", 3, 1)
-        self.buildings[2].startProducing()
+        self.buildings[1].startProducing()
         newBuilding("production", "stonecutter", [1, 2], "ok", self)
         #~ self.buildings[3].startProducing("stone", 3, 1)
-        self.buildings[3].startProducing()
+        self.buildings[2].startProducing()
         
         
     def __str__(self):
@@ -299,6 +299,8 @@ class LittleVillage:
         inds = range(len(self.toDoList))
         inds.reverse()
         for i in inds:
+            if self.toDoList[i].delayed > 0:
+                self.toDoList[i].delayed  -= 1
             if self.toDoList[i].status == "done":
                 #~ print self.toDoList[i].name, " finished"
                 self.toDoList.pop(i)

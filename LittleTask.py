@@ -20,6 +20,8 @@ class LittleTask:
         
         self.owner = owner
         
+        self.delayed = 0
+        
         global taskID
         self.id = taskID
         taskID += 1
@@ -29,7 +31,7 @@ class LittleTask:
 
     def canPerform(self):
         #~ print "default perform"
-        return self.status != "done" and self.state == "to do"
+        return self.status != "done" and self.state == "to do" and self.delayed == 0
         #~ return True
         
 
@@ -39,6 +41,7 @@ class LittleTask:
         self.type = att["type"]
         self.state = att["state"]
         self.status = att["status"]
+        self.delayed = int(att["delayed"])
         #~ self.villager = att["villager"]
         self.salary = float(att["salary"])
         self.mandatory = att["mandatory"]=="True"
@@ -61,6 +64,7 @@ class LittleTask:
         building.set("state", self.state)
         building.set("id", str(self.id))
         building.set("status", self.status)
+        building.set("delayed", str(self.delayed))
         #~ building.set("villager", str(self.villager.name))
         building.set("salary", str(self.salary))
 
@@ -366,6 +370,7 @@ class LittleCarryTask(LittleTask):
                 else:
                     print "there is no ",self.material," here"
                     self.status = "fail"
+                    self.delayed = 30
                     if self.mandatory:
                         if self.knownGoal:
                             askingName = self.material
@@ -462,7 +467,7 @@ class LittleWorkTask(LittleTask):
         
     def execute(self):
         if self.status == "to start":
-            if self.villager.goto(self.workshop.position):
+            
                 self.status = "waiting for materials"
                 for m in self.needed:
                     if m in self.workshop.content.keys():
@@ -480,9 +485,10 @@ class LittleWorkTask(LittleTask):
                         self.building.addTask(lct)
                 return True
         elif self.status == "waiting for materials":
-            print "starting production !"
-            self.status = "producing"
-            return False
+            if self.villager.goto(self.workshop.position):
+                print "starting production !"
+                self.status = "producing"
+                return False
         elif self.status == "producing":
             if self.remainingTime > 0:
                 print "producing ",self.workshop.production
@@ -492,7 +498,7 @@ class LittleWorkTask(LittleTask):
             
             print "produced ",self.workshop.production
             for p in self.producing.keys():
-                self.workshop.setMaterial(self.workshop.production, self.producing[p])
+                self.workshop.setMaterial(p, self.producing[p])
                 for i in range(0, self.producing[p]):
                     lct = LittleCarryTask(self.village, self.workshop,  "warehouse",  p)
                     #~ lct.dependantTask = self
@@ -500,10 +506,11 @@ class LittleWorkTask(LittleTask):
                     self.workshop.addTask(lct)
                     #~ self.village.addProductionTask(self.workshop)
                     lwt = LittleWorkTask(self.workshop, None, self.village)
+                    lwt.setData(self.workshop, self.needed, self.producing, int(self.salary))
                     self.workshop.addTask(lwt)
             
             self.status = "done"
-            #~ self.villager.money += self.salary
+            self.villager.money += self.salary
             return True
         
     def canPerform(self):

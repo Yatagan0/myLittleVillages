@@ -99,8 +99,9 @@ class LittleVillager:
             if t.state== "to do" and t.canPerform():
                 #~ print self.name, " executing ", t.name, " ", t.id
                 p = self.estimateTask(t)
+                print "task ",t.name," estimated at ", p
                 choice.append([t, p])
-                if len(choice) >= 10:
+                if len(choice) >= 30:
                     break
                 
         if len(choice) ==0:

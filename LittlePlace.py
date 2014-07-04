@@ -119,6 +119,8 @@ class LittlePlace:
         inds = range(len(self.taskList))
         inds.reverse()
         for i in inds:
+            if self.taskList[i].delayed > 0:
+                self.taskList[i].delayed  -= 1
             if self.taskList[i].status == "done":
                 #~ print self.toDoList[i].name, " finished"
                 self.taskList.pop(i)
