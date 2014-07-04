@@ -351,6 +351,7 @@ class LittleCarryTask(LittleTask):
                 self.initial = initiallist[0]
             #~ print "goal position ",self.goalBuilding.name ," ",self.goalBuilding.position
             self.status = "getting material"
+            return False
             
         elif self.status == "getting material":
             #~ print "getting material of task ",self.id
@@ -420,6 +421,7 @@ class LittleWorkTask(LittleTask):
     def setData(self, workshop, needed, producing, time):
         self.workshop = workshop
         self.remainingTime = time
+        self.salary = self.remainingTime
         self.needed = copy.deepcopy(needed)
         self.producing = copy.deepcopy(producing)
 
@@ -461,8 +463,26 @@ class LittleWorkTask(LittleTask):
     def execute(self):
         if self.status == "to start":
             if self.villager.goto(self.workshop.position):
-                self.status = "producing"
-                return False
+                self.status = "waiting for materials"
+                for m in self.needed:
+                    if m in self.workshop.content.keys():
+                        max = self.needed[m]
+                    else:
+                        max = self.needed[m] - self.workshop.content[m]
+                    for i in range(0, max):
+                        #~ print "adding carry tasks"
+                        lct = LittleCarryTask(self.village, "warehouse", self.building, m)
+                        #~ lct.material = m
+                        #~ lct.destination = self.building.position 
+                        #~ lct.dependantTask = self
+                        lct.salary = 1.
+                        #~ self.village.toDoList.append(lct)
+                        self.building.addTask(lct)
+                return True
+        elif self.status == "waiting for materials":
+            print "starting production !"
+            self.status = "producing"
+            return False
         elif self.status == "producing":
             if self.remainingTime > 0:
                 print "producing ",self.workshop.production
@@ -471,19 +491,36 @@ class LittleWorkTask(LittleTask):
                 return False
             
             print "produced ",self.workshop.production
-            self.workshop.setMaterial(self.workshop.production, 1)
-            lct = LittleCarryTask(self.village, self.workshop,  "warehouse",  self.workshop.production)
-            #~ lct.dependantTask = self
-            lct.salary = 1
-            self.workshop.addTask(lct)
-            #~ self.village.addProductionTask(self.workshop)
-            lwt = LittleWorkTask(self.workshop, None, self.village)
-            self.workshop.addTask(lwt)
+            for p in self.producing.keys():
+                self.workshop.setMaterial(self.workshop.production, self.producing[p])
+                for i in range(0, self.producing[p]):
+                    lct = LittleCarryTask(self.village, self.workshop,  "warehouse",  p)
+                    #~ lct.dependantTask = self
+                    lct.salary = 1
+                    self.workshop.addTask(lct)
+                    #~ self.village.addProductionTask(self.workshop)
+                    lwt = LittleWorkTask(self.workshop, None, self.village)
+                    self.workshop.addTask(lwt)
             
             self.status = "done"
             #~ self.villager.money += self.salary
             return True
         
+    def canPerform(self):
+        #~ print "can perform ? ",self.status,self.id
+        if self.status == "waiting for materials" and self.state == "to do":
+            #~ print "testing if all materials are present"
+            for m in self.needed:
+                #~ if self.materials[m] > 0:
+                if m not in self.workshop.content.keys():
+                    print self.id," cant produce : ",m," not known in ", self.workshop.id
+                    return False
+                if self.workshop.content[m] < self.needed[m]:
+                    print self.id," cant produce, not enough ",m," in ",self.workshop.id
+                    #~ print "cannot perform"
+                    return False
+            print "can produce"
+        return  LittleTask.canPerform(self) #  self.status != "done" and self.state == "to do"
         
 if __name__ == '__main__':
     lbt = LittleBuildTask()
