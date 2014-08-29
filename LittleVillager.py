@@ -74,7 +74,7 @@ class LittleVillager:
         elif t.type == "build":
             if t.pos == []:
                 
-                cost = 1.
+                cost = 2.
             else:
                 cost = utils.distance(self.position, t.pos) 
         elif t.type == "production":
@@ -99,7 +99,7 @@ class LittleVillager:
             if t.state== "to do" and t.canPerform():
                 #~ print self.name, " executing ", t.name, " ", t.id
                 p = self.estimateTask(t)
-                print "task ",t.name," estimated at ", p
+                #~ print "task ",t.name," estimated at ", p
                 choice.append([t, p])
                 if len(choice) >= 30:
                     break
@@ -168,13 +168,25 @@ class LittleVillager:
         self.properties[obj.name] = obj
         
     def improvePrestige(self):
-        if self.home is None and self.money > 10:
-            pos = [0, 0]
-            pos[0] = int(self.position[0])
-            pos[1] = int(self.position[1])
-            lbt = LittleBuildTask(self.village, "house", position=pos, owner=self)
-            self.village.toDoList.append(lbt)
-            self.money -= 10
+        desiredItemList = [["bijou1", 10], ["bijou2", 20], ["bijou3", 20]]
+        if self.home is None :
+            if self.money > 40:
+                pos = [0, 0]
+                pos[0] = int(self.position[0])
+                pos[1] = int(self.position[1])
+                lbt = LittleBuildTask(self.village, "house", position=pos, owner=self)
+                self.village.toDoList.append(lbt)
+                self.money -= 40
+        else:
+            ritem = random.randint(0, len(desiredItemList)-1)
+            print ritem
+            print "I want a new "+desiredItemList[ritem][0]
+            if self.money > desiredItemList[ritem][1]:
+                lct = LittleCarryTask(self.village, "warehouse", self.home, desiredItemList[ritem][0])
+                self.money -= desiredItemList[ritem][1]
+                
+                self.home.taskList.append(lct)
+            
         #~ elif "table" not in self.properties.keys() and self.money > 10:
             
         

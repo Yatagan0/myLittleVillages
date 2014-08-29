@@ -43,4 +43,31 @@
 <produced name="wood" quantity="1" />
 </production>
 </workshop>
+<workshop name="jeweller1" type="production">
+<build  time="20">
+<material name="wood" quantity = "10"/>
+<material name="stone" quantity = "10"/>
+</build>
+<production  time="5">
+<produced name="bijou1" quantity="1" />
+</production>
+</workshop> 
+<workshop name="jeweller2" type="production">
+<build  time="20">
+<material name="wood" quantity = "10"/>
+<material name="stone" quantity = "10"/>
+</build>
+<production  time="5">
+<produced name="bijou2" quantity="1" />
+</production>
+</workshop> 
+<workshop name="jeweller3" type="production">
+<build  time="20">
+<material name="wood" quantity = "10"/>
+<material name="stone" quantity = "10"/>
+</build>
+<production  time="5">
+<produced name="bijou3" quantity="1" />
+</production>
+</workshop> 
 </workshops>
