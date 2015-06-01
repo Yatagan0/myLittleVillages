@@ -1,129 +1,236 @@
-import math
+# -*- coding: utf-8 -*-
+
+import random, math
 import xml.etree.ElementTree as ET
 
-start = "B.C.D.F.G.H.J.L.M.N.P.R.S.T.V.Qu.Ch.St"
-start = start.split('.')
-then = "a.e.i.o.u.on.ou.ai.en.in"
-then = then.split('.')
+seasonIndex = 0
 
-allU = []
-allL = []
 
-for f in start:
-    for t in then:
-        allU.append((f+t))
-        allL.append((f+t).lower())
+consonnes = "B.C.D.F.G.H.J.L.M.N.P.R.S.T.V.Qu.Ch.St.Tr.Pr.Cr.Sc"
+consonnes = consonnes.split('.')
+voyelles = "a.e.i.o.u.on.ou.ai.en.in"
+voyelles = voyelles.split('.')
+
+consonnesDoubles = "ss.ll.rr.rt"
+consonnesDoubles = consonnesDoubles.split('.') + consonnes
+voyellesFinVille = "ac.es.art.ant.eaux.e.and.as.ard"
+voyellesFinVille = voyellesFinVille.split('.')
+
+voyellesFinNom = "es.art.ant.eaux.e.and.ot.er.ard"
+voyellesFinNom = voyellesFinNom.split('.')
+
+
+finVille = ["touille", "mont", "vert", "gny","lieu", "guen", "fort", "puy"]
+finNom = [ "mont", "vert",  "leaux", "lieu", "guen"]
+prenoms = ["Ahmed","Albert","Alexandre","André","Antoine","Arnaud","Augustin", "Basile", "Benoit", "Charles", "Christophe","Clement","Damien","Dominique",
+"Edouard","Emile","Etienne","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", "Gautier","Germain","Georges","Grégoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
+"Joël", "Jonas","Joseph", "Julien","Laurent","Léon","Luc","Lucas","Manuel", "Matthieu", "Martin", "Nicolas", "Paul","Pierre","Philippe", 
+"René", "Robert", "Sylvain", "Thimotée","Thomas","Vincent", "William"]
+
+def isNameOk(name):
+    if name.find("uu") > -1:
+        return False
+    if name.find("nll") > -1:
+        return False
+    if name.find("nrr") > -1:
+        return False
+    if name.find("nrt") > -1:
+        return False
+    if len(name) > 12:
+        return False
         
+    return True
+
+def randomName():
+    s= random.choice(consonnes)+random.choice(voyelles)
+    r = random.randint(0, 2)
+    #~ print r
+    if r == 2:
+        #~ print "rare"
+        r = random.randint(0,2) #very long names are rares
+        #~ print r
+    for i in range(0, r):
+        s +=random.choice(consonnesDoubles).lower()+random.choice(voyelles)
+    r = random.randint(0, 4)
+    if r < 1:
+        s += random.choice(finVille)
+    else:
+        s +=random.choice(consonnesDoubles).lower()+random.choice(voyellesFinNom)
+    if(not isNameOk(s)):
+        #~ print s, " not ok"
+        return randomName()
+    s = random.choice(prenoms)+" "+s
+    return s
+    
+    
+def randomCityName():
+    s = random.choice(consonnes)+random.choice(voyelles)
+    r = random.randint(0, 2)
+    if r == 2:
+        r = random.randint(0, 2) #very long names are rares
+    for i in range(0, r):
+        s +=random.choice(consonnes).lower()+random.choice(voyelles)
         
+    r = random.randint(0, 2)
+    if r < 1:
+        s += random.choice(finVille)
+    else:
+        s +=random.choice(consonnesDoubles).lower()+random.choice(voyellesFinVille)
+    if(not isNameOk(s)):
+        return randomCityName()
+    return s
+    
+    
+#produits = ["pommes", "poires", "peches", "farine", "oeufs", "beurre", "sucre", "miel", "amandes", "raisins", "noisettes", "noix"]   
+produits = ["pommes",  "farine", "oeufs", "beurre", "sucre", ]
+    
+def addToDict(dict, key, value):
+    if key not in dict.keys():
+        dict[key] = value
+    else:
+        dict[key] += value
+    if dict[key] == 0:
+        del dict[key]
+
+def getDict(dict, key):
+    if key not in dict.keys():
+        return 0
+    return dict[key]
+    
+    
+def addToDictList(dict, key, value):
+    if key not in dict.keys():
+        dict[key] = [value]
+    else:
+        dict[key].append(value)
+
+    
 def distance(p1, p2):
-    #~ return 0
     return math.sqrt((p1[0] - p2[0])*(p1[0] - p2[0])+(p1[1] - p2[1])*(p1[1] - p2[1]))
     
-global time
-time = 0
-def iterateTime():
-    global time
-    time += 1
+def firstPart(s):
+    split = s.split('-', 1)
+    if len(split) == 1:
+        split.append("")
+    return split
     
-#~ workshopName = {}
-#~ workshopName["wood"] = "woodcutter"
-#~ workshopName["stone"] = "stonecutter"
-#~ workshopName["gold"] = "goldminer"
-#~ workshopName["jewel"] = "jeweler"
-#~ workshopName["warehouse"] = "warehouse"
+class Time:
+    def __init__(self):
+        self.minute = 0
+        self.hour = 0
+        self.day = 1
+        self.month = 1
+        self.year = 0
+        
+    def now():
+        return [self.minute, self.hour, self.day, self.month, self.year] 
 
-def getMeanPos(posList):
-    result = [0,0]
-    if len(posList) == 0:
-        return result
+    def addTime(self, num=1):
+        [self.minute, self.hour, self.day, self.month, self.year] = self.timeIn(num)
+        
     
-    for p in posList:
-        result[0] += p[0]
-        result[1] += p[1]
-    result[0] = float(result[0])/len(posList)
-    result[1] = float(result[1])/len(posList)
-    return result
+    def durationTo(self,date, startDate = []):
+        #~ min = date[0]
+        #~ h = date[1]
+        #~ d = date[2]
+        #~ m = date[3]
+        #~ y = date[4]
+        
+        if len(startDate)<5:
+            startDate = [self.minute, self.hour, self.day, self.month, self.year] 
+        
+        duration = (date[4] - startDate[4])*12
+        duration = (duration + date[3] - startDate[3])*30
+        duration = (duration + date[2] - startDate[2])*24
+        duration = (duration + date[1] - startDate[1])*60
+        return duration + date[0] - startDate[0]
     
-prestigeObjects = {}
-
-cabane = {"prestige":10, "price":10}
-prestigeObjects["hut"] = cabane
-
-maison = {"prestige":40, "price":30}
-prestigeObjects["house"] = maison
-
-global allMaterials
-allMaterials = {}
-
-global allWorkshops
-allWorkshops = {}
-
-class productionData:
-    def __init__(self, elem):
-        self.produced = {}
-        self.tools = {}
-        self.needed = {}
-        self.time = int(elem.attrib["time"])
-        
-        for child in elem:
-            if child.tag == "produced":
-                self.produced[child.attrib["name"]] = int(child.attrib["quantity"])
-                print "it produces ",self.produced[child.attrib["name"]] ," ", child.attrib["name"]
-                
-
-                
-            if child.tag == "needed":
-                self.needed[child.attrib["name"]] = int(child.attrib["quantity"])
-                print "it needs ",self.needed[child.attrib["name"]] ," ", child.attrib["name"]
-
-
-
-class workshopData:
-    def __init__(self, elem):
-        self.name = elem.attrib["name"]
-        self.type = elem.attrib["type"]
-        self.productions = []
-        
-        self.build = {}
-        self.buildTime = 0
-        
-        
-        for child in elem:
-            if child.tag == "build":
-                self.buildTime = int(child.attrib["time"])
-                self.addBuild(child)
-            if child.tag == "production":
-                self.addProduction(child)
-                
-                
-    def addBuild(self, elem):
-        for child in elem:
-            if child.tag == "material":
-                self.build[child.attrib["name"]] = int(child.attrib["quantity"])
-        
-    def addProduction(self, elem):
-        pd = productionData(elem)
-        self.productions.append(pd)
-        
-        global allMaterials
-        for p in pd.produced.keys():
-            if not p in allMaterials.keys():
-                allMaterials[p] = [self]
-            else:
-                allMaterials[p].append(self)
-            
-        
-        
-tree =  ET.parse("workshops.xml")
-root = tree.getroot()
-for child in root:
-    wd = workshopData(child)
-
-    global allWorkshops
-    allWorkshops[wd.name] = wd
+    def timeIn(self, duration, fromTime=[]):
+        if len(fromTime)<5:
+            fromTime = [self.minute, self.hour, self.day, self.month, self.year] 
     
-    #~ global allMaterial
-    #~ allMaterial[wd.material] = wd
-print allWorkshops
+        min = fromTime[0] + duration
+        h = fromTime[1]
+        d = fromTime[2]
+        m = fromTime[3]
+        y = fromTime[4]
+        while min >=60:
+            min -=60
+            h += 1
+        while min <0:
+            min +=60
+            h -= 1
+        while h >=24:
+            h -=24
+            d += 1
+        while h <0:
+            h+=24
+            d -= 1
+        while d>30:
+            d -= 30
+            m  += 1
+        while d<=0:
+            d += 30
+            m  -= 1
+        while m > 12:
+            m -= 12
+            y +=1
+        while m<= 0:
+            m += 12
+            y -=1
+        return [min, h, d, m, y]
+        
+    def now(self):
+        return [self.minute, self.hour, self.day, self.month, self.year] 
+    
+    def __str__(self, t=[]):
+        if len(t)<5:
+            t = [self.minute, self.hour, self.day, self.month, self.year] 
+        monthNames = ["janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre"]
+        s = str(t[1])+" h "+str(t[0])+", le "+str(t[2])+" "+monthNames[t[3]-1]+" "+str(2000 + t[4])
+        return s
+ 
+    def write(self, root):
+        subel = ET.SubElement(root, 'time')
+        subel.set("minute", str(self.minute))
+        subel.set("hour", str(self.hour))
+        subel.set("day", str(self.day))
+        subel.set("month", str(self.month))
+        subel.set("year", str(self.year))
+        
+    def read(self, root):
+        self.minute = int(root.attrib["minute"])
+        self.hour = int(root.attrib["hour"])
+        self.day = int(root.attrib["day"])
+        self.month = int(root.attrib["month"])
+        self.year = int(root.attrib["year"])
+        
+global globalTime
+globalTime = Time()
+    
+if __name__ == '__main__':
+    for i in range(0, 10):
+        print randomName()
+    #~ for i in range(0, 10):
+        #~ print randomCityName()      
+    #~ dict = {"test":2}
+    #~ print dict
+    #~ addToDict(dict, "test", 3)
+    #~ addToDict(dict, "test2", 3)
+    #~ print dict
+    #~ print getDict(dict, "test2")
+    #~ print getDict(dict, "test3")
+    #~ addTime()
+    #~ print durationTo(10, 1, 1, 0)
+    
 
-print allMaterials
+    #~ print printTime()
+    #~ t = Time()
+    #~ t.addTime()
+    #~ print t
+    #~ [h, d, m, y] = t.timeIn(1000)
+    #~ print t.__str__([h, d, m, y])
+
+    
+    
+        
