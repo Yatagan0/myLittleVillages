@@ -22,10 +22,10 @@ voyellesFinNom = voyellesFinNom.split('.')
 
 finVille = ["touille", "mont", "vert", "gny","lieu", "guen", "fort", "puy"]
 finNom = [ "mont", "vert",  "leaux", "lieu", "guen"]
-prenoms = ["Ahmed","Albert","Alexandre","André","Antoine","Arnaud","Augustin", "Basile", "Benoit", "Charles", "Christophe","Clement","Damien","Dominique",
+prenoms = ["Ahmed","Albert","Alexandre","André","Antoine","Arnaud","Augustin", "Basile", "Benoit", "Charles", "Christophe","Clement","Damien","Denis","Dominique",
 "Edouard","Emile","Etienne","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", "Gautier","Germain","Georges","Grégoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
 "Joël", "Jonas","Joseph", "Julien","Laurent","Léon","Luc","Lucas","Manuel", "Matthieu", "Martin", "Nicolas", "Paul","Pierre","Philippe", 
-"René", "Robert", "Sylvain", "Thimotée","Thomas","Vincent", "William"]
+"René", "Robert", "Ronan","Sylvain", "Thimotée","Thomas","Vincent", "William"]
 
 def isNameOk(name):
     if name.find("uu") > -1:
