@@ -40,6 +40,7 @@ def addInAllImages(name, path):
     cv2.cv.Resize(cv2.cv.fromarray(img), cv2.cv.fromarray(allImages[name] )) 
 
 addInAllImages("people", "img/people.jpg")
+addInAllImages("building", "img/building.jpg")
  
 class displayTree:
     def __init__(self, image="default"):
@@ -96,10 +97,14 @@ class displayTree:
 DT = displayTree()
 DT_people = displayTree("people")
 DT.addChild("people", DT_people)
+DT_building = displayTree("building")
+DT.addChild("building", DT_building)
     
-def display(p):
+def display(people, buildings):
     clear()
-    for pp in p:
+    for b in buildings:
+        DT.display("building", b.pos)
+    for pp in people:
         DT.display("people", pp.pos)
     cv2.imshow('LittleDispay',bg)
     key = cv2.waitKey(33)
