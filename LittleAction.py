@@ -3,11 +3,12 @@ import xml.etree.ElementTree as ET
 
 class LittleAction:
     def __init__(self, root=None, people=None, type="do nothing", startHour=None):
+        self.people = people 
         if root is not None:
             self.read(root)
             return
         
-        self.people = people
+
         self.type = type
         self.startHour = startHour
         self.init()
@@ -17,7 +18,10 @@ class LittleAction:
         return s
         
     def read(self, root):
-        pass
+        self.type = root.attrib["type"]
+        self.startHour = [int(root.attrib["startHour"]),int(root.attrib["startMinute"]) ]
+        self.status = root.attrib["status"]
+        self.remainingTime = int(root.attrib["remainingTime"])
         
     def write(self, root):
         elem =  ET.SubElement(root, 'action')
@@ -38,12 +42,12 @@ class LittleAction:
         return self.remainingTime > 0
         
     def init(self):
-        print "init"
+        #~ print "init"
         self.status = "not started"
         self.remainingTime = 59
     
     def copy(self):
-        a = LittleAction(self.people, self.type, self.startHour)
+        a = LittleAction(people=self.people, type=self.type, startHour=self.startHour)
         return a
         
 class LittleSleepAction(LittleAction):
@@ -60,7 +64,8 @@ class LittleSleepAction(LittleAction):
         self.pos = [0., 0.]
         
     def read(self, root):
-        pass
+        LittleAction.read(self,root)
+        self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
         
     def write(self, root):
         elem =  LittleAction.write(self, root)
@@ -70,7 +75,7 @@ class LittleSleepAction(LittleAction):
 
         
     def copy(self):
-        a = LittleSleepAction(self.people, self.startHour)
+        a = LittleSleepAction(people=self.people, startHour=self.startHour)
         return a
         
     def execute(self):
@@ -94,7 +99,7 @@ class LittleEatAction(LittleAction):
     def __init__(self,root=None, people=None, startHour=None):
         LittleAction.__init__(self,root, people, "eat", startHour)
         if root is not None:
-            self.read()
+            self.read(root)
         else:
             self.init()
         
@@ -104,7 +109,8 @@ class LittleEatAction(LittleAction):
         self.pos = [0., 0.]
 
     def read(self, root):
-        pass
+        LittleAction.read(self,root)
+        self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
 
     def write(self, root):
         elem =  LittleAction.write(self, root)
@@ -113,7 +119,7 @@ class LittleEatAction(LittleAction):
         elem.set("class", "LittleEatAction")
         
     def copy(self):
-        a = LittleEatAction(self.people, self.startHour)
+        a = LittleEatAction(people=self.people, startHour=self.startHour)
         return a
         
     def execute(self):
@@ -141,11 +147,11 @@ class LittleEatAction(LittleAction):
         return True
         
 class LittleOldActions():
-    def __init__(self,people, toRead=None):
+    def __init__(self,people, root=None):
         self.days = []
-        if toRead is not None:
+        if root is not None:
             
-            self.read(toRead)
+            self.read(root, people)
             return
             
         for i in range(0,9):
@@ -170,11 +176,11 @@ class LittleOldActions():
                 s+=" "+str(a)
         return s
     
-    def read(self, root):
+    def read(self, root, people):
         for child in root:
             day = []
-            #~ for cc in child:
-                #~ day.append(LittleAction(cc))
+            for cc in child:
+                day.append(readAction(cc, people))
             self.days.append(day)
     
     def write(self, root):
@@ -222,11 +228,11 @@ class LittleOldActions():
             self.days.append([])
         self.days[-1].append(a)
 
-def readAction(root):
+def readAction(root, people):
     if root.attrib["class"] == "LittleEatAction":
-        a = LittleEatAction(root=root)
+        a = LittleEatAction(root=root, people=people)
     elif root.attrib["class"] == "LittleSleepAction":
-        a = LittleSleepAction(root=root)
+        a = LittleSleepAction(root=root, people=people)
     else:
-        a = LittleAction(root=root)
+        a = LittleAction(root=root, people=people)
     return a

@@ -12,7 +12,7 @@ from xml.dom import minidom
 
 if __name__ == '__main__':
 
-    newVillage = False
+    newVillage = True
  
     allPeople = []
     path = "village.xml"
@@ -24,7 +24,7 @@ if __name__ == '__main__':
         b = LittleBuilding( pos=[0.,0.],type="cantine")
         
         
-        for i in range(0, 1):
+        for i in range(0, 2):
             p = LittlePeople()
             p.knowledge["sleep"].seenBuilding(bb)
             p.knowledge["eat"].seenBuilding(b)

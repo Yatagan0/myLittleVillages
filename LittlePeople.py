@@ -13,6 +13,7 @@ class LittlePeople:
         self.knowledge["sleep"] = LittleBuildingList()
         self.knowledge["eat"] = LittleBuildingList()
         
+        self.speed = 0.04
         
         if root is not None:
             self.read(root)
@@ -20,7 +21,7 @@ class LittlePeople:
         self.name = utils.randomName()
         
         self.pos = [0.0, 0.0]
-        self.speed = 0.04
+        
         
         self.habits = LittleOldActions(self)
         
@@ -37,6 +38,8 @@ class LittlePeople:
         for child in root:
             if (child.tag == "habits"):     
                 self.habits = LittleOldActions(self, child)
+            elif child.tag=="action":
+                self.action = readAction(child, self)
                 
                 
     def write(self, root):
@@ -46,6 +49,8 @@ class LittlePeople:
         elem.set("posY", str(self.pos[1]))
         elem.set("tired", str(self.tired))
         elem.set("hungry", str(self.hungry))
+        if self.action is not None:
+            self.action.write(elem)
         
         self.habits.write(elem)
    
