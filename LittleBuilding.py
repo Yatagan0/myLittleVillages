@@ -1,4 +1,5 @@
 import utils, random
+import xml.etree.ElementTree as ET
 
 allBuildings = []
 
@@ -10,14 +11,29 @@ def buildingImIn(pos):
 
 
 class LittleBuilding:
-    def __init__(self, pos, type):
-        self.pos = self.findFreePos(pos, 0)
-        print "building ",type," at ",self.pos
-        self.type = type
+    def __init__(self, root=None, pos = [0., 0.], type="building"):
+
+        
+        
+        if root is not None:
+            self.read(root)
+        else:
+            self.pos = self.findFreePos(pos, 0)
+            print "building ",type," at ",self.pos
+            self.type = type
         
         global allBuildings
         allBuildings.append(self)
         
+    def write(self, root):
+        elem =  ET.SubElement(root, 'building')
+        elem.set("posX", str(self.pos[0]))
+        elem.set("posY", str(self.pos[1]))
+        elem.set("type", self.type)
+
+    def read(self, root):
+        self.type = root.attrib["type"]
+        self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
         
     def findFreePos(self, pos, size):
         r0 = random.randint(pos[0]-size, pos[0]+size)

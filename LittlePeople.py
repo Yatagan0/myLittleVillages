@@ -3,24 +3,51 @@ import utils, random, copy
 from LittleAction import *
 from LittleBuilding import *
 
+import xml.etree.ElementTree as ET
+
 
 class LittlePeople:
-    def __init__(self):
+    def __init__(self, root=None):
+        self.action = None
+        self.knowledge = {}
+        self.knowledge["sleep"] = LittleBuildingList()
+        self.knowledge["eat"] = LittleBuildingList()
+        
+        
+        if root is not None:
+            self.read(root)
+            return
         self.name = utils.randomName()
         
         self.pos = [0.0, 0.0]
         self.speed = 0.04
         
-        self.habits = LittleOldActions(self,)
-        self.action = None
+        self.habits = LittleOldActions(self)
+        
         
         self.tired = -5*60
         self.hungry = 0
 
-        self.knowledge = {}
-        self.knowledge["sleep"] = LittleBuildingList()
-        self.knowledge["eat"] = LittleBuildingList()
 
+    def read(self, root):
+        self.name = root.attrib["name"]
+        self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
+        self.tired = int(root.attrib["tired"])
+        self.hungry = int(root.attrib["hungry"])
+        for child in root:
+            if (child.tag == "habits"):     
+                self.habits = LittleOldActions(self, child)
+                
+                
+    def write(self, root):
+        elem =  ET.SubElement(root, 'people')
+        elem.set("name", self.name)
+        elem.set("posX", str(self.pos[0]))
+        elem.set("posY", str(self.pos[1]))
+        elem.set("tired", str(self.tired))
+        elem.set("hungry", str(self.hungry))
+        
+        self.habits.write(elem)
    
     def update(self, time):
         self.tired+=1
@@ -34,12 +61,12 @@ class LittlePeople:
         
         if self.tired > 20*60:
             #~ print "must sleep"
-            self.action = LittleSleepAction( self,[time.hour, time.minute])
+            self.action = LittleSleepAction( people=self,startHour=[time.hour, time.minute])
             return
         
         if self.hungry > 10*60:
             #~ print "must eat"
-            self.action = LittleEatAction( self,[time.hour, time.minute]) 
+            self.action = LittleEatAction( people=self,startHour=[time.hour, time.minute]) 
             return
         
         myHabits = self.habits.findHabits([time.hour, time.minute])
@@ -53,7 +80,7 @@ class LittlePeople:
                 self.action = a.copy()
                 return
 
-        self.action = LittleAction(self, "do nothing", [time.hour, time.minute])
+        self.action = LittleAction(people=self, type="do nothing", startHour=[time.hour, time.minute])
 
 
     def canDoAction(self, a):

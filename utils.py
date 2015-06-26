@@ -22,9 +22,12 @@ voyellesFinNom = voyellesFinNom.split('.')
 
 finVille = ["touille", "mont", "vert", "gny","lieu", "guen", "fort", "puy"]
 finNom = [ "mont", "vert",  "leaux", "lieu", "guen"]
-prenoms = ["Ahmed","Albert","Alexandre","André","Antoine","Arnaud","Augustin", "Basile", "Benoit", "Charles", "Christophe","Clement","Damien","Denis","Dominique",
-"Edouard","Emile","Etienne","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", "Gautier","Germain","Georges","Grégoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
-"Joël", "Jonas","Joseph", "Julien","Laurent","Léon","Luc","Lucas","Manuel", "Matthieu", "Martin", "Nicolas", "Paul","Pierre","Philippe", 
+prenoms = ["Ahmed","Albert","Alexandre","André","Antoine","Arnaud","Augustin", "Basile", "Benoit",
+"Bertrand","Charles", "Christophe","Calude","Clement","Damien","Denis","Dominique",
+"Edouard","Emile","Etienne","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", 
+"Gautier","Germain","Georges","Grégoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
+"Joël", "Jonas","Joseph", "Julien","Laurent","Léon","Luc","Lucas","Manuel", "Matthieu", "Martin", 
+"Nicolas", "Paul","Pierre","Philippe", 
 "René", "Robert", "Ronan","Sylvain", "Thimotée","Thomas","Vincent", "William"]
 
 def isNameOk(name):
@@ -122,7 +125,7 @@ class Time:
         self.month = 1
         self.year = 0
         
-    def now():
+    def now(self):
         return [self.minute, self.hour, self.day, self.month, self.year] 
 
     def addTime(self, num=1):
@@ -179,9 +182,6 @@ class Time:
             m += 12
             y -=1
         return [min, h, d, m, y]
-        
-    def now(self):
-        return [self.minute, self.hour, self.day, self.month, self.year] 
     
     def __str__(self, t=[]):
         if len(t)<5:
