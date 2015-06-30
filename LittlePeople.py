@@ -5,6 +5,7 @@ from LittleBuilding import *
 
 import xml.etree.ElementTree as ET
 
+allPeople = []
 
 class LittlePeople:
     def __init__(self, root=None):
@@ -15,20 +16,23 @@ class LittlePeople:
         
         if root is not None:
             self.read(root)
-            return
+        else:
             
-        self.name = utils.randomName()
+            self.name = utils.randomName()
+            
+            self.pos = [0.0, 0.0]
+            self.knowledge = {}
+            self.knowledge["sleep"] = LittleBuildingList(type="sleep")
+            self.knowledge["eat"] = LittleBuildingList(type="eat")
+            
+            self.habits = LittleOldActions(self)
+            
+            
+            self.tired = -5*60
+            self.hungry = 0
         
-        self.pos = [0.0, 0.0]
-        self.knowledge = {}
-        self.knowledge["sleep"] = LittleBuildingList(type="sleep")
-        self.knowledge["eat"] = LittleBuildingList(type="eat")
-        
-        self.habits = LittleOldActions(self)
-        
-        
-        self.tired = -5*60
-        self.hungry = 0
+        global allPeople
+        allPeople.append(self)
 
 
     def read(self, root):
@@ -84,6 +88,13 @@ class LittlePeople:
             self.action = LittleEatAction( people=self,startHour=[time.hour, time.minute]) 
             return
         
+        #~ possibleActions = []
+        
+        candiscuss = self.canDiscuss()
+        for c in candiscuss:
+            #~ if random.randint(0, 9) == 0:
+                self.tellInfo(c)
+        
         myHabits = self.habits.findHabits([time.hour, time.minute])
         #~ myHabits = [LittleAction(self, "do nothing", [time.hour, time.minute])]
         
@@ -117,3 +128,30 @@ class LittlePeople:
             self.pos[0] += self.speed*(pos[0] - self.pos[0])/d
             self.pos[1] += self.speed*(pos[1] - self.pos[1])/d
             return False
+            
+    def tellInfo(self, p):
+        knowledgeType = random.choice(self.knowledge.values())
+        #~ print "tell info about ",knowledgeType.type
+        b = knowledgeType.getLastSeen()
+        print self.name," tells ",p.name, " about something for ",knowledgeType.type," at ",b.pos
+        p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
+            
+    def canDiscuss(self):
+        #~ print self.name, "can discuss ?"
+        samepos = self.samePos()
+        candiscuss = []
+        for p in samepos:
+            if p.action is None or p.action.type == "do nothing" or p.action.type == "eat":
+                candiscuss.append(p)
+                #~ print self.name, " can discuss with ",p.name
+        return candiscuss
+        
+    def samePos(self):
+        samepos = []
+        for p in allPeople:
+            if p.name == self.name:
+                continue
+            #~ print 
+            if abs(self.pos[0] - p.pos[0]) < 1 and abs(self.pos[1] - p.pos[1])<1:
+                samepos.append(p)
+        return samepos

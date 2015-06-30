@@ -26,8 +26,8 @@ if __name__ == '__main__':
         
         for i in range(0, 2):
             p = LittlePeople()
-            p.knowledge["sleep"].seenBuilding(bb)
-            p.knowledge["eat"].seenBuilding(b)
+            p.knowledge["sleep"].seenBuilding(building=bb)
+            p.knowledge["eat"].seenBuilding(building=b)
             print p.name
 
             allPeople.append(p)

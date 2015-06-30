@@ -72,7 +72,7 @@ class LittleKnownBuilding:
         self.lastSeen = [int(root.attrib["minute"]),int(root.attrib["hour"]), int(root.attrib["day"]), int(root.attrib["month"]), int(root.attrib["year"])]
         
     def seen(self, reliable):
-        print "seen !"
+        #~ print "seen !"
         self.lastSeen = utils.globalTime.now()
         if reliable > -1:
             self.reliable = 0.9*self.reliable + 0.1*reliable        
@@ -130,6 +130,18 @@ class LittleBuildingList:
                 
         #~ print rpos
         return rpos
+        
+    def getLastSeen(self):
+        blast = None
+        dmin = -1
+        for b in self.known:
+            t = -utils.globalTime.durationTo(b.lastSeen)
+            #~ print t
+            if dmin == -1 or t < dmin:
+                dmin = t
+                blast = b
+                
+        return blast
             
             
             
