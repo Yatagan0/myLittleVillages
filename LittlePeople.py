@@ -53,6 +53,11 @@ class LittlePeople:
             self.action.write(elem)
         
         self.habits.write(elem)
+        
+        sub =  ET.SubElement(elem, 'knowledge')
+        for k in self.knowledge.keys():
+            self.knowledge[k].write(sub, k)
+            
    
     def update(self, time):
         self.tired+=1

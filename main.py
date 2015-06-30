@@ -12,7 +12,7 @@ from xml.dom import minidom
 
 if __name__ == '__main__':
 
-    newVillage = True
+    newVillage = False
  
     allPeople = []
     path = "village.xml"
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         
         #~ print "------------------"
         utils.globalTime.addTime()
-        print utils.globalTime
+        #~ print utils.globalTime
         for p in allPeople:
             p.update(utils.globalTime)
         if DO_DISPLAY:

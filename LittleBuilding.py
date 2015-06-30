@@ -51,16 +51,34 @@ class LittleKnownBuilding:
         self.lastSeen = utils.globalTime.now()
         self.reliable = 0.5
         
+    def write(self, root):
+        elem =  ET.SubElement(root, 'known') 
+        elem.set("posX", str(self.pos[0]))
+        elem.set("posY", str(self.pos[1]))
+        elem.set("reliable", str(self.reliable))
+        elem.set("minute", str(self.lastSeen[0]))
+        subel.set("hour", str(self.lastSeen[1]))
+        subel.set("day", str(self.lastSeen[2]))
+        subel.set("month", str(self.lastSeen[3]))
+        subel.set("year", str(self.lastSeen[4]))
+        
     def seen(self, reliable):
+        print "seen !"
         self.lastSeen = utils.globalTime.now()
         if reliable > -1:
             self.reliable = 0.9*self.reliable + 0.1*reliable        
-        
+       
 class LittleBuildingList:
 
     
     def __init__(self):
         self.known = []
+        
+    def write(self, root, type):
+        elem =  ET.SubElement(root, 'knowntype') 
+        elem.set("type", type)
+        for k in self.known:
+            k.write(elem)
         
     def seenBuilding(self, building, reliable=-1):
         b = self.findBuilding(building.pos)
