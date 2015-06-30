@@ -91,6 +91,7 @@ class LittleSleepAction(LittleAction):
                 
             else:
                 self.people.tired = 0
+                self.people.knowledge["sleep"].seenBuilding(pos=self.pos)
                 return False
                 
         return True
@@ -142,6 +143,7 @@ class LittleEatAction(LittleAction):
                 
             else:
                 self.people.hungry = 0
+                self.people.knowledge["eat"].seenBuilding(pos=self.pos)
                 return False
                 
         return True

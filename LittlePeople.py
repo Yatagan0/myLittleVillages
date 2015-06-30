@@ -9,19 +9,20 @@ import xml.etree.ElementTree as ET
 class LittlePeople:
     def __init__(self, root=None):
         self.action = None
-        self.knowledge = {}
-        self.knowledge["sleep"] = LittleBuildingList()
-        self.knowledge["eat"] = LittleBuildingList()
+
         
         self.speed = 0.04
         
         if root is not None:
             self.read(root)
             return
+            
         self.name = utils.randomName()
         
         self.pos = [0.0, 0.0]
-        
+        self.knowledge = {}
+        self.knowledge["sleep"] = LittleBuildingList(type="sleep")
+        self.knowledge["eat"] = LittleBuildingList(type="eat")
         
         self.habits = LittleOldActions(self)
         
@@ -40,6 +41,10 @@ class LittlePeople:
                 self.habits = LittleOldActions(self, child)
             elif child.tag=="action":
                 self.action = readAction(child, self)
+            elif child.tag == "knowledge":
+                self.knowledge = {}
+                for cc in child:
+                    self.knowledge[cc.attrib["type"]] = LittleBuildingList(cc)
                 
                 
     def write(self, root):
@@ -55,8 +60,8 @@ class LittlePeople:
         self.habits.write(elem)
         
         sub =  ET.SubElement(elem, 'knowledge')
-        for k in self.knowledge.keys():
-            self.knowledge[k].write(sub, k)
+        for k in self.knowledge.values():
+            k.write(sub)
             
    
     def update(self, time):
