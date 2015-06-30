@@ -88,7 +88,7 @@ class LittlePeople:
             self.action = LittleEatAction( people=self,startHour=[time.hour, time.minute]) 
             return
         
-        #~ possibleActions = []
+        possibleActions = []
         
         candiscuss = self.canDiscuss()
         for c in candiscuss:
@@ -103,18 +103,28 @@ class LittlePeople:
             a = random.choice(myHabits)
             
             if self.canDoAction(a):
-                self.action = a.copy()
-                return
+                possibleActions.append(a)
+                #~ self.action = a.copy()
+                #~ return
                 
         if random.randint(0, 1)==0:
             dest = [0., 0.]
             dest[0] = self.pos[0] + random.randint(-1, 1)
             dest[1] = self.pos[1] + random.randint(-1, 1)
-            self.action = LittleMoveAction(people=self,  startHour=[time.hour, time.minute], destination =dest)
-            return
+            a= LittleMoveAction(people=self,  startHour=[time.hour, time.minute], destination =dest)
+            possibleActions.append(a)
+            #~ return
 
-        self.action = LittleAction(people=self, type="do nothing", startHour=[time.hour, time.minute])
-
+        a = LittleAction(people=self, type="do nothing", startHour=[time.hour, time.minute])
+        possibleActions.append(a)
+        
+        b = buildingImIn(self.pos)
+        aa = b.getPossibleActions()
+        for a in aa:
+            if self.canDoAction(a):
+                possibleActions.append(a)
+        
+        self.action = random.choice(possibleActions).copy()
 
     def canDoAction(self, a):
         if a.type == "sleep" and self.tired < 5*60:

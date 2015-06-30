@@ -83,6 +83,61 @@ def randomCityName():
         return randomCityName()
     return s
     
+def randomRestaurantName(owner=""):
+    if owner == "":
+        owner = random.choice(prenoms)
+        
+    names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", "estaminet","coutelas", "pain"],
+                    ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade"]]
+    au = ["Au ", "A la ", "A l'"]
+    le = ["Le ", "La ", "L'"]
+ 
+        
+    cases = ["chez", "au", "le", "au", "le"]
+    case = random.choice(cases)
+    if case == "chez":
+        return "Chez "+owner
+        
+    nameGenre = random.randint(0,1)
+    
+    myname = random.choice(names[nameGenre])
+        
+    if case == "au":
+        if myname[0] in ["a", "e", "i", "o", "u", "y"]:
+            myau = au[2]
+        else: myau = au[nameGenre] 
+        finalName = myau+myname
+    elif case == "le":
+        if myname[0] in ["a", "e", "i", "o", "u", "y"]:
+            myau = le[2]
+        else: myau = le[nameGenre] 
+        finalName = myau+myname
+        
+    cases = ["de", "adjectif", "du", "rien"]
+    case = random.choice(cases)
+    
+    if case == "de":
+        finalName += " de "+owner
+    elif case == "adjectif":
+        adj = {}
+        adj["merveilleux"] = "merveilleuse"
+        adj["magique"] = ""
+        adj["enchante"] = "enchantee"
+        adj["gourmand"] = "gourmande"
+        adj["lointain"] = "lointaine"
+        adj["traditionnel"] = "traditionnelle"
+        aa = random.choice(adj.keys())
+        if adj[aa] != "" and (nameGenre==1 or nameGenre==3) :
+            aa = adj[aa]
+        finalName += " "+aa
+    elif case == "du":
+        toadd = ["des lutins", "des familles", "du gourmet", "de chez nous", "d'antan", "du printemps",
+        "des amis", "du port", "de la gare", "du centre"]
+        aa = random.choice(toadd)
+        finalName += " "+aa
+        
+    return finalName
+    
     
 #produits = ["pommes", "poires", "peches", "farine", "oeufs", "beurre", "sucre", "miel", "amandes", "raisins", "noisettes", "noix"]   
 produits = ["pommes",  "farine", "oeufs", "beurre", "sucre", ]
@@ -210,7 +265,8 @@ globalTime = Time()
     
 if __name__ == '__main__':
     for i in range(0, 10):
-        print randomName()
+        #~ print randomName()
+        print randomRestaurantName()
     #~ for i in range(0, 10):
         #~ print randomCityName()      
     #~ dict = {"test":2}

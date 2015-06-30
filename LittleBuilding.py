@@ -13,14 +13,14 @@ def buildingImIn(pos):
 class LittleBuilding:
     def __init__(self, root=None, pos = [0., 0.], type="building"):
 
-        
-        
         if root is not None:
             self.read(root)
         else:
             self.pos = self.findFreePos(pos, 0)
             print "building ",type," at ",self.pos
             self.type = type
+            
+        self.possibleActions = []
         
         global allBuildings
         allBuildings.append(self)
@@ -42,6 +42,9 @@ class LittleBuilding:
         if buildingImIn([r0, r1]) is None:
             return [r0, r1]
         return self.findFreePos(pos, size+1)
+        
+    def getPossibleActions(self):
+        return []
  
 
 class LittleKnownBuilding:
