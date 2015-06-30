@@ -112,7 +112,7 @@ class LittleBuildingList:
         for b in self.known:
             if pos[0] == b.pos[0] and pos[1] == b.pos[1] :
                 return b
-        
+        #~ print "new buidling !"
         b = LittleKnownBuilding(pos=pos)
         self.known.append(b)
         return b

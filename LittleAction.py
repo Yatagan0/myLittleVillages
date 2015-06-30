@@ -50,6 +50,41 @@ class LittleAction:
         a = LittleAction(people=self.people, type=self.type, startHour=self.startHour)
         return a
         
+class LittleMoveAction(LittleAction):
+    def __init__(self,root=None,people=None, startHour=None, destination=None):
+        LittleAction.__init__(self, root,people,"move", startHour)
+        if root is not None:
+            self.read(root)
+        else:
+            self.pos = destination
+            
+    def read(self, root):
+        LittleAction.read(self,root)
+        self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+        
+    def write(self, root):
+        elem =  LittleAction.write(self, root)
+        elem.set("posX", str(self.pos[0]))
+        elem.set("posY", str(self.pos[1]))
+        elem.set("class", "LittleMoveAction")
+
+        
+    def copy(self):
+        a = LittleMoveAction(people=self.people, startHour=self.startHour, destination=self.pos)
+        return a      
+
+    def execute(self):
+        if self.status == "not started":
+            t = utils.globalTime
+            self.startHour = [t.hour, t.minute]
+
+        self.status = "executing"
+        if self.people.go(self.pos):
+            return False
+                
+        return True      
+        
+        
 class LittleSleepAction(LittleAction):
     def __init__(self,root=None,people=None, startHour=None):
         LittleAction.__init__(self, root,people,"sleep", startHour)
@@ -235,6 +270,8 @@ def readAction(root, people):
         a = LittleEatAction(root=root, people=people)
     elif root.attrib["class"] == "LittleSleepAction":
         a = LittleSleepAction(root=root, people=people)
+    elif root.attrib["class"] == "LittleMoveAction":
+        a = LittleMoveAction(root=root, people=people)
     else:
         a = LittleAction(root=root, people=people)
     return a

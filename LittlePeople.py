@@ -92,7 +92,7 @@ class LittlePeople:
         
         candiscuss = self.canDiscuss()
         for c in candiscuss:
-            #~ if random.randint(0, 9) == 0:
+            if random.randint(0, 9) == 0:
                 self.tellInfo(c)
         
         myHabits = self.habits.findHabits([time.hour, time.minute])
@@ -105,6 +105,13 @@ class LittlePeople:
             if self.canDoAction(a):
                 self.action = a.copy()
                 return
+                
+        if random.randint(0, 1)==0:
+            dest = [0., 0.]
+            dest[0] = self.pos[0] + random.randint(-1, 1)
+            dest[1] = self.pos[1] + random.randint(-1, 1)
+            self.action = LittleMoveAction(people=self,  startHour=[time.hour, time.minute], destination =dest)
+            return
 
         self.action = LittleAction(people=self, type="do nothing", startHour=[time.hour, time.minute])
 

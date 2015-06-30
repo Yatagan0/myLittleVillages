@@ -22,16 +22,24 @@ if __name__ == '__main__':
 
         bb = LittleBuilding( pos=[0.,0.],type="dortoir")
         b = LittleBuilding( pos=[0.,0.],type="cantine")
+        bbb = LittleBuilding( pos=[0.,0.],type="dortoir")
+        bbbb = LittleBuilding( pos=[0.,0.],type="cantine")
         
         
-        for i in range(0, 2):
+        for i in range(0, 3):
             p = LittlePeople()
             p.knowledge["sleep"].seenBuilding(building=bb)
             p.knowledge["eat"].seenBuilding(building=b)
             print p.name
 
             allPeople.append(p)
-  
+        for i in range(0, 3):
+            p = LittlePeople()
+            p.knowledge["sleep"].seenBuilding(building=bbb)
+            p.knowledge["eat"].seenBuilding(building=bbbb)
+            print p.name
+
+            allPeople.append(p)
     else:
         tree =  ET.parse(path)
         root = tree.getroot()
