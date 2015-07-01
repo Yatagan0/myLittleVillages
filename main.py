@@ -12,7 +12,7 @@ from xml.dom import minidom
 
 if __name__ == '__main__':
 
-    newVillage = True
+    newVillage = False
  
     allPeople = []
     path = "village.xml"
@@ -23,10 +23,13 @@ if __name__ == '__main__':
         bb = LittleBuilding( pos=[0.,0.],type="dortoir")
         b = LittleRestaurant( pos=[0.,0.], owner=None)
         #~ bbb = LittleBuilding( pos=[0.,0.],type="dortoir")
-        #~ bbbb = LittleBuilding( pos=[0.,0.],type="cantine")
+        bbb1 = LittleRestaurant( pos=[0.,0.], owner=None)
+        bbb2 = LittleRestaurant( pos=[0.,0.], owner=None)
+        bbb3 = LittleRestaurant( pos=[0.,0.], owner=None)
+        bbb4 = LittleRestaurant( pos=[0.,0.], owner=None)
         
         
-        for i in range(0, 3):
+        for i in range(0, 6):
             p = LittlePeople()
             p.knowledge["sleep"].seenBuilding(building=bb)
             p.knowledge["eat"].seenBuilding(building=b)
@@ -50,12 +53,7 @@ if __name__ == '__main__':
                 p=LittlePeople(child)
                 allPeople.append(p)
             elif child.tag == "building":
-                b = LittleBuilding(child)
-
-    #~ lv.readVillage(path)
-    
-      
-    #~ t = LittleSleepTask([], [])
+                b = readBuilding(child)
 
     
     DO_DISPLAY = True
@@ -67,7 +65,7 @@ if __name__ == '__main__':
         
         #~ print "------------------"
         utils.globalTime.addTime()
-        #~ print utils.globalTime
+        print utils.globalTime
         for p in allPeople:
             p.update(utils.globalTime)
         if DO_DISPLAY:

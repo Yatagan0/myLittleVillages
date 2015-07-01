@@ -80,12 +80,12 @@ class LittlePeople:
         
         if self.tired > 20*60:
             #~ print "must sleep"
-            self.action = LittleSleepAction( people=self,startHour=[time.hour, time.minute])
+            self.startAction( LittleSleepAction( people=self,startHour=[time.hour, time.minute]))
             return
         
         if self.hungry > 10*60:
             #~ print "must eat"
-            self.action = LittleEatAction( people=self,startHour=[time.hour, time.minute]) 
+            self.startAction( LittleEatAction( people=self,startHour=[time.hour, time.minute]) )
             return
         
         possibleActions = []
@@ -107,12 +107,12 @@ class LittlePeople:
                 #~ self.action = a.copy()
                 #~ return
                 
-        if random.randint(0, 1)==0:
-            dest = [0., 0.]
-            dest[0] = self.pos[0] + random.randint(-1, 1)
-            dest[1] = self.pos[1] + random.randint(-1, 1)
-            a= LittleMoveAction(people=self,  startHour=[time.hour, time.minute], destination =dest)
-            possibleActions.append(a)
+        #~ if random.randint(0, 1)==0:
+        #~ dest = [0., 0.]
+        #~ dest[0] = self.pos[0] + random.randint(-1, 1)
+        #~ dest[1] = self.pos[1] + random.randint(-1, 1)
+        a= LittleMoveAction(people=self,  startHour=[time.hour, time.minute])
+        possibleActions.append(a)
             #~ return
 
         a = LittleAction(people=self, type="do nothing", startHour=[time.hour, time.minute])
@@ -121,11 +121,20 @@ class LittlePeople:
         b = buildingImIn(self.pos)
         if b is not None:
             aa = b.getPossibleActions()
+            print len(aa), " possible actions in ",b.name
             for a in aa:
                 if self.canDoAction(a):
-                    possibleActions.append(a)
+                    #~ possibleActions.append(a)
+                    print "#### must do ### ",a.pos
+                    possibleActions= [a]
         
-        self.action = random.choice(possibleActions).copy()
+        self.startAction(random.choice(possibleActions).copy())
+
+    def startAction(self, a):
+        a.people = self
+        if not a.hasLocation():
+            a.getLocation()
+        self.action = a
 
     def canDoAction(self, a):
         if a.type == "sleep" and self.tired < 5*60:

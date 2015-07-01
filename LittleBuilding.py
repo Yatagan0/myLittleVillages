@@ -1,6 +1,7 @@
 import utils, random
 import xml.etree.ElementTree as ET
 
+
 allBuildings = []
 
 def buildingImIn(pos):
@@ -9,6 +10,7 @@ def buildingImIn(pos):
             return b
     return None
 
+from LittleAction import *
 
 class LittleBuilding:
     def __init__(self, root=None, pos = [0., 0.], type="building"):
@@ -25,6 +27,7 @@ class LittleBuilding:
         
         global allBuildings
         allBuildings.append(self)
+        print "num of buildings ",len(allBuildings)
         
     def write(self, root):
         elem =  ET.SubElement(root, 'building')
@@ -32,6 +35,8 @@ class LittleBuilding:
         elem.set("posY", str(self.pos[1]))
         elem.set("type", self.type)
         elem.set("name", self.name)
+        elem.set("class", "LittleBuilding")
+        return elem
 
     def read(self, root):
         self.type = root.attrib["type"]
@@ -47,10 +52,11 @@ class LittleBuilding:
         return self.findFreePos(pos, size+1)
         
     def getPossibleActions(self):
+        print "#### nothing in ### ", self.name
         return []
  
 class LittleRestaurant(LittleBuilding):
-     def __init__(self, root=None, owner=None, pos=None):
+    def __init__(self, root=None, owner=None, pos=None):
         LittleBuilding.__init__(self, root=root, pos=pos, type="restaurant")
         
         if root is not None:
@@ -62,6 +68,14 @@ class LittleRestaurant(LittleBuilding):
                 self.name = utils.randomRestaurantName(self.owner.name)
             else:
                 self.name = utils.randomRestaurantName()
+                
+    def write(self, root):
+        elem = LittleBuilding.write(self, root)
+        elem.set("class", "LittleRestaurant")
+                
+    def getPossibleActions(self):
+        print "#### eat here ! ###"
+        return [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos)]
 
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.], name=""):
@@ -166,5 +180,10 @@ class LittleBuildingList:
         return blast
             
             
-            
+def readBuilding(root):
+    if root.attrib["class"] == "LittleRestaurant":
+        b = LittleRestaurant(root=root)
+    else:
+        b = LittleBuilding(root=root)
+    return b
             

@@ -1,9 +1,13 @@
 import utils, random
 import xml.etree.ElementTree as ET
 
+
+
 class LittleAction:
-    def __init__(self, root=None, people=None, type="do nothing", startHour=None):
+    def __init__(self, root=None, people=None, type="do nothing", startHour=None, pos=None):
         self.people = people 
+        self.pos = pos
+        self.building = None
         if root is not None:
             self.read(root)
             return
@@ -11,6 +15,7 @@ class LittleAction:
 
         self.type = type
         self.startHour = startHour
+ 
         self.init()
         
     def __str__(self):
@@ -22,6 +27,12 @@ class LittleAction:
         self.startHour = [int(root.attrib["startHour"]),int(root.attrib["startMinute"]) ]
         self.status = root.attrib["status"]
         self.remainingTime = int(root.attrib["remainingTime"])
+        if "posX" in root.attrib.keys():
+            #~ print "has pos"
+            self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+            #~ print self.pos
+        #~ else:
+            #~ print "no pos"
         
     def write(self, root):
         elem =  ET.SubElement(root, 'action')
@@ -31,6 +42,9 @@ class LittleAction:
         elem.set("startMinute", str(self.startHour[1]))
         elem.set("status", self.status)
         elem.set("remainingTime", str(self.remainingTime))
+        if self.pos is not None:
+            elem.set("posX", str(self.pos[0]))
+            elem.set("posY", str(self.pos[1]))
         return elem
         
     def execute(self):
@@ -47,30 +61,37 @@ class LittleAction:
         self.remainingTime = 59
     
     def copy(self):
-        a = LittleAction(people=self.people, type=self.type, startHour=self.startHour)
+        a = LittleAction(people=self.people, type=self.type, startHour=self.startHour, pos=self.pos)
         return a
         
+    def hasLocation(self):
+        return self.pos != None
+        
+    def getLocation(self):
+        self.pos = [self.people.pos[0], self.people.pos[1]]
+        
 class LittleMoveAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None, destination=None):
-        LittleAction.__init__(self, root,people,"move", startHour)
+    def __init__(self,root=None,people=None, startHour=None,pos=None):
+        LittleAction.__init__(self, root,people,"move", startHour, pos)
         if root is not None:
             self.read(root)
-        else:
-            self.pos = destination
+        #~ else:
+            #~ self.pos = 
             
     def read(self, root):
         LittleAction.read(self,root)
-        self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+        #~ self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+        
         
     def write(self, root):
         elem =  LittleAction.write(self, root)
-        elem.set("posX", str(self.pos[0]))
-        elem.set("posY", str(self.pos[1]))
+        #~ elem.set("posX", str(self.pos[0]))
+        #~ elem.set("posY", str(self.pos[1]))
         elem.set("class", "LittleMoveAction")
 
         
     def copy(self):
-        a = LittleMoveAction(people=self.people, startHour=self.startHour, destination=self.pos)
+        a = LittleMoveAction(people=self.people, startHour=self.startHour, pos=self.pos)
         return a      
 
     def execute(self):
@@ -82,12 +103,16 @@ class LittleMoveAction(LittleAction):
         if self.people.go(self.pos):
             return False
                 
-        return True      
-        
+        return True     
+
+    def getLocation(self):
+        self.pos = [self.people.pos[0]+random.randint(-1, 1), self.people.pos[1]+random.randint(-1, 1)]
+        #~ from LittleBuilding import buildingImIn
+        #~ self.buidling = buildingImIn(self.pos)
         
 class LittleSleepAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None):
-        LittleAction.__init__(self, root,people,"sleep", startHour)
+    def __init__(self,root=None,people=None, startHour=None,pos=None):
+        LittleAction.__init__(self, root,people,"sleep", startHour, pos)
         if root is not None:
             self.read(root)
         else:
@@ -96,16 +121,20 @@ class LittleSleepAction(LittleAction):
     def init(self):
         self.status = "not started"
         self.remainingTime = 7*60 +random.randint(0, 60)
-        self.pos = [0., 0.]
+        #~ self.pos = [0., 0.]
         
     def read(self, root):
         LittleAction.read(self,root)
-        self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
-        
+        #~ self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+        if self.pos is not None:
+            
+            from LittleBuilding import buildingImIn
+            self.building = buildingImIn(self.pos)
+    
     def write(self, root):
         elem =  LittleAction.write(self, root)
-        elem.set("posX", str(self.pos[0]))
-        elem.set("posY", str(self.pos[1]))
+        #~ elem.set("posX", str(self.pos[0]))
+        #~ elem.set("posY", str(self.pos[1]))
         elem.set("class", "LittleSleepAction")
 
         
@@ -117,7 +146,7 @@ class LittleSleepAction(LittleAction):
         if self.status == "not started":
             t = utils.globalTime
             self.startHour = [t.hour, t.minute]
-            self.pos = self.people.knowledge["sleep"].findClosest(self.people.pos)
+           
         self.status = "executing"
         if self.people.go(self.pos):
             self.remainingTime -= 1
@@ -131,9 +160,14 @@ class LittleSleepAction(LittleAction):
                 
         return True
         
+    def getLocation(self):
+        self.pos = self.people.knowledge["sleep"].findClosest(self.people.pos)
+        from LittleBuilding import buildingImIn
+        self.buidling = buildingImIn(self.pos)
+        
 class LittleEatAction(LittleAction):
-    def __init__(self,root=None, people=None, startHour=None):
-        LittleAction.__init__(self,root, people, "eat", startHour)
+    def __init__(self,root=None, people=None, startHour=None,pos=None):
+        LittleAction.__init__(self,root, people, "eat", startHour,pos)
         if root is not None:
             self.read(root)
         else:
@@ -142,16 +176,21 @@ class LittleEatAction(LittleAction):
     def init(self):
         self.status = "not started"
         self.remainingTime = 45 +random.randint(0, 15)
-        self.pos = [0., 0.]
+        #~ self.pos = [0., 0.]
 
     def read(self, root):
         LittleAction.read(self,root)
-        self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
-
+        #~ self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+        #~ if self.pos is not None:
+            #~ print "eat ", self.pos
+            #~ from LittleBuilding import buildingImIn
+            #~ self.building = buildingImIn(self.pos)
+            #~ print self.building
+            
     def write(self, root):
         elem =  LittleAction.write(self, root)
-        elem.set("posX", str(self.pos[0]))
-        elem.set("posY", str(self.pos[1]))
+        #~ elem.set("posX", str(self.pos[0]))
+        #~ elem.set("posY", str(self.pos[1]))
         elem.set("class", "LittleEatAction")
         
     def copy(self):
@@ -159,17 +198,14 @@ class LittleEatAction(LittleAction):
         return a
         
     def execute(self):
-        #~ result = LittleAction.execute(self)
-        
-        #~ if result is False:
-            #~ self.people.hungry = 0
-        #~ return result
-        
-        
+
         if self.status == "not started":
             t = utils.globalTime
             self.startHour = [t.hour, t.minute]
-            self.pos = self.people.knowledge["eat"].findClosest(self.people.pos)
+            if self.building is None:
+                from LittleBuilding import buildingImIn
+                self.building = buildingImIn(self.pos)
+            print self.people.name, " va manger a ",self.building.name
         self.status = "executing"
         if self.people.go(self.pos):
             self.remainingTime -= 1
@@ -182,6 +218,14 @@ class LittleEatAction(LittleAction):
                 return False
                 
         return True
+        
+    def getLocation(self):
+        self.pos = self.people.knowledge["eat"].findClosest(self.people.pos)
+        from LittleBuilding import buildingImIn
+        self.building = buildingImIn(self.pos)
+        #~ print "get location ",self.pos
+        #~ print "get location ",self.building
+
         
 class LittleOldActions():
     def __init__(self,people, root=None):

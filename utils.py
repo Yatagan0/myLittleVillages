@@ -25,8 +25,8 @@ finNom = [ "mont", "vert",  "leaux", "lieu", "guen"]
 prenoms = ["Ahmed","Albert","Alexandre","Andre","Antoine","Arnaud","Augustin", "Basile", "Benoit",
 "Bertrand","Charles", "Christophe","Claude","Clement","Damien","Denis","Dominique",
 "Edouard","Emile","Etienne","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", 
-"Gautier","Germain","Georges","Grégoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
-"Joel", "Jonas","Joseph", "Julien","Laurent","Léon","Luc","Lucas","Manuel", "Matthieu", "Martin", 
+"Gautier","Germain","Georges","Gregoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
+"Joel", "Jonas","Joseph", "Julien","Laurent","Leon","Luc","Lucas","Manuel", "Matthieu", "Martin", 
 "Nicolas", "Paul","Pierre","Philippe", 
 "Rene", "Robert", "Ronan","Sylvain", "Thimotee","Thomas","Vincent", "William"]
 
@@ -89,10 +89,10 @@ def randomRestaurantName(owner=""):
     else:
         owner = owner.split(" ")[0]
         
-    names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot"],
-                    ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade", "brasserie", "tartine", "reverie", "escale", "pause"]]
+    names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal"],
+                    ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade", "brasserie", "tartine", "reverie", "escale", "pause", "auberge"]]
                     
-    namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine"]
+    namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le chef"]
     au = ["Au ", "A la ", "A l'"]
     le = ["Le ", "La ", "L'"]
  
@@ -139,6 +139,7 @@ def randomRestaurantName(owner=""):
         adj = {}
         adj["merveilleux"] = "merveilleuse"
         adj["magique"] = ""
+        adj["gastronomique"] = ""
         adj["enchante"] = "enchantee"
         adj["gourmand"] = "gourmande"
         adj["lointain"] = "lointaine"
