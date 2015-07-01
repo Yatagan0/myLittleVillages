@@ -139,7 +139,7 @@ class LittleSleepAction(LittleAction):
 
         
     def copy(self):
-        a = LittleSleepAction(people=self.people, startHour=self.startHour)
+        a = LittleSleepAction(people=self.people, startHour=self.startHour, pos=self.pos)
         return a
         
     def execute(self):
@@ -161,7 +161,8 @@ class LittleSleepAction(LittleAction):
         return True
         
     def getLocation(self):
-        self.pos = self.people.knowledge["sleep"].findClosest(self.people.pos)
+        if self.pos is None:
+            self.pos = self.people.knowledge["sleep"].findClosest(self.people.pos)
         from LittleBuilding import buildingImIn
         self.buidling = buildingImIn(self.pos)
         
@@ -194,18 +195,21 @@ class LittleEatAction(LittleAction):
         elem.set("class", "LittleEatAction")
         
     def copy(self):
-        a = LittleEatAction(people=self.people, startHour=self.startHour)
+        a = LittleEatAction(people=self.people, startHour=self.startHour, pos=self.pos)
         return a
         
     def execute(self):
+        
+        if self.building is None:
+                from LittleBuilding import buildingImIn
+                self.building = buildingImIn(self.pos)
 
         if self.status == "not started":
             t = utils.globalTime
             self.startHour = [t.hour, t.minute]
-            if self.building is None:
-                from LittleBuilding import buildingImIn
-                self.building = buildingImIn(self.pos)
+            
             print self.people.name, " va manger a ",self.building.name
+            #~ print self.people.name, " va manger a ",self.pos
         self.status = "executing"
         if self.people.go(self.pos):
             self.remainingTime -= 1
@@ -214,17 +218,18 @@ class LittleEatAction(LittleAction):
                 
             else:
                 self.people.hungry = 0
-                self.people.knowledge["eat"].seenBuilding(pos=self.pos)
+                self.people.knowledge["eat"].seenBuilding(pos=self.pos, name=self.building.name)
                 return False
                 
         return True
         
     def getLocation(self):
-        self.pos = self.people.knowledge["eat"].findClosest(self.people.pos)
+        if self.pos is None:
+            self.pos = self.people.knowledge["eat"].findClosest(self.people.pos)
         from LittleBuilding import buildingImIn
         self.building = buildingImIn(self.pos)
         #~ print "get location ",self.pos
-        #~ print "get location ",self.building
+        #~ print "get location ",self.building.name
 
         
 class LittleOldActions():

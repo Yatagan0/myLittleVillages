@@ -27,7 +27,7 @@ class LittleBuilding:
         
         global allBuildings
         allBuildings.append(self)
-        print "num of buildings ",len(allBuildings)
+        #~ print "num of buildings ",len(allBuildings)
         
     def write(self, root):
         elem =  ET.SubElement(root, 'building')
@@ -52,7 +52,7 @@ class LittleBuilding:
         return self.findFreePos(pos, size+1)
         
     def getPossibleActions(self):
-        print "#### nothing in ### ", self.name
+        #~ print "#### nothing in ### ", self.name
         return []
  
 class LittleRestaurant(LittleBuilding):
@@ -74,7 +74,7 @@ class LittleRestaurant(LittleBuilding):
         elem.set("class", "LittleRestaurant")
                 
     def getPossibleActions(self):
-        print "#### eat here ! ###"
+        #~ print "#### eat here ! ### ",self.pos
         return [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos)]
 
 class LittleKnownBuilding:

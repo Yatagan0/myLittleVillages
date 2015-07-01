@@ -121,12 +121,12 @@ class LittlePeople:
         b = buildingImIn(self.pos)
         if b is not None:
             aa = b.getPossibleActions()
-            print len(aa), " possible actions in ",b.name
+            #~ print len(aa), " possible actions in ",b.name
             for a in aa:
                 if self.canDoAction(a):
-                    #~ possibleActions.append(a)
-                    print "#### must do ### ",a.pos
-                    possibleActions= [a]
+                    possibleActions.append(a)
+                    #~ print "#### must do ### ",a.pos
+                    #~ possibleActions= [a]
         
         self.startAction(random.choice(possibleActions).copy())
 
