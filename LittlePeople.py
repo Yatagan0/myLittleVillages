@@ -119,10 +119,11 @@ class LittlePeople:
         possibleActions.append(a)
         
         b = buildingImIn(self.pos)
-        aa = b.getPossibleActions()
-        for a in aa:
-            if self.canDoAction(a):
-                possibleActions.append(a)
+        if b is not None:
+            aa = b.getPossibleActions()
+            for a in aa:
+                if self.canDoAction(a):
+                    possibleActions.append(a)
         
         self.action = random.choice(possibleActions).copy()
 
@@ -150,7 +151,7 @@ class LittlePeople:
         knowledgeType = random.choice(self.knowledge.values())
         #~ print "tell info about ",knowledgeType.type
         b = knowledgeType.getLastSeen()
-        print self.name," tells ",p.name, " about something for ",knowledgeType.type," at ",b.pos
+        print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
         p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
             
     def canDiscuss(self):

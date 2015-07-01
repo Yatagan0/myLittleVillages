@@ -12,7 +12,7 @@ from xml.dom import minidom
 
 if __name__ == '__main__':
 
-    newVillage = False
+    newVillage = True
  
     allPeople = []
     path = "village.xml"
@@ -21,9 +21,9 @@ if __name__ == '__main__':
 
 
         bb = LittleBuilding( pos=[0.,0.],type="dortoir")
-        b = LittleBuilding( pos=[0.,0.],type="cantine")
-        bbb = LittleBuilding( pos=[0.,0.],type="dortoir")
-        bbbb = LittleBuilding( pos=[0.,0.],type="cantine")
+        b = LittleRestaurant( pos=[0.,0.], owner=None)
+        #~ bbb = LittleBuilding( pos=[0.,0.],type="dortoir")
+        #~ bbbb = LittleBuilding( pos=[0.,0.],type="cantine")
         
         
         for i in range(0, 3):
@@ -33,13 +33,13 @@ if __name__ == '__main__':
             print p.name
 
             allPeople.append(p)
-        for i in range(0, 3):
-            p = LittlePeople()
-            p.knowledge["sleep"].seenBuilding(building=bbb)
-            p.knowledge["eat"].seenBuilding(building=bbbb)
-            print p.name
+        #~ for i in range(0, 3):
+            #~ p = LittlePeople()
+            #~ p.knowledge["sleep"].seenBuilding(building=bbb)
+            #~ p.knowledge["eat"].seenBuilding(building=bbbb)
+            #~ print p.name
 
-            allPeople.append(p)
+            #~ allPeople.append(p)
     else:
         tree =  ET.parse(path)
         root = tree.getroot()

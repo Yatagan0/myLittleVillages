@@ -86,17 +86,25 @@ def randomCityName():
 def randomRestaurantName(owner=""):
     if owner == "":
         owner = random.choice(prenoms)
+    else:
+        owner = owner.split(" ")[0]
         
-    names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", "estaminet","coutelas", "pain"],
-                    ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade"]]
+    names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot"],
+                    ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade", "brasserie", "tartine", "reverie", "escale", "pause"]]
+                    
+    namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine"]
     au = ["Au ", "A la ", "A l'"]
     le = ["Le ", "La ", "L'"]
  
         
-    cases = ["chez", "au", "le", "au", "le"]
+    cases = ["chez", "au", "le", "au", "le", "le"]
     case = random.choice(cases)
     if case == "chez":
-        return "Chez "+owner
+        adj = ""
+        if random.randint(0,1) == 0:
+            adj = random.choice(namesOwner)+" "
+        return "Chez "+adj+owner
+        
         
     nameGenre = random.randint(0,1)
     
@@ -117,7 +125,16 @@ def randomRestaurantName(owner=""):
     case = random.choice(cases)
     
     if case == "de":
-        finalName += " de "+owner
+        adj = " de "
+        if random.randint(0,1) == 0:
+            no = random.choice(namesOwner)
+            if no[0:3] == "le ":
+                no = " du "+no[3:]
+                adj = ""
+            adj += no+" "
+        elif owner[0] in ["A", "E", "I", "O", "U", "Y"]:
+            adj= " d'"
+        finalName += adj+owner
     elif case == "adjectif":
         adj = {}
         adj["merveilleux"] = "merveilleuse"
@@ -126,13 +143,14 @@ def randomRestaurantName(owner=""):
         adj["gourmand"] = "gourmande"
         adj["lointain"] = "lointaine"
         adj["traditionnel"] = "traditionnelle"
+        adj["delicat"] = "delicate"
         aa = random.choice(adj.keys())
         if adj[aa] != "" and (nameGenre==1 or nameGenre==3) :
             aa = adj[aa]
         finalName += " "+aa
     elif case == "du":
         toadd = ["des lutins", "des familles", "du gourmet", "de chez nous", "d'antan", "du printemps",
-        "des amis", "du port", "de la gare", "du centre"]
+        "des amis", "du port", "de la gare", "du centre", "des reves", "du pays"]
         aa = random.choice(toadd)
         finalName += " "+aa
         
@@ -264,9 +282,14 @@ global globalTime
 globalTime = Time()
     
 if __name__ == '__main__':
-    for i in range(0, 10):
+    #~ for i in range(0, 10):
         #~ print randomName()
-        print randomRestaurantName()
+    #~ print "---"
+    #~ for i in range(0, 10):
+        #~ print randomCityName()
+    #~ print "---"
+    for i in range(0, 20):
+        print randomRestaurantName("fernand leger")
     #~ for i in range(0, 10):
         #~ print randomCityName()      
     #~ dict = {"test":2}
