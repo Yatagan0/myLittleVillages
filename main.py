@@ -5,7 +5,7 @@ import random, utils
 
 from LittlePeople import *
 from LittleBuilding import *
-from LittleDisplay import *
+
 
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
@@ -13,35 +13,43 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage = False
+    
+    DO_DISPLAY = False
  
     allPeople = []
     path = "village.xml"
     
     if newVillage:
 
-
+        mayor = LittlePeople()
         bb = LittleBuilding( pos=[0.,0.],type="dortoir")
-        b = LittleRestaurant( pos=[0.,0.], owner=None)
-        #~ bbb = LittleBuilding( pos=[0.,0.],type="dortoir")
-        bbb1 = LittleRestaurant( pos=[0.,0.], owner=None)
-        bbb2 = LittleRestaurant( pos=[0.,0.], owner=None)
+        b = LittleRestaurant( pos=[0.,0.], owner = mayor)
+        print mayor.name
+        allPeople.append(mayor)
+        
+        p1= LittlePeople()
+        bbb = LittleRestaurant( pos=[0.,0.], owner=p1)
+        print p1.name
+        allPeople.append(p1)
+
+        p2= LittlePeople()
+        bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
+        print p1.name
+        allPeople.append(p2)
 
         
         
-        for i in range(0, 6):
+        for i in range(0, 3):
             p = LittlePeople()
             p.knowledge["sleep"].seenBuilding(building=bb)
             p.knowledge["eat"].seenBuilding(building=b)
             print p.name
-
             allPeople.append(p)
-        #~ for i in range(0, 3):
-            #~ p = LittlePeople()
-            #~ p.knowledge["sleep"].seenBuilding(building=bbb)
-            #~ p.knowledge["eat"].seenBuilding(building=bbbb)
-            #~ print p.name
 
-            #~ allPeople.append(p)
+        for p in allPeople:
+            p.knowledge["sleep"].seenBuilding(building=bb)
+            p.knowledge["eat"].seenBuilding(building=b)            
+            
     else:
         tree =  ET.parse(path)
         root = tree.getroot()
@@ -55,7 +63,7 @@ if __name__ == '__main__':
                 b = readBuilding(child)
 
     
-    DO_DISPLAY = True
+    
 
     counter = 400
     
@@ -68,6 +76,7 @@ if __name__ == '__main__':
         for p in allPeople:
             p.update(utils.globalTime)
         if DO_DISPLAY:
+            from LittleDisplay import *
             if not display(allPeople, allBuildings):
                 counter=0
             

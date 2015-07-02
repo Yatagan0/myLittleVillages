@@ -7,6 +7,13 @@ import xml.etree.ElementTree as ET
 
 allPeople = []
 
+def peopleNamed(name):
+    for p in allPeople:
+        if p.name == name:
+            return p
+            
+    return None
+
 class LittlePeople:
     def __init__(self, root=None):
         self.action = None

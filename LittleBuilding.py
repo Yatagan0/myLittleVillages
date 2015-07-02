@@ -13,7 +13,7 @@ def buildingImIn(pos):
 from LittleAction import *
 
 class LittleBuilding:
-    def __init__(self, root=None, pos = [0., 0.], type="building"):
+    def __init__(self, root=None, pos = [0., 0.], type="building", owner=None):
 
         if root is not None:
             self.read(root)
@@ -22,6 +22,7 @@ class LittleBuilding:
             print "building ",type," at ",self.pos
             self.type = type
             self.name = "unnamed building"
+            self.owner = owner
             
         self.possibleActions = []
         
@@ -35,6 +36,12 @@ class LittleBuilding:
         elem.set("posY", str(self.pos[1]))
         elem.set("type", self.type)
         elem.set("name", self.name)
+        if self.owner is None:
+            elem.set("owner", "")
+        elif isinstance(self.owner, basestring):
+            elem.set("owner", self.owner)
+        else:
+            elem.set("owner", self.owner.name)
         elem.set("class", "LittleBuilding")
         return elem
 
@@ -42,6 +49,10 @@ class LittleBuilding:
         self.type = root.attrib["type"]
         self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
         self.name = root.attrib["name"]
+        from LittlePeople import peopleNamed
+        self.owner = peopleNamed(root.attrib["owner"])
+        if self.owner is None:
+            self.owner = root.attrib["owner"]
         
     def findFreePos(self, pos, size):
         r0 = random.randint(pos[0]-size, pos[0]+size)
@@ -57,13 +68,12 @@ class LittleBuilding:
  
 class LittleRestaurant(LittleBuilding):
     def __init__(self, root=None, owner=None, pos=None):
-        LittleBuilding.__init__(self, root=root, pos=pos, type="restaurant")
+        LittleBuilding.__init__(self, root=root, pos=pos, type="restaurant", owner=owner)
         
         if root is not None:
             self.read(root)
         else:
         
-            self.owner = owner
             if owner is not None:
                 self.name = utils.randomRestaurantName(self.owner.name)
             else:
