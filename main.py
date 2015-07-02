@@ -25,8 +25,7 @@ if __name__ == '__main__':
         #~ bbb = LittleBuilding( pos=[0.,0.],type="dortoir")
         bbb1 = LittleRestaurant( pos=[0.,0.], owner=None)
         bbb2 = LittleRestaurant( pos=[0.,0.], owner=None)
-        bbb3 = LittleRestaurant( pos=[0.,0.], owner=None)
-        bbb4 = LittleRestaurant( pos=[0.,0.], owner=None)
+
         
         
         for i in range(0, 6):

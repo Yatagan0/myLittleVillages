@@ -24,6 +24,7 @@ class LittlePeople:
             self.knowledge = {}
             self.knowledge["sleep"] = LittleBuildingList(type="sleep")
             self.knowledge["eat"] = LittleBuildingList(type="eat")
+            self.knowledge["work"] = LittleBuildingList(type="work")
             
             self.habits = LittleOldActions(self)
             
@@ -160,8 +161,9 @@ class LittlePeople:
         knowledgeType = random.choice(self.knowledge.values())
         #~ print "tell info about ",knowledgeType.type
         b = knowledgeType.getLastSeen()
-        print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
-        p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
+        if b is not None:
+            print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
+            p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
             
     def canDiscuss(self):
         #~ print self.name, "can discuss ?"
