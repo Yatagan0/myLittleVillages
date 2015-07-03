@@ -232,11 +232,12 @@ class LittleEatAction(LittleAction):
         #~ print "get location ",self.building.name
 
 class LittleWorkAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None,pos=None):
+    def __init__(self,root=None,people=None, startHour=None,pos=None, desc=""):
         LittleAction.__init__(self, root,people,"work", startHour, pos)
         if root is not None:
             self.read(root)
         else:
+            self.description = desc
             self.init()
         
     def init(self):
@@ -245,14 +246,13 @@ class LittleWorkAction(LittleAction):
             
     def read(self, root):
         LittleAction.read(self,root)
-        #~ self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+        self.description = root.attrib["description"]
         
         
     def write(self, root):
         elem =  LittleAction.write(self, root)
-        #~ elem.set("posX", str(self.pos[0]))
-        #~ elem.set("posY", str(self.pos[1]))
         elem.set("class", "LittleWorkAction")
+        elem.set("description", self.description)
 
         
     def copy(self):
@@ -268,7 +268,10 @@ class LittleWorkAction(LittleAction):
         if self.status == "not started":
             t = utils.globalTime
             self.startHour = [t.hour, t.minute]
-            print self.people.name, " travaille a ",self.building.name
+            if self.description == "":
+                print self.people.name, " travaille a ",self.building.name
+            else:
+                print self.people.name, " ", self.description, " ",self.building.name
 
         self.status = "executing"
         if self.people.go(self.pos):

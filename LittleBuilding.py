@@ -85,7 +85,7 @@ class LittleRestaurant(LittleBuilding):
                 
     def getPossibleActions(self):
         #~ print "#### eat here ! ### ",self.pos
-        return [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos), LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos)]
+        return [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos), LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez")]
 
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.], name=""):
