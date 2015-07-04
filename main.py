@@ -12,9 +12,9 @@ from xml.dom import minidom
 
 if __name__ == '__main__':
 
-    newVillage = False
+    newVillage =True
     
-    DO_DISPLAY = False
+    DO_DISPLAY =False
  
     allPeople = []
     path = "village.xml"
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     
     
 
-    counter = 400
+    counter = 4000
     
     while counter > 0:
         counter -= 1

@@ -9,6 +9,11 @@ def buildingImIn(pos):
         if pos[0] == b.pos[0] and pos[1] == b.pos[1] :
             return b
     return None
+    
+def buildingNamed(name):
+    for b in allBuildings:
+        if b.name == name:
+            return b
 
 from LittleAction import *
 
@@ -79,14 +84,23 @@ class LittleRestaurant(LittleBuilding):
             else:
                 self.name = utils.randomRestaurantName()
                 
+            self.couverts = 3
+            self.meals = 0
+            self.cleanCouverts = self.couverts
+                
     def write(self, root):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleRestaurant")
                 
     def getPossibleActions(self):
-        #~ print "#### eat here ! ### ",self.pos
-        return [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos), LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez")]
-
+        actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos)]
+        for i in range(self.couverts - self.meals):
+            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook"))
+        for i in range(self.couverts - self.cleanCouverts):
+            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez"))
+        
+        return actions
+        
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.], name=""):
         

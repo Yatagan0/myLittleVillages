@@ -86,12 +86,12 @@ class LittlePeople:
                 self.action = None
             return
         
-        if self.tired > 20*60:
+        if self.tired > 20*60 and random.randint(0, 20) != 0:
             #~ print "must sleep"
             self.startAction( LittleSleepAction( people=self,startHour=[time.hour, time.minute]))
             return
         
-        if self.hungry > 10*60:
+        if self.hungry > 10*60 and random.randint(0, 20) != 0:
             #~ print "must eat"
             self.startAction( LittleEatAction( people=self,startHour=[time.hour, time.minute]) )
             return
@@ -169,7 +169,9 @@ class LittlePeople:
         #~ print "tell info about ",knowledgeType.type
         b = knowledgeType.getLastSeen()
         if b is not None:
-            print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
+            #~ print self.name," : Hey, ",p.name, " tu connais ",b.name, " ?"
+            #~ print self.name," : C'est un super ",knowledgeType.type, " en ",b.pos
+            #~ print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
             p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
             
     def canDiscuss(self):

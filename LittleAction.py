@@ -207,8 +207,15 @@ class LittleEatAction(LittleAction):
         if self.status == "not started":
             t = utils.globalTime
             self.startHour = [t.hour, t.minute]
-            
-            print self.people.name, " va manger a ",self.building.name
+            if self.building.meals > 0 and self.building.cleanCouverts > 0:
+                print self.people.name, " va manger a ",self.building.name
+                self.building.meals -=1
+                self.building.cleanCouverts -=1
+            else:
+                print self.people.name, " ne peux pas manger a ",self.building.name
+                self.people.knowledge["eat"].seenBuilding(pos=self.pos, name=self.building.name, reliable=0)
+                return False
+                
             #~ print self.people.name, " va manger a ",self.pos
         self.status = "executing"
         if self.people.go(self.pos):
@@ -218,6 +225,9 @@ class LittleEatAction(LittleAction):
                 
             else:
                 self.people.hungry = 0
+
+                print "now ",self.building.meals, " meals at ", self.building.name
+                print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
                 self.people.knowledge["eat"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
                 return False
                 
@@ -232,13 +242,15 @@ class LittleEatAction(LittleAction):
         #~ print "get location ",self.building.name
 
 class LittleWorkAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None,pos=None, desc=""):
-        LittleAction.__init__(self, root,people,"work", startHour, pos)
+    def __init__(self,root=None,people=None, startHour=None,pos=None, desc="", type="work"):
+        LittleAction.__init__(self, root,people,type, startHour, pos)
         if root is not None:
             self.read(root)
         else:
             self.description = desc
             self.init()
+            
+        #~ print self.description, " ", self.type
         
     def init(self):
         self.status = "not started"
@@ -256,7 +268,7 @@ class LittleWorkAction(LittleAction):
 
         
     def copy(self):
-        a = LittleWorkAction(people=self.people, startHour=self.startHour, pos=self.pos)
+        a = LittleWorkAction(people=self.people, startHour=self.startHour, pos=self.pos, desc=self.description, type=self.type)
         return a      
 
     def execute(self):
@@ -280,6 +292,15 @@ class LittleWorkAction(LittleAction):
                 return True
                 
             else:
+                #~ print "fini !"
+                #~ print "finin ",self.description, " ", self.type
+                if self.type=="cook":
+                    self.building.meals +=1
+                    print "now ",self.building.meals, " meals at ", self.building.name
+                elif self.type=="dishes":
+                    self.building.cleanCouverts +=1
+                    print "now ",self.building.meals, " clean couverts at ", self.building.name
+                
                 self.people.knowledge["work"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
                 return False
                 
@@ -287,7 +308,7 @@ class LittleWorkAction(LittleAction):
 
     def getLocation(self):
         if self.pos is None:
-            self.pos = self.people.knowledge["eat"].findClosest(self.people.pos)
+            self.pos = self.people.knowledge["work"].findClosest(self.people.pos)
         from LittleBuilding import buildingImIn
         self.building = buildingImIn(self.pos)
         
