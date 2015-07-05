@@ -280,6 +280,12 @@ class LittleWorkAction(LittleAction):
         if self.status == "not started":
             t = utils.globalTime
             self.startHour = [t.hour, t.minute]
+            
+            if self.type=="cook":
+                self.remainingTime = 20 + random.randint(0, 20)
+            elif self.type=="dishes":
+                self.remainingTime = 10 + random.randint(0, 10)
+            
             if self.description == "":
                 print self.people.name, " travaille a ",self.building.name
             else:

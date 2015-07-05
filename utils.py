@@ -92,7 +92,7 @@ def randomRestaurantName(owner=""):
     names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal"],
                     ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade", "brasserie", "tartine", "reverie", "escale", "pause", "auberge"]]
                     
-    namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le chef"]
+    namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le chef", "maitre"]
     au = ["Au ", "A la ", "A l'"]
     le = ["Le ", "La ", "L'"]
  

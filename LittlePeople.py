@@ -169,8 +169,8 @@ class LittlePeople:
         #~ print "tell info about ",knowledgeType.type
         b = knowledgeType.getLastSeen()
         if b is not None:
-            #~ print self.name," : Hey, ",p.name, " tu connais ",b.name, " ?"
-            #~ print self.name," : C'est un super ",knowledgeType.type, " en ",b.pos
+            print self.name," : Hey, ",p.name, " tu connais ",b.name, " ?"
+            print self.name," : C'est un super ",knowledgeType.type, " en ",b.pos
             #~ print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
             p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
             

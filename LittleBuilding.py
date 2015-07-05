@@ -91,13 +91,23 @@ class LittleRestaurant(LittleBuilding):
     def write(self, root):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleRestaurant")
+        elem.set("couverts", str(self.couverts))
+        elem.set("meals", str(self.meals))
+        elem.set("cleancouverts", str(self.cleanCouverts))
+        
+    def read(self, root):
+        LittleBuilding.read(self, root)
+        self.couverts = int(root.attrib["couverts"])
+        self.meals = int(root.attrib["meals"])
+        self.cleanCouverts = int(root.attrib["cleancouverts"])
+        
                 
     def getPossibleActions(self):
         actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos)]
         for i in range(self.couverts - self.meals):
             actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook"))
         for i in range(self.couverts - self.cleanCouverts):
-            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez"))
+            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez", type="dishes"))
         
         return actions
         
