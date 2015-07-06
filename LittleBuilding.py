@@ -67,7 +67,7 @@ class LittleBuilding:
             return [r0, r1]
         return self.findFreePos(pos, size+1)
         
-    def getPossibleActions(self):
+    def getPossibleActions(self, isOwner=False):
         #~ print "#### nothing in ### ", self.name
         return []
  
@@ -102,7 +102,7 @@ class LittleRestaurant(LittleBuilding):
         self.cleanCouverts = int(root.attrib["cleancouverts"])
         
                 
-    def getPossibleActions(self):
+    def getPossibleActions(self, isOwner=False):
         actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos)]
         for i in range(self.couverts - self.meals):
             actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook"))

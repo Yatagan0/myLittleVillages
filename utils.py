@@ -27,7 +27,7 @@ prenoms = ["Ahmed","Albert","Alexandre","Andre","Antoine","Arnaud","Augustin", "
 "Edouard","Emile","Etienne","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", 
 "Gautier","Germain","Georges","Gregoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
 "Joel", "Jonas","Joseph", "Julien","Laurent","Leon","Luc","Lucas","Manuel", "Matthieu", "Martin", 
-"Nicolas", "Paul","Pierre","Philippe", 
+"Mickael","Michel","Nicolas", "Paul","Pierre","Philippe", 
 "Rene", "Robert", "Ronan","Sylvain", "Thimotee","Thomas","Vincent", "William"]
 
 def isNameOk(name):
