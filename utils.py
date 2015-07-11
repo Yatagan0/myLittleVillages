@@ -172,7 +172,7 @@ def randomHotelName(owner=""):
     else:
         owner = owner.split(" ")[0]
         
-    names = [["jardin", "delice", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel"],
+    names = [["jardin", "delice", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel", "matelas", "berceau", "drap", "couffin"],
                     ["escapade", "escale", "pause", "auberge", "auberge de jeunesse", "couette", "plume", "hotellerie"]]
                     
     namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le jeune"]

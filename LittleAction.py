@@ -182,7 +182,7 @@ class LittleSleepAction(LittleAction):
             else:
                 self.people.money -= self.price
                 self.building.money += self.price
-                print self.building.name, " money ", self.building.money, " price ",self.price
+                #~ print self.building.name, " money ", self.building.money, " price ",self.price
                 self.building.beds +=1
                 self.people.tired = 0
                 self.people.knowledge["sleep"].seenBuilding(pos=self.pos, reliable=1)
@@ -260,8 +260,8 @@ class LittleEatAction(LittleAction):
                 self.people.money -= self.price
                 self.building.money += self.price
 
-                print "now ",self.building.meals, " meals at ", self.building.name
-                print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
+                #~ print "now ",self.building.meals, " meals at ", self.building.name
+                #~ print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
                 self.people.knowledge["eat"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
                 return False
                 
@@ -319,6 +319,8 @@ class LittleWorkAction(LittleAction):
                 self.remainingTime = 20 + random.randint(0, 20)
             elif self.type=="dishes":
                 self.remainingTime = 10 + random.randint(0, 10)
+            elif self.type=="cleanbed":
+                self.remainingTime = 10 + random.randint(0, 10)
             
             if self.description == "":
                 print self.people.name, " travaille a ",self.building.name
@@ -340,13 +342,13 @@ class LittleWorkAction(LittleAction):
                 
                 if self.type=="cook":
                     self.building.meals +=1
-                    print "now ",self.building.meals, " meals at ", self.building.name
+                    #~ print "now ",self.building.meals, " meals at ", self.building.name
                 elif self.type=="dishes":
                     self.building.cleanCouverts +=1
-                    print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
+                    #~ print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
                 elif self.type=="cleanbed":
                     self.building.cleanBeds +=1
-                    print "now ",self.building.cleanBeds, " clean beds at ", self.building.name
+                    #~ print "now ",self.building.cleanBeds, " clean beds at ", self.building.name
                 
                 self.people.knowledge["work"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
                 return False

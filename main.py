@@ -13,7 +13,6 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage =False
-    
     DO_DISPLAY =False
  
     allPeople = []
@@ -39,12 +38,12 @@ if __name__ == '__main__':
 
         
         
-        for i in range(0, 3):
-            p = LittlePeople()
-            p.knowledge["sleep"].seenBuilding(building=bb)
-            p.knowledge["eat"].seenBuilding(building=b)
-            print p.name
-            allPeople.append(p)
+        #~ for i in range(0, 3):
+            #~ p = LittlePeople()
+            #~ p.knowledge["sleep"].seenBuilding(building=bb)
+            #~ p.knowledge["eat"].seenBuilding(building=b)
+            #~ print p.name
+            #~ allPeople.append(p)
 
         for p in allPeople:
             p.knowledge["sleep"].seenBuilding(building=bb)
@@ -74,7 +73,7 @@ if __name__ == '__main__':
         utils.globalTime.addTime()
         print utils.globalTime
         for p in allPeople:
-            p.update(utils.globalTime)
+            p.update()
         if DO_DISPLAY:
             from LittleDisplay import *
             if not display(allPeople, allBuildings):
