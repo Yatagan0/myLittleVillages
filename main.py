@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     newVillage =False
     
-    DO_DISPLAY =True
+    DO_DISPLAY =False
  
     allPeople = []
     path = "village.xml"
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     if newVillage:
 
         mayor = LittlePeople()
-        bb = LittleBuilding( pos=[0.,0.],type="dortoir")
+        bb = LittleHotel( pos=[0.,0.],owner = mayor)
         b = LittleRestaurant( pos=[0.,0.], owner = mayor)
         print mayor.name
         allPeople.append(mayor)
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     
     
 
-    counter = 4000
+    counter = 400
     
     while counter > 0:
         counter -= 1

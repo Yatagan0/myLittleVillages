@@ -38,6 +38,7 @@ class LittlePeople:
             
             self.tired = -5*60
             self.hungry = 0
+            self.money=10
         
         global allPeople
         allPeople.append(self)
@@ -48,6 +49,7 @@ class LittlePeople:
         self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
         self.tired = int(root.attrib["tired"])
         self.hungry = int(root.attrib["hungry"])
+        self.money = float(root.attrib["money"])
         for child in root:
             if (child.tag == "habits"):     
                 self.habits = LittleOldActions(self, child)
@@ -66,6 +68,7 @@ class LittlePeople:
         elem.set("posY", str(self.pos[1]))
         elem.set("tired", str(self.tired))
         elem.set("hungry", str(self.hungry))
+        elem.set("money", str(self.money))
         if self.action is not None:
             self.action.write(elem)
         

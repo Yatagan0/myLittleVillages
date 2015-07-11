@@ -28,6 +28,7 @@ class LittleBuilding:
             self.type = type
             self.name = "unnamed building"
             self.owner = owner
+            self.money=0
             
         self.possibleActions = []
         
@@ -41,6 +42,7 @@ class LittleBuilding:
         elem.set("posY", str(self.pos[1]))
         elem.set("type", self.type)
         elem.set("name", self.name)
+        elem.set("money", str(self.money))
         if self.owner is None:
             elem.set("owner", "")
         elif isinstance(self.owner, basestring):
@@ -54,6 +56,7 @@ class LittleBuilding:
         self.type = root.attrib["type"]
         self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
         self.name = root.attrib["name"]
+        self.money = float(root.attrib["money"])
         from LittlePeople import peopleNamed
         self.owner = peopleNamed(root.attrib["owner"])
         if self.owner is None:
@@ -103,14 +106,51 @@ class LittleRestaurant(LittleBuilding):
         
                 
     def getPossibleActions(self, isOwner=False):
-        actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos)]
+        actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos, price=4)]
         for i in range(self.couverts - self.meals):
-            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook"))
+            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook", price=-3))
         for i in range(self.couverts - self.cleanCouverts):
-            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez", type="dishes"))
+            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez", type="dishes", price = -1))
         
         return actions
+    
+
+class LittleHotel(LittleBuilding):
+    def __init__(self, root=None, owner=None, pos=None):
+        LittleBuilding.__init__(self, root=root, pos=pos, type="hotel", owner=owner)
         
+        if root is not None:
+            self.read(root)
+        else:
+        
+            if owner is not None:
+                self.name = utils.randomHotelName(self.owner.name)
+            else:
+                self.name = utils.randomHotelName()
+                
+            self.beds = 6
+            self.cleanBeds = self.beds
+                
+    def write(self, root):
+        elem = LittleBuilding.write(self, root)
+        elem.set("class", "LittleHotel")
+        elem.set("beds", str(self.beds))
+        elem.set("cleanbeds", str(self.cleanBeds))
+        
+    def read(self, root):
+        LittleBuilding.read(self, root)
+        self.beds= int(root.attrib["beds"])
+        self.cleanBeds = int(root.attrib["cleanbeds"])
+        
+                
+    def getPossibleActions(self, isOwner=False):
+        actions = [LittleSleepAction( people=None,startHour=[0, 0], pos=self.pos, price=1)]
+        for i in range(self.beds - self.cleanBeds):
+            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="nettoie une chambre chez", type="cleanbed", price = -1))
+        
+        return actions
+
+       
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.], name=""):
         
@@ -217,6 +257,8 @@ class LittleBuildingList:
 def readBuilding(root):
     if root.attrib["class"] == "LittleRestaurant":
         b = LittleRestaurant(root=root)
+    elif root.attrib["class"] == "LittleHotel":
+        b = LittleHotel(root=root) 
     else:
         b = LittleBuilding(root=root)
     return b

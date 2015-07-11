@@ -24,11 +24,11 @@ finVille = ["touille", "mont", "vert", "gny","lieu", "guen", "fort", "puy"]
 finNom = [ "mont", "vert",  "leaux", "lieu", "guen"]
 prenoms = ["Ahmed","Albert","Alexandre","Andre","Antoine","Arnaud","Augustin", "Basile", "Benoit",
 "Bertrand","Charles", "Christophe","Claude","Clement","Damien","Denis","Dominique",
-"Edouard","Emile","Etienne","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", 
+"Edouard","Emile","Etienne","Fabrice","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", 
 "Gautier","Germain","Georges","Gregoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
 "Joel", "Jonas","Joseph", "Julien","Laurent","Leon","Luc","Lucas","Manuel", "Matthieu", "Martin", 
 "Mickael","Michel","Nicolas", "Paul","Pierre","Philippe", 
-"Rene", "Robert", "Ronan","Sylvain", "Thimotee","Thomas","Vincent", "William"]
+"Rene", "Robert", "Ronan","Sylvain", "Thimotee","Thomas", "Tristan","Vincent", "William"]
 
 def isNameOk(name):
     if name.find("uu") > -1:
@@ -39,6 +39,8 @@ def isNameOk(name):
         return False
     if name.find("nrt") > -1:
         return False
+    if name.find("nss") > -1:
+        return False 
     if len(name) > 12:
         return False
         
@@ -89,8 +91,10 @@ def randomRestaurantName(owner=""):
     else:
         owner = owner.split(" ")[0]
         
-    names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal"],
-                    ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade", "brasserie", "tartine", "reverie", "escale", "pause", "auberge"]]
+    names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", 
+    "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal"],
+                    ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade",
+                    "brasserie", "tartine", "reverie", "escale", "pause", "auberge"]]
                     
     namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le chef", "maitre"]
     au = ["Au ", "A la ", "A l'"]
@@ -145,6 +149,9 @@ def randomRestaurantName(owner=""):
         adj["lointain"] = "lointaine"
         adj["traditionnel"] = "traditionnelle"
         adj["delicat"] = "delicate"
+        adj["succulent"] = "succulente"
+        adj["délicieux"] = "délicieuse"
+        adj["juteux"] = "juteuse"
         aa = random.choice(adj.keys())
         if adj[aa] != "" and (nameGenre==1 or nameGenre==3) :
             aa = adj[aa]
@@ -152,6 +159,79 @@ def randomRestaurantName(owner=""):
     elif case == "du":
         toadd = ["des lutins", "des familles", "du gourmet", "de chez nous", "d'antan", "du printemps",
         "des amis", "du port", "de la gare", "du centre", "des reves", "du pays"]
+        aa = random.choice(toadd)
+        finalName += " "+aa
+        
+    return finalName
+    
+    
+    
+def randomHotelName(owner=""):
+    if owner == "":
+        owner = random.choice(prenoms)
+    else:
+        owner = owner.split(" ")[0]
+        
+    names = [["jardin", "delice", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel"],
+                    ["escapade", "escale", "pause", "auberge", "auberge de jeunesse", "couette", "plume", "hotellerie"]]
+                    
+    namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le jeune"]
+    au = ["Au ", "A la ", "A l'"]
+    le = ["Le ", "La ", "L'"]
+ 
+        
+    cases = ["chez", "au", "le", "au", "le", "le"]
+    case = random.choice(cases)
+    if case == "chez":
+        adj = ""
+        if random.randint(0,1) == 0:
+            adj = random.choice(namesOwner)+" "
+        return "Chez "+adj+owner
+        
+        
+    nameGenre = random.randint(0,1)
+    
+    myname = random.choice(names[nameGenre])
+        
+    if case == "au":
+        if myname[0] in ["a", "e", "i", "o", "u", "y", "h"]:
+            myau = au[2]
+        else: myau = au[nameGenre] 
+        finalName = myau+myname
+    elif case == "le":
+        if myname[0] in ["a", "e", "i", "o", "u", "y", "h"]:
+            myau = le[2]
+        else: myau = le[nameGenre] 
+        finalName = myau+myname
+        
+    cases = ["de", "adjectif", "du", "rien"]
+    case = random.choice(cases)
+    
+    if case == "de":
+        adj = " de "
+        if random.randint(0,1) == 0:
+            no = random.choice(namesOwner)
+            if no[0:3] == "le ":
+                no = " du "+no[3:]
+                adj = ""
+            adj += no+" "
+        elif owner[0] in ["A", "E", "I", "O", "U", "Y"]:
+            adj= " d'"
+        finalName += adj+owner
+    elif case == "adjectif":
+        adj = {}
+        adj["merveilleux"] = "merveilleuse"
+        adj["magique"] = ""
+        adj["enchante"] = "enchantee"
+        adj["lointain"] = "lointaine"
+    
+        aa = random.choice(adj.keys())
+        if adj[aa] != "" and (nameGenre==1 or nameGenre==3) :
+            aa = adj[aa]
+        finalName += " "+aa
+    elif case == "du":
+        toadd = ["des lutins", "des familles", "de chez nous", "d'antan", "du printemps",
+        "des amis", "du port", "de la gare", "du centre", "des reves", "du bon Dieu"]
         aa = random.choice(toadd)
         finalName += " "+aa
         
@@ -290,7 +370,7 @@ if __name__ == '__main__':
         #~ print randomCityName()
     #~ print "---"
     for i in range(0, 20):
-        print randomRestaurantName("fernand leger")
+        print randomHotelName("Guillaume")
     #~ for i in range(0, 10):
         #~ print randomCityName()      
     #~ dict = {"test":2}

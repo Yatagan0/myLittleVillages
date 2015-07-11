@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 
 class LittleAction:
-    def __init__(self, root=None, people=None, type="do nothing", startHour=None, pos=None):
+    def __init__(self, root=None, people=None, type="do nothing", startHour=None, pos=None, price=0.):
         self.people = people 
         self.pos = pos
         self.building = None
@@ -15,6 +15,7 @@ class LittleAction:
 
         self.type = type
         self.startHour = startHour
+        self.price=price
  
         self.init()
         
@@ -27,6 +28,7 @@ class LittleAction:
         self.startHour = [int(root.attrib["startHour"]),int(root.attrib["startMinute"]) ]
         self.status = root.attrib["status"]
         self.remainingTime = int(root.attrib["remainingTime"])
+        self.price = float(root.attrib["price"])
         if "posX" in root.attrib.keys():
             #~ print "has pos"
             self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
@@ -42,6 +44,7 @@ class LittleAction:
         elem.set("startMinute", str(self.startHour[1]))
         elem.set("status", self.status)
         elem.set("remainingTime", str(self.remainingTime))
+        elem.set("price", str(self.price))
         if self.pos is not None:
             elem.set("posX", str(self.pos[0]))
             elem.set("posY", str(self.pos[1]))
@@ -53,7 +56,14 @@ class LittleAction:
             self.startHour = [t.hour, t.minute]
         self.status = "executing"
         self.remainingTime -= 1
-        return self.remainingTime > 0
+        if self.remainingTime <= 0:
+            if self.building is not None:
+                self.people.money -= self.price
+                self.building.money += self.price
+            
+            return False
+            
+        return True
         
     def init(self):
         #~ print "init"
@@ -61,7 +71,7 @@ class LittleAction:
         self.remainingTime = 59
     
     def copy(self):
-        a = LittleAction(people=self.people, type=self.type, startHour=self.startHour, pos=self.pos)
+        a = LittleAction(people=self.people, type=self.type, startHour=self.startHour, pos=self.pos, price=self.price)
         return a
         
     def hasLocation(self):
@@ -71,8 +81,8 @@ class LittleAction:
         self.pos = [self.people.pos[0], self.people.pos[1]]
         
 class LittleMoveAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None,pos=None):
-        LittleAction.__init__(self, root,people,"move", startHour, pos)
+    def __init__(self,root=None,people=None, startHour=None,pos=None, price=0.):
+        LittleAction.__init__(self, root,people,"move", startHour, pos, price)
         if root is not None:
             self.read(root)
         #~ else:
@@ -91,7 +101,7 @@ class LittleMoveAction(LittleAction):
 
         
     def copy(self):
-        a = LittleMoveAction(people=self.people, startHour=self.startHour, pos=self.pos)
+        a = LittleMoveAction(people=self.people, startHour=self.startHour, pos=self.pos, price=self.price)
         return a      
 
     def execute(self):
@@ -101,6 +111,9 @@ class LittleMoveAction(LittleAction):
 
         self.status = "executing"
         if self.people.go(self.pos):
+            if self.building is not None:
+                self.people.money -= self.price
+                self.building.money += self.price
             return False
                 
         return True     
@@ -111,8 +124,8 @@ class LittleMoveAction(LittleAction):
         #~ self.buidling = buildingImIn(self.pos)
         
 class LittleSleepAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None,pos=None):
-        LittleAction.__init__(self, root,people,"sleep", startHour, pos)
+    def __init__(self,root=None,people=None, startHour=None,pos=None, price=0.):
+        LittleAction.__init__(self, root,people,"sleep", startHour, pos, price)
         if root is not None:
             self.read(root)
         else:
@@ -139,13 +152,26 @@ class LittleSleepAction(LittleAction):
 
         
     def copy(self):
-        a = LittleSleepAction(people=self.people, startHour=self.startHour, pos=self.pos)
+        a = LittleSleepAction(people=self.people, startHour=self.startHour, pos=self.pos, price=self.price)
         return a
         
     def execute(self):
+        
+        if self.building is None:
+            from LittleBuilding import buildingImIn
+            self.building = buildingImIn(self.pos)
+        
         if self.status == "not started":
             t = utils.globalTime
             self.startHour = [t.hour, t.minute]
+            if self.building.cleanBeds > 0:
+                print self.people.name, " va dormir a ",self.building.name
+                self.building.cleanBeds -=1
+                self.building.beds -=1
+            else:
+                print self.people.name, " ne peux pas dormir a ",self.building.name
+                self.people.knowledge["sleep"].seenBuilding(pos=self.pos, name=self.building.name, reliable=0)
+                return False
            
         self.status = "executing"
         if self.people.go(self.pos):
@@ -154,6 +180,10 @@ class LittleSleepAction(LittleAction):
                 return True
                 
             else:
+                self.people.money -= self.price
+                self.building.money += self.price
+                print self.building.name, " money ", self.building.money, " price ",self.price
+                self.building.beds +=1
                 self.people.tired = 0
                 self.people.knowledge["sleep"].seenBuilding(pos=self.pos, reliable=1)
                 return False
@@ -167,8 +197,8 @@ class LittleSleepAction(LittleAction):
         self.buidling = buildingImIn(self.pos)
         
 class LittleEatAction(LittleAction):
-    def __init__(self,root=None, people=None, startHour=None,pos=None):
-        LittleAction.__init__(self,root, people, "eat", startHour,pos)
+    def __init__(self,root=None, people=None, startHour=None,pos=None, price=0.):
+        LittleAction.__init__(self,root, people, "eat", startHour,pos, price)
         if root is not None:
             self.read(root)
         else:
@@ -195,7 +225,7 @@ class LittleEatAction(LittleAction):
         elem.set("class", "LittleEatAction")
         
     def copy(self):
-        a = LittleEatAction(people=self.people, startHour=self.startHour, pos=self.pos)
+        a = LittleEatAction(people=self.people, startHour=self.startHour, pos=self.pos, price=self.price)
         return a
         
     def execute(self):
@@ -210,6 +240,7 @@ class LittleEatAction(LittleAction):
             if self.building.meals > 0 and self.building.cleanCouverts > 0:
                 print self.people.name, " va manger a ",self.building.name
                 self.building.meals -=1
+                self.building.couverts -=1
                 self.building.cleanCouverts -=1
             else:
                 print self.people.name, " ne peux pas manger a ",self.building.name
@@ -225,6 +256,9 @@ class LittleEatAction(LittleAction):
                 
             else:
                 self.people.hungry = 0
+                self.building.couverts +=1
+                self.people.money -= self.price
+                self.building.money += self.price
 
                 print "now ",self.building.meals, " meals at ", self.building.name
                 print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
@@ -242,8 +276,8 @@ class LittleEatAction(LittleAction):
         #~ print "get location ",self.building.name
 
 class LittleWorkAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None,pos=None, desc="", type="work"):
-        LittleAction.__init__(self, root,people,type, startHour, pos)
+    def __init__(self,root=None,people=None, startHour=None,pos=None, desc="", type="work", price=0.):
+        LittleAction.__init__(self, root,people,type, startHour, pos, price)
         if root is not None:
             self.read(root)
         else:
@@ -268,7 +302,7 @@ class LittleWorkAction(LittleAction):
 
         
     def copy(self):
-        a = LittleWorkAction(people=self.people, startHour=self.startHour, pos=self.pos, desc=self.description, type=self.type)
+        a = LittleWorkAction(people=self.people, startHour=self.startHour, pos=self.pos, desc=self.description, type=self.type, price=self.price)
         return a      
 
     def execute(self):
@@ -300,12 +334,19 @@ class LittleWorkAction(LittleAction):
             else:
                 #~ print "fini !"
                 #~ print "finin ",self.description, " ", self.type
+                self.people.money -= self.price
+                self.building.money += self.price
+                
+                
                 if self.type=="cook":
                     self.building.meals +=1
                     print "now ",self.building.meals, " meals at ", self.building.name
                 elif self.type=="dishes":
                     self.building.cleanCouverts +=1
-                    print "now ",self.building.meals, " clean couverts at ", self.building.name
+                    print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
+                elif self.type=="cleanbed":
+                    self.building.cleanBeds +=1
+                    print "now ",self.building.cleanBeds, " clean beds at ", self.building.name
                 
                 self.people.knowledge["work"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
                 return False
