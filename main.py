@@ -13,7 +13,7 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage =False
-    DO_DISPLAY =False
+    DO_DISPLAY =True
  
     allPeople = []
     path = "village.xml"
@@ -26,28 +26,33 @@ if __name__ == '__main__':
         print mayor.name
         allPeople.append(mayor)
         
-        p1= LittlePeople()
-        bbb = LittleRestaurant( pos=[0.,0.], owner=p1)
-        print p1.name
-        allPeople.append(p1)
+        #~ p1= LittlePeople()
+        #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p1)
+        #~ print p1.name
+        #~ allPeople.append(p1)
 
-        p2= LittlePeople()
-        bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
-        print p1.name
-        allPeople.append(p2)
+        #~ p2= LittlePeople()
+        #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
+        #~ print p1.name
+        #~ allPeople.append(p2)
+
 
         
-        
-        #~ for i in range(0, 3):
-            #~ p = LittlePeople()
-            #~ p.knowledge["sleep"].seenBuilding(building=bb)
-            #~ p.knowledge["eat"].seenBuilding(building=b)
-            #~ print p.name
-            #~ allPeople.append(p)
-
-        for p in allPeople:
+        for i in range(0, 5):
+            p = LittlePeople()
             p.knowledge["sleep"].seenBuilding(building=bb)
-            p.knowledge["eat"].seenBuilding(building=b)            
+            p.knowledge["eat"].seenBuilding(building=b)
+            print p.name
+            allPeople.append(p)
+
+        #~ for p in allPeople:
+            #~ p.knowledge["sleep"].seenBuilding(building=bb)
+            #~ p.knowledge["eat"].seenBuilding(building=b)            
+
+        b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
+        b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
+        b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
+
             
     else:
         tree =  ET.parse(path)
@@ -61,7 +66,7 @@ if __name__ == '__main__':
             elif child.tag == "building":
                 b = readBuilding(child)
 
-    
+    #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
     
 
     counter = 400

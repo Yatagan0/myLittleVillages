@@ -26,8 +26,8 @@ prenoms = ["Ahmed","Albert","Alexandre","Andre","Antoine","Arnaud","Augustin", "
 "Bertrand","Charles", "Christophe","Claude","Clement","Damien","Denis","Dominique",
 "Edouard","Emile","Etienne","Fabrice","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", 
 "Gautier","Germain","Georges","Gregoire","Guillaume", "Guy", "Henri","Jacques","Jean", 
-"Joel", "Jonas","Joseph", "Julien","Laurent","Leon","Luc","Lucas","Manuel", "Matthieu", "Martin", 
-"Mickael","Michel","Nicolas", "Paul","Pierre","Philippe", 
+"Joel", "Jonas","Joseph", "Julien","Laurent","Leon","Louis","Luc","Lucas","Manuel", "Matthieu", "Martin", 
+"Mickael","Michel","Nicolas", "Olivier","Paul","Pierre","Philippe", 
 "Rene", "Robert", "Ronan","Sylvain", "Thimotee","Thomas", "Tristan","Vincent", "William"]
 
 def isNameOk(name):
@@ -92,9 +92,9 @@ def randomRestaurantName(owner=""):
         owner = owner.split(" ")[0]
         
     names = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", 
-    "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal"],
+    "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal", "gosier"],
                     ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade",
-                    "brasserie", "tartine", "reverie", "escale", "pause", "auberge"]]
+                    "brasserie", "tartine", "reverie", "escale", "pause", "auberge", "taverne"]]
                     
     namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le chef", "maitre"]
     au = ["Au ", "A la ", "A l'"]
@@ -172,7 +172,7 @@ def randomHotelName(owner=""):
     else:
         owner = owner.split(" ")[0]
         
-    names = [["jardin", "delice", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel", "matelas", "berceau", "drap", "couffin"],
+    names = [["jardin", "delice", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel", "matelas", "berceau", "drap", "couffin", "silence"],
                     ["escapade", "escale", "pause", "auberge", "auberge de jeunesse", "couette", "plume", "hotellerie"]]
                     
     namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le jeune"]

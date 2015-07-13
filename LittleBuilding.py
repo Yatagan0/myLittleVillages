@@ -59,7 +59,7 @@ class LittleBuilding:
         self.money = float(root.attrib["money"])
         from LittlePeople import peopleNamed
         self.owner = peopleNamed(root.attrib["owner"])
-        if self.owner is None:
+        if self.owner is None and root.attrib["owner"] is not "" :
             self.owner = root.attrib["owner"]
         
     def findFreePos(self, pos, size):
@@ -81,15 +81,24 @@ class LittleRestaurant(LittleBuilding):
         if root is not None:
             self.read(root)
         else:
-        
-            if owner is not None:
-                self.name = utils.randomRestaurantName(self.owner.name)
-            else:
-                self.name = utils.randomRestaurantName()
-                
-            self.couverts = 3
-            self.meals = 0
-            self.cleanCouverts = self.couverts
+            self.owner = owner
+            self.init()
+
+            
+    def init(self):
+        if self.owner is not None:
+            print "OWNER ", self.owner
+            if isinstance(self.owner, basestring):
+                from LittlePeople import peopleNamed
+                self.owner = peopleNamed(self.owner)
+            
+            self.name = utils.randomRestaurantName(self.owner.name)
+        else:
+            self.name = utils.randomRestaurantName()
+            
+        self.couverts = 3
+        self.meals = 0
+        self.cleanCouverts = self.couverts 
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
@@ -122,14 +131,21 @@ class LittleHotel(LittleBuilding):
         if root is not None:
             self.read(root)
         else:
-        
-            if owner is not None:
-                self.name = utils.randomHotelName(self.owner.name)
-            else:
-                self.name = utils.randomHotelName()
-                
-            self.beds = 6
-            self.cleanBeds = self.beds
+            self.owner = owner
+            self.init()
+            
+    def init(self):
+        print "init !"
+        if self.owner is not None:
+            if isinstance(self.owner, basestring):
+                from LittlePeople import peopleNamed
+                self.owner = peopleNamed(self.owner)
+            self.name = utils.randomHotelName(self.owner.name)
+        else:
+            self.name = utils.randomHotelName()
+            
+        self.beds = 6
+        self.cleanBeds = self.beds
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
@@ -149,7 +165,55 @@ class LittleHotel(LittleBuilding):
             actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="nettoie une chambre chez", type="cleanbed", price = -1))
         
         return actions
-
+        
+class LittleConstructingBuilding(LittleBuilding):
+    def __init__(self, root=None, pos = [0., 0.], owner=None, futureType=None):
+        
+        LittleBuilding.__init__(self, root=root, pos=pos, type="constructing", owner=owner)
+        
+        if root is not None:
+            self.read(root)
+        else:
+        
+            self.name = "constructing"
+            self.futureType = futureType
+            self.numWorkers = 4
+            self.workTasks = 4
+            
+    def read(self, root):
+        LittleBuilding.read(self, root)
+        self.numWorkers= int(root.attrib["numWorkers"])
+        self.workTasks = int(root.attrib["workTasks"])
+        self.futureType = root.attrib["futureType"]
+        
+    def write(self, root):
+        elem = LittleBuilding.write(self, root)
+        elem.set("class", "LittleConstructingBuilding")
+        elem.set("numWorkers", str(self.numWorkers))
+        elem.set("workTasks", str(self.workTasks))      
+        elem.set("futureType", self.futureType)      
+        
+    def finish(self):
+        global allBuildings
+        allBuildings.remove(self)
+        if self.futureType == "LittleHotel":
+            #~ self.__class__= LittleHotel
+            self= LittleHotel( owner=self.owner, pos=self.pos)
+        elif self.futureType == "LittleRestaurant":
+            #~ self.__class__= LittleRestaurant
+            self= LittleRestaurant( owner=self.owner, pos=self.pos)
+        else:
+            #~ self.__class__= LittleBuilding
+            self= LittleBuilding( owner=self.owner, pos=self.pos)
+        #~ self.init()
+        print "building in ",self.pos," is now finished ! Its name is ",self.name,"!"
+        
+    def getPossibleActions(self, isOwner=False):
+        actions = []
+        for i in range(min(self.numWorkers, self.workTasks)):
+            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="construit", type="construct", price = -2))
+        
+        return actions
        
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.], name=""):
@@ -259,7 +323,14 @@ def readBuilding(root):
         b = LittleRestaurant(root=root)
     elif root.attrib["class"] == "LittleHotel":
         b = LittleHotel(root=root) 
+    elif root.attrib["class"] == "LittleConstructingBuilding":
+        b = LittleConstructingBuilding(root=root) 
     else:
         b = LittleBuilding(root=root)
     return b
             
+if __name__ == '__main__':
+    b = LittleConstructingBuilding(pos=[0., 0.], owner=None, futureType="LittleHotel")
+    print b.__class__.__name__
+    b.finish()
+    print b.__class__.__name__

@@ -308,8 +308,8 @@ class LittleWorkAction(LittleAction):
     def execute(self):
         
         if self.building is None:
-                from LittleBuilding import buildingImIn
-                self.building = buildingImIn(self.pos)
+            from LittleBuilding import buildingImIn
+            self.building = buildingImIn(self.pos)
         
         if self.status == "not started":
             t = utils.globalTime
@@ -321,7 +321,10 @@ class LittleWorkAction(LittleAction):
                 self.remainingTime = 10 + random.randint(0, 10)
             elif self.type=="cleanbed":
                 self.remainingTime = 10 + random.randint(0, 10)
-            
+            elif self.type=="construct":
+                self.remainingTime = 60 + random.randint(0, 60)
+                self.building.numWorkers -=1
+                
             if self.description == "":
                 print self.people.name, " travaille a ",self.building.name
             else:
@@ -349,7 +352,12 @@ class LittleWorkAction(LittleAction):
                 elif self.type=="cleanbed":
                     self.building.cleanBeds +=1
                     #~ print "now ",self.building.cleanBeds, " clean beds at ", self.building.name
-                
+                elif self.type=="construct":
+                    self.building.numWorkers +=1
+                    self.building.workTasks -=1
+                    if self.building.workTasks == 0:
+                        self.building.finish()
+            
                 self.people.knowledge["work"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
                 return False
                 
