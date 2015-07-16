@@ -287,19 +287,30 @@ class LittleBuildingList:
         self.known.append(b)
         return b
         
-    def findClosest(self, pos):
-        dist = 10000
-        rpos = [0., 0.]
+    def findClosest(self, pos, checkReliable= True):
+        dist = -1
+        bestb=None
+        #~ rpos = [0., 0.]
         
         for b in self.known:
-            #~ print b.pos
             d = utils.distance(pos, b.pos)
+            if dist == -1:
+                dist = d
+                bestb = b
+                continue
+            #~ print b.pos
+            if checkReliable:
+                if bestb.reliable < b.reliable and random.randint(0, 2) == 0:
+                    dist = d
+                    bestb = b    
+                    continue
+                    
             if d < dist:
                 dist = d
-                rpos = b.pos
+                bestb = b
                 
         #~ print rpos
-        return rpos
+        return bestb.pos
         
     def getLastSeen(self):
         blast = None
