@@ -166,6 +166,59 @@ class LittleHotel(LittleBuilding):
         
         return actions
         
+class LittleField(LittleBuilding):
+    def __init__(self, root=None, owner=None, pos=None):
+        LittleBuilding.__init__(self, root=root, pos=pos, type="field", owner=owner)
+        
+        if root is not None:
+            self.read(root)
+        else:
+            self.owner = owner
+            self.init()
+            
+    def init(self):
+        print "init !"
+        if self.owner is not None:
+            if isinstance(self.owner, basestring):
+                from LittlePeople import peopleNamed
+                self.owner = peopleNamed(self.owner)
+        self.name = "field"
+
+        self.planted=[["nothing", "none", [0, 0, 0, 0, 0]]]*3
+        print self.planted
+
+                
+    def write(self, root):
+        elem = LittleBuilding.write(self, root)
+        elem.set("class", "LittleField")
+        for p in self.planted:
+            sub = ET.SubElement(elem, 'planted')
+            sub.set("planted", p[0])
+            sub.set("state", p[1])
+            sub.set("minute", str(p[2][0]))
+            sub.set("hour", str(p[2][1]))
+            sub.set("day", str(p[2][2]))
+            sub.set("month", str(p[2][3]))
+            sub.set("year", str(p[2][4]))
+        
+    def read(self, root):
+        LittleBuilding.read(self, root)
+        self.planted = []
+        for child in root:
+            if (child.tag == "planted"):   
+                p = []
+                p.append(child.attrib["planted"])
+                p.append(child.attrib["state"])
+                p.append([int(child.attrib["minute"]), int(child.attrib["hour"]),int(child.attrib["day"]),int(child.attrib["month"]),int(child.attrib["year"])])
+                self.planted.append(p)
+
+        
+                
+    def getPossibleActions(self, isOwner=False):
+        actions = []
+               
+        return actions
+        
 class LittleConstructingBuilding(LittleBuilding):
     def __init__(self, root=None, pos = [0., 0.], owner=None, futureType=None):
         
@@ -202,6 +255,9 @@ class LittleConstructingBuilding(LittleBuilding):
         elif self.futureType == "LittleRestaurant":
             #~ self.__class__= LittleRestaurant
             self= LittleRestaurant( owner=self.owner, pos=self.pos)
+        elif self.futureType == "LittleField":
+            #~ self.__class__= LittleRestaurant
+            self= LittleField( owner=self.owner, pos=self.pos) 
         else:
             #~ self.__class__= LittleBuilding
             self= LittleBuilding( owner=self.owner, pos=self.pos)
@@ -332,12 +388,18 @@ def readBuilding(root):
         b = LittleHotel(root=root) 
     elif root.attrib["class"] == "LittleConstructingBuilding":
         b = LittleConstructingBuilding(root=root) 
+    elif root.attrib["class"] == "LittleField":
+        b = LittleField(root=root) 
     else:
         b = LittleBuilding(root=root)
     return b
             
 if __name__ == '__main__':
-    b = LittleConstructingBuilding(pos=[0., 0.], owner=None, futureType="LittleHotel")
-    print b.__class__.__name__
-    b.finish()
-    print b.__class__.__name__
+    #~ b = LittleConstructingBuilding(pos=[0., 0.], owner=None, futureType="LittleHotel")
+    #~ print b.__class__.__name__
+    #~ b.finish()
+    #~ print b.__class__.__name__
+    b = LittleField(pos=[0., 0.])
+    
+    
+    

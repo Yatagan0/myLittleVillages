@@ -44,14 +44,15 @@ if __name__ == '__main__':
             #~ p.knowledge["eat"].seenBuilding(building=b)
             print p.name
             allPeople.append(p)
+            LittleConstructingBuilding( pos = [0., 0.], owner=p, futureType="LittleField")
 
         for p in allPeople:
             p.knowledge["sleep"].seenBuilding(building=bb)
             p.knowledge["eat"].seenBuilding(building=b)            
 
-        b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
-        b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
-        b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
+        #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
+        #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
+        #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
 
             
     else:
