@@ -216,7 +216,7 @@ class LittleConstructingBuilding(LittleBuilding):
         return actions
        
 class LittleKnownBuilding:
-    def __init__(self, root=None, pos=[0., 0.], name=""):
+    def __init__(self, root=None, pos=[0., 0.]):
         
         if root is not None:
             self.read(root)
@@ -225,8 +225,7 @@ class LittleKnownBuilding:
         self.pos = pos
         self.lastSeen = utils.globalTime.now()
         self.reliable = 0.5
-        self.name=name
-        
+
     def write(self, root):
         elem =  ET.SubElement(root, 'known') 
         elem.set("posX", str(self.pos[0]))
@@ -237,13 +236,11 @@ class LittleKnownBuilding:
         elem.set("day", str(self.lastSeen[2]))
         elem.set("month", str(self.lastSeen[3]))
         elem.set("year", str(self.lastSeen[4]))
-        elem.set("name", self.name)
         
     def read(self, root):
         self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
         self.reliable = float(root.attrib["reliable"])
         self.lastSeen = [int(root.attrib["minute"]),int(root.attrib["hour"]), int(root.attrib["day"]), int(root.attrib["month"]), int(root.attrib["year"])]
-        self.name = root.attrib["name"]
         
     def seen(self, reliable):
         #~ print "seen !"
@@ -253,7 +250,6 @@ class LittleKnownBuilding:
        
 class LittleBuildingList:
 
-    
     def __init__(self, root=None, type=""):
         if root is not None:
             self.read(root)
@@ -274,20 +270,20 @@ class LittleBuildingList:
             self.known.append(LittleKnownBuilding(root=child))
         
         
-    def seenBuilding(self, building=None, pos=[0., 0.], reliable=-1, name=""):
+    def seenBuilding(self, building=None, pos=[0., 0.], reliable=-1):
         if building is not None:
-            b = self.findBuilding(building.pos, building.name)
+            b = self.findBuilding(building.pos)
         else:
-            b = self.findBuilding(pos, name)
+            b = self.findBuilding(pos)
         b.seen(reliable)
         
             
-    def findBuilding(self, pos, name):
+    def findBuilding(self, pos):
         for b in self.known:
             if pos[0] == b.pos[0] and pos[1] == b.pos[1] :
                 return b
         #~ print "new buidling !"
-        b = LittleKnownBuilding(pos=pos, name=name)
+        b = LittleKnownBuilding(pos=pos)
         self.known.append(b)
         return b
         

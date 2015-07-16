@@ -170,7 +170,7 @@ class LittleSleepAction(LittleAction):
                 self.building.beds -=1
             else:
                 print self.people.name, " ne peux pas dormir a ",self.building.name
-                self.people.knowledge["sleep"].seenBuilding(pos=self.pos, name=self.building.name, reliable=0)
+                self.people.knowledge["sleep"].seenBuilding(pos=self.pos,  reliable=0)
                 return False
            
         self.status = "executing"
@@ -244,7 +244,7 @@ class LittleEatAction(LittleAction):
                 self.building.cleanCouverts -=1
             else:
                 print self.people.name, " ne peux pas manger a ",self.building.name
-                self.people.knowledge["eat"].seenBuilding(pos=self.pos, name=self.building.name, reliable=0)
+                self.people.knowledge["eat"].seenBuilding(pos=self.pos, reliable=0)
                 return False
                 
             #~ print self.people.name, " va manger a ",self.pos
@@ -262,7 +262,7 @@ class LittleEatAction(LittleAction):
 
                 #~ print "now ",self.building.meals, " meals at ", self.building.name
                 #~ print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
-                self.people.knowledge["eat"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
+                self.people.knowledge["eat"].seenBuilding(pos=self.pos, reliable=1)
                 return False
                 
         return True
@@ -358,7 +358,7 @@ class LittleWorkAction(LittleAction):
                     if self.building.workTasks == 0:
                         self.building.finish()
             
-                self.people.knowledge["work"].seenBuilding(pos=self.pos, name=self.building.name, reliable=1)
+                self.people.knowledge["work"].seenBuilding(pos=self.pos,reliable=1)
                 return False
                 
         return True

@@ -40,14 +40,14 @@ if __name__ == '__main__':
         
         for i in range(0, 5):
             p = LittlePeople()
-            p.knowledge["sleep"].seenBuilding(building=bb)
-            p.knowledge["eat"].seenBuilding(building=b)
+            #~ p.knowledge["sleep"].seenBuilding(building=bb)
+            #~ p.knowledge["eat"].seenBuilding(building=b)
             print p.name
             allPeople.append(p)
 
-        #~ for p in allPeople:
-            #~ p.knowledge["sleep"].seenBuilding(building=bb)
-            #~ p.knowledge["eat"].seenBuilding(building=b)            
+        for p in allPeople:
+            p.knowledge["sleep"].seenBuilding(building=bb)
+            p.knowledge["eat"].seenBuilding(building=b)            
 
         b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
         b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")

@@ -172,8 +172,8 @@ def randomHotelName(owner=""):
     else:
         owner = owner.split(" ")[0]
         
-    names = [["jardin", "delice", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel", "matelas", "berceau", "drap", "couffin", "silence"],
-                    ["escapade", "escale", "pause", "auberge", "auberge de jeunesse", "couette", "plume", "hotellerie"]]
+    names = [["jardin", "delice", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel", "matelas", "berceau", "drap", "couffin", "silence", "plumard"],
+                    ["escapade", "escale", "pause", "auberge", "auberge de jeunesse", "couette", "plume", "hotellerie", "berceuse"]]
                     
     namesOwner = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le jeune"]
     au = ["Au ", "A la ", "A l'"]
@@ -224,14 +224,14 @@ def randomHotelName(owner=""):
         adj["magique"] = ""
         adj["enchante"] = "enchantee"
         adj["lointain"] = "lointaine"
-    
+        adj["bienheureux"] = "bienheureuse"
         aa = random.choice(adj.keys())
         if adj[aa] != "" and (nameGenre==1 or nameGenre==3) :
             aa = adj[aa]
         finalName += " "+aa
     elif case == "du":
         toadd = ["des lutins", "des familles", "de chez nous", "d'antan", "du printemps",
-        "des amis", "du port", "de la gare", "du centre", "des reves", "du bon Dieu"]
+        "des amis", "du port", "de la gare", "du centre", "des reves", "du bon Dieu", "de Morphee"]
         aa = random.choice(toadd)
         finalName += " "+aa
         

@@ -90,10 +90,11 @@ class LittlePeople:
         
         if self.action is not None:
             if not self.action.execute():
-                if self.action.type is not "move" and self.action.type is not "do nothing" :
+                if self.action.type != "move" and self.action.type != "do nothing" :
                     if self.action.remainingTime <= 0:
                         #don't add if you could not eat...
-                        print self.name," remember action ", self.action.type, " price ", self.action.price
+
+                        print self.name," remember action #"+self.action.type+"# price ", self.action.price
                         self.habits.addAction(self.action)
                 self.action = None
             return
@@ -210,8 +211,10 @@ class LittlePeople:
         knowledgeType = random.choice(self.knowledge.values())
         #~ print "tell info about ",knowledgeType.type
         b = knowledgeType.getLastSeen()
+        
         if b is not None:
-            print self.name," : Hey, ",p.name, " tu connais ",b.name, " ?"
+            bb = buildingImIn(b.pos)
+            print self.name," : Hey, ",p.name, " tu connais ",bb.name, " ?"
             print self.name," : C'est un super ",knowledgeType.type, " en ",b.pos
             #~ print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
             p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
