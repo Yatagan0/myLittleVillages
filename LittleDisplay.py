@@ -32,15 +32,18 @@ allImages["default"] =  np.zeros((toDisplayHeight ,toDisplayWidth,3), np.uint8)
 
 
 
-def addInAllImages(name, path):
+def addInAllImages(name, path, ratio=1.):
     img = cv2.imread(path)
     #~ print img
-    allImages[name] = np.zeros((toDisplayHeight,toDisplayWidth,3), np.uint8)
+    allImages[name] = np.zeros((ratio*toDisplayHeight,ratio*toDisplayWidth,3), np.uint8)
     
     cv2.cv.Resize(cv2.cv.fromarray(img), cv2.cv.fromarray(allImages[name] )) 
 
-addInAllImages("people", "img/people.jpg")
+addInAllImages("people", "img/people.jpg", ratio=0.5)
 addInAllImages("building", "img/building.jpg")
+addInAllImages("field", "img/field.jpg")
+addInAllImages("hotel", "img/hotel.jpg")
+addInAllImages("restaurant", "img/restaurant.jpg")
  
 class displayTree:
     def __init__(self, image="default"):
@@ -98,12 +101,18 @@ DT = displayTree()
 DT_people = displayTree("people")
 DT.addChild("people", DT_people)
 DT_building = displayTree("building")
+DT_field = displayTree("field")
+DT_building.addChild("field", DT_field)
+DT_hotel = displayTree("hotel")
+DT_building.addChild("hotel", DT_hotel)
+DT_restaurant = displayTree("restaurant")
+DT_building.addChild("restaurant", DT_restaurant)
 DT.addChild("building", DT_building)
     
 def display(people, buildings):
     clear()
     for b in buildings:
-        DT.display("building", b.pos)
+        DT.display("building-"+b.type, b.pos)
     for pp in people:
         DT.display("people", pp.pos)
     cv2.imshow('LittleDispay',bg)
