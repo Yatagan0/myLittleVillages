@@ -29,7 +29,11 @@ class WorkSlot:
             self.objects.append(["bed", "clean"])
         
     def getPossibleActions(self):
-        return []
+        actions = []
+        for o in self.objects:
+            if o[0] == "bed" and o[1] == "clean":
+                actions.append(LittleSleepAction( people=None,startHour=[0, 0], pos=self.building.pos, price=1))
+        return actions
         
     def read(self, root):
         self.types = root.attrib["types"].split("-")
