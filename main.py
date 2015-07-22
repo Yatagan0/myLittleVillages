@@ -13,8 +13,8 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage =False
-    DO_DISPLAY =True
- 
+    DO_DISPLAY =False
+    
     allPeople = []
     path = "village.xml"
     
@@ -59,7 +59,6 @@ if __name__ == '__main__':
         tree =  ET.parse(path)
         root = tree.getroot()
         for child in root:
-            print "MAIN ",child.tag
             if (child.tag == "time"):
                 utils.globalTime.read(child)
             elif (child.tag == "people"):

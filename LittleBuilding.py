@@ -21,10 +21,12 @@ class WorkSlot:
     def __init__(self, root=None, types=[], building=None):
         
         self.building = building
+        self.objects = []
         if root is not None:
             self.read(root)
         else:
             self.types = types
+            self.objects.append(["bed", "clean"])
         
     def getPossibleActions(self):
         return []
@@ -33,20 +35,26 @@ class WorkSlot:
         self.types = root.attrib["types"].split("-")
         if self.types[0] == '':
             self.types = []
-        print self.types
+        #~ print self.types
         
-        #~ self.types = [self.types[0]]
+        for child in root:
+            if child.tag == "object":
+                self.objects.append([child.attrib["name"], child.attrib["state"]])
         
     def write(self, root):
         elem =  ET.SubElement(root, 'workslot')
-        print self.types
+        #~ print self.types
         s = ""
         for t in self.types:
             s+=t+"-"
         if len(s) > 0:
             s = s[:-1]
-        print s
+        #~ print s
         elem.set("types", s)
+        for o in self.objects:
+            sub =  ET.SubElement(elem, 'object')
+            sub.set("name", o[0])
+            sub.set("state", o[1])
 
 class LittleBuilding:
     def __init__(self, root=None, pos = [0., 0.], type="building", owner=None):
@@ -95,7 +103,7 @@ class LittleBuilding:
         self.type = root.attrib["type"]
         self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
         self.name = root.attrib["name"]
-        print self.name
+        #~ print self.name
         self.money = float(root.attrib["money"])
         from LittlePeople import peopleNamed
         self.owner = peopleNamed(root.attrib["owner"])
@@ -104,7 +112,7 @@ class LittleBuilding:
             
         for child in root:
             if child.tag == "workslot":
-                print "append workslot"
+                #~ print "append workslot"
                 self.workSlots.append(WorkSlot(root=child, building=self))
         
     def findFreePos(self, pos, size):
@@ -116,8 +124,10 @@ class LittleBuilding:
         return self.findFreePos(pos, size+1)
         
     def getPossibleActions(self, isOwner=False):
-        #~ print "#### nothing in ### ", self.name
-        return []
+        actions = []
+        for s in self.workSlots:
+            actions = actions + s.getPossibleActions()
+        return actions
  
 class LittleRestaurant(LittleBuilding):
     def __init__(self, root=None, owner=None, pos=None):
@@ -133,7 +143,7 @@ class LittleRestaurant(LittleBuilding):
             
     def init(self):
         if self.owner is not None:
-            print "OWNER ", self.owner
+            #~ print "OWNER ", self.owner
             if isinstance(self.owner, basestring):
                 from LittlePeople import peopleNamed
                 self.owner = peopleNamed(self.owner)
@@ -432,7 +442,7 @@ class LittleBuildingList:
             
             
 def readBuilding(root):
-    print "readBuilding ", root.attrib["class"]
+    #~ print "readBuilding ", root.attrib["class"]
     if root.attrib["class"] == "LittleRestaurant":
         b = LittleRestaurant(root=root)
     elif root.attrib["class"] == "LittleHotel":
