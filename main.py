@@ -44,7 +44,7 @@ if __name__ == '__main__':
             #~ p.knowledge["eat"].seenBuilding(building=b)
             print p.name
             allPeople.append(p)
-            LittleConstructingBuilding( pos = [0., 0.], owner=p, futureType="LittleField")
+            #~ LittleConstructingBuilding( pos = [0., 0.], owner=p, futureType="LittleField")
 
         for p in allPeople:
             p.knowledge["sleep"].seenBuilding(building=bb)
@@ -59,6 +59,7 @@ if __name__ == '__main__':
         tree =  ET.parse(path)
         root = tree.getroot()
         for child in root:
+            print "MAIN ",child.tag
             if (child.tag == "time"):
                 utils.globalTime.read(child)
             elif (child.tag == "people"):

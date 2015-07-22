@@ -224,8 +224,8 @@ class LittlePeople:
         samepos = self.samePos()
         candiscuss = []
         for p in samepos:
-            #~ if p.action is None or p.action.type == "do nothing" or p.action.type == "eat":
-            candiscuss.append(p)
+            if p.action is None or p.action.type != "sleep":
+                candiscuss.append(p)
                 #~ print self.name, " can discuss with ",p.name
         return candiscuss
         

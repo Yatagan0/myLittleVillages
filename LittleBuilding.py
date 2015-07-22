@@ -17,8 +17,42 @@ def buildingNamed(name):
 
 from LittleAction import *
 
+class WorkSlot:
+    def __init__(self, root=None, types=[], building=None):
+        
+        self.building = building
+        if root is not None:
+            self.read(root)
+        else:
+            self.types = types
+        
+    def getPossibleActions(self):
+        return []
+        
+    def read(self, root):
+        self.types = root.attrib["types"].split("-")
+        if self.types[0] == '':
+            self.types = []
+        print self.types
+        
+        #~ self.types = [self.types[0]]
+        
+    def write(self, root):
+        elem =  ET.SubElement(root, 'workslot')
+        print self.types
+        s = ""
+        for t in self.types:
+            s+=t+"-"
+        if len(s) > 0:
+            s = s[:-1]
+        print s
+        elem.set("types", s)
+
 class LittleBuilding:
     def __init__(self, root=None, pos = [0., 0.], type="building", owner=None):
+
+        self.possibleActions = []
+        self.workSlots=[]
 
         if root is not None:
             self.read(root)
@@ -30,7 +64,9 @@ class LittleBuilding:
             self.owner = owner
             self.money=0
             
-        self.possibleActions = []
+            print "new work slots"
+            for i in range(0, 3):
+                self.workSlots.append(WorkSlot(types=["test", "building"], building=self))
         
         global allBuildings
         allBuildings.append(self)
@@ -49,6 +85,9 @@ class LittleBuilding:
             elem.set("owner", self.owner)
         else:
             elem.set("owner", self.owner.name)
+            
+        for s in self.workSlots:
+            s.write(elem)
         elem.set("class", "LittleBuilding")
         return elem
 
@@ -56,11 +95,17 @@ class LittleBuilding:
         self.type = root.attrib["type"]
         self.pos = [float(root.attrib["posX"]), float(root.attrib["posY"])]
         self.name = root.attrib["name"]
+        print self.name
         self.money = float(root.attrib["money"])
         from LittlePeople import peopleNamed
         self.owner = peopleNamed(root.attrib["owner"])
         if self.owner is None and root.attrib["owner"] is not "" :
             self.owner = root.attrib["owner"]
+            
+        for child in root:
+            if child.tag == "workslot":
+                print "append workslot"
+                self.workSlots.append(WorkSlot(root=child, building=self))
         
     def findFreePos(self, pos, size):
         r0 = random.randint(pos[0]-size, pos[0]+size)
@@ -79,7 +124,8 @@ class LittleRestaurant(LittleBuilding):
         LittleBuilding.__init__(self, root=root, pos=pos, type="restaurant", owner=owner)
         
         if root is not None:
-            self.read(root)
+            #~ self.read(root)
+            pass
         else:
             self.owner = owner
             self.init()
@@ -129,7 +175,8 @@ class LittleHotel(LittleBuilding):
         LittleBuilding.__init__(self, root=root, pos=pos, type="hotel", owner=owner)
         
         if root is not None:
-            self.read(root)
+            #~ self.read(root)
+            pass
         else:
             self.owner = owner
             self.init()
@@ -154,6 +201,7 @@ class LittleHotel(LittleBuilding):
         elem.set("cleanbeds", str(self.cleanBeds))
         
     def read(self, root):
+        print "read hotel"
         LittleBuilding.read(self, root)
         self.beds= int(root.attrib["beds"])
         self.cleanBeds = int(root.attrib["cleanbeds"])
@@ -171,7 +219,8 @@ class LittleField(LittleBuilding):
         LittleBuilding.__init__(self, root=root, pos=pos, type="field", owner=owner)
         
         if root is not None:
-            self.read(root)
+            #~ self.read(root)
+            pass
         else:
             self.owner = owner
             self.init()
@@ -225,7 +274,8 @@ class LittleConstructingBuilding(LittleBuilding):
         LittleBuilding.__init__(self, root=root, pos=pos, type="constructing", owner=owner)
         
         if root is not None:
-            self.read(root)
+            pass
+            #~ self.read(root)
         else:
         
             self.name = "constructing"
@@ -382,6 +432,7 @@ class LittleBuildingList:
             
             
 def readBuilding(root):
+    print "readBuilding ", root.attrib["class"]
     if root.attrib["class"] == "LittleRestaurant":
         b = LittleRestaurant(root=root)
     elif root.attrib["class"] == "LittleHotel":
