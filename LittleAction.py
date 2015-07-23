@@ -1,7 +1,7 @@
 import utils, random
 import xml.etree.ElementTree as ET
 
-
+from LittleNewAction import *
 
 class LittleAction:
     def __init__(self, root=None, people=None, type="do nothing", startHour=None, pos=None, price=0., workslot=None):
@@ -475,6 +475,9 @@ def readAction(root, people):
         a = LittleMoveAction(root=root, people=people)
     elif root.attrib["class"] == "LittleWorkAction":
         a = LittleWorkAction(root=root, people=people)
+    elif root.attrib["class"] == "LittleNewAction":
+        a = LittleNewAction(root=root) 
+        a.people = people
     else:
         a = LittleAction(root=root, people=people)
     return a

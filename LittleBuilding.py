@@ -16,6 +16,7 @@ def buildingNamed(name):
             return b
 
 from LittleAction import *
+from LittleNewAction import *
 
 class WorkSlot:
     def __init__(self, root=None, types=[], building=None, name=""):
@@ -33,7 +34,7 @@ class WorkSlot:
         actions = []
         for o in self.objects:
             if o[0] == "bed" and o[1] == "clean":
-                actions.append(LittleSleepAction( people=None,startHour=[0, 0], pos=self.building.pos, price=1, workslot = self))
+                actions.append(LittleNewAction(  price=1, workslot = self))
         return actions
         
     def read(self, root):
