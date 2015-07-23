@@ -21,8 +21,8 @@ if __name__ == '__main__':
     if newVillage:
 
         mayor = LittlePeople()
-        bb = LittleHotel( pos=[0.,0.],owner = mayor)
-        b = LittleRestaurant( pos=[0.,0.], owner = mayor)
+        bb = LittleBuilding(pos=[0.,0.])#LittleHotel( pos=[0.,0.],owner = mayor)
+        b =LittleBuilding(pos=[0.,0.])# LittleRestaurant( pos=[0.,0.], owner = mayor)
         print mayor.name
         allPeople.append(mayor)
         

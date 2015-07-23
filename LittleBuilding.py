@@ -18,7 +18,7 @@ def buildingNamed(name):
 from LittleAction import *
 
 class WorkSlot:
-    def __init__(self, root=None, types=[], building=None):
+    def __init__(self, root=None, types=[], building=None, name=""):
         
         self.building = building
         self.objects = []
@@ -27,12 +27,13 @@ class WorkSlot:
         else:
             self.types = types
             self.objects.append(["bed", "clean"])
+            self.name = name
         
     def getPossibleActions(self):
         actions = []
         for o in self.objects:
             if o[0] == "bed" and o[1] == "clean":
-                actions.append(LittleSleepAction( people=None,startHour=[0, 0], pos=self.building.pos, price=1))
+                actions.append(LittleSleepAction( people=None,startHour=[0, 0], pos=self.building.pos, price=1, workslot = self))
         return actions
         
     def read(self, root):
@@ -40,7 +41,7 @@ class WorkSlot:
         if self.types[0] == '':
             self.types = []
         #~ print self.types
-        
+        self.name = root.attrib["name"]
         for child in root:
             if child.tag == "object":
                 self.objects.append([child.attrib["name"], child.attrib["state"]])
@@ -55,10 +56,18 @@ class WorkSlot:
             s = s[:-1]
         #~ print s
         elem.set("types", s)
+        elem.set("name", self.name)
         for o in self.objects:
             sub =  ET.SubElement(elem, 'object')
             sub.set("name", o[0])
             sub.set("state", o[1])
+
+    def hasObject(self, name, state=""):
+        for o in self.objects:
+            if o[0] == name:
+                if state == "" or state==o[1]:
+                    return True
+        return False
 
 class LittleBuilding:
     def __init__(self, root=None, pos = [0., 0.], type="building", owner=None):
@@ -78,7 +87,7 @@ class LittleBuilding:
             
             print "new work slots"
             for i in range(0, 3):
-                self.workSlots.append(WorkSlot(types=["test", "building"], building=self))
+                self.workSlots.append(WorkSlot(types=["test", "building"], building=self, name = "slot"+str(i)))
         
         global allBuildings
         allBuildings.append(self)
