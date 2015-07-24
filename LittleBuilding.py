@@ -5,6 +5,8 @@ import xml.etree.ElementTree as ET
 allBuildings = []
 
 def buildingImIn(pos):
+    if pos is None:
+        return None
     for b in allBuildings:
         if pos[0] == b.pos[0] and pos[1] == b.pos[1] :
             return b
@@ -14,6 +16,14 @@ def buildingNamed(name):
     for b in allBuildings:
         if b.name == name:
             return b
+            
+def findWorkslot(pos, name):
+    b = buildingImIn(pos)
+    if b is not None:
+        for s in b.workSlots:
+            if s.name == name:
+                return s
+    return None
 
 from LittleAction import *
 from LittleNewAction import *
