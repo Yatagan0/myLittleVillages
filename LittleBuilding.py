@@ -79,6 +79,13 @@ class WorkSlot:
                 if state == "" or state==o[1]:
                     return True
         return False
+        
+    def objectStatus(self, name, prev, new):
+        for o in self.objects:
+            if o[0] == name:
+                if prev == "" or prev==o[1]:
+                    o[1] = new
+                    return
 
 class LittleBuilding:
     def __init__(self, root=None, pos = [0., 0.], type="building", owner=None):

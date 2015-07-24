@@ -124,43 +124,43 @@ class LittlePeople:
             return
         
         
-        if self.tired > 20*60 and random.randint(0, 20) != 0:
+        #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
             #~ print "must sleep"
-            a =  LittleSleepAction( people=self,startHour=[utils.globalTime.hour, utils.globalTime.minute])
-            self.moveToAction(a)
-            return
+            #~ a =  LittleSleepAction( people=self,startHour=[utils.globalTime.hour, utils.globalTime.minute])
+            #~ self.moveToAction(a)
+            #~ return
         
-        if self.hungry > 10*60 and random.randint(0, 20) != 0:
+        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
             #~ print "must eat"
-            a = LittleEatAction( people=self,startHour=[utils.globalTime.hour, utils.globalTime.minute]) 
-            self.moveToAction(a)
-            return
+            #~ a = LittleEatAction( people=self,startHour=[utils.globalTime.hour, utils.globalTime.minute]) 
+            #~ self.moveToAction(a)
+            #~ return
         
 
         
 
         
-        myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
+        myHabits = []#self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
         #~ myHabits = [LittleAction(self, "do nothing", [time.hour, time.minute])]
         
-        r = random.randint(0, 9)
-        if r < 9:
-            a = random.choice(myHabits)
+        #~ r = random.randint(0, 9)
+        #~ if r < 9:
+            #~ a = random.choice(myHabits)
             
-            if self.canDoAction(a):
-                possibleActions.append(a)
-                #~ self.action = a.copy()
-                #~ return
+            #~ if self.canDoAction(a):
+                #~ possibleActions.append(a)
+     
                 
         #~ if random.randint(0, 1)==0:
         #~ dest = [0., 0.]
         #~ dest[0] = self.pos[0] + random.randint(-1, 1)
         #~ dest[1] = self.pos[1] + random.randint(-1, 1)
-        a= LittleMoveAction(people=self,  startHour=[utils.globalTime.hour, utils.globalTime.minute])
-        possibleActions.append(a)
+        #~ a= LittleMoveAction(people=self,  startHour=[utils.globalTime.hour, utils.globalTime.minute])
+        #~ possibleActions.append(a)
             #~ return
 
-        a = LittleAction(people=self, type="do nothing", startHour=[utils.globalTime.hour, utils.globalTime.minute])
+        a = LittleNewAction()
+        #~ a = LittleAction(people=self, type="do nothing", startHour=[utils.globalTime.hour, utils.globalTime.minute])
         possibleActions.append(a)
         
         a = random.choice(possibleActions)
@@ -173,17 +173,18 @@ class LittlePeople:
 
 
     def moveToAction(self, a):
-        self.shortTermGoal = a.type
-        if not a.hasLocation():
-            a.getLocation()
-        a =  LittleMoveAction(people=self,  startHour=[utils.globalTime.hour, utils.globalTime.minute], pos=a.pos)
+        #~ self.shortTermGoal = a.type
+        #~ if not a.hasLocation():
+            #~ a.getLocation()
+        #~ a =  LittleMoveAction(people=self,  startHour=[utils.globalTime.hour, utils.globalTime.minute], pos=a.pos)
         #~ print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
         self.startAction(a)
 
     def startAction(self, a):
-        a.people = self
-        if not a.hasLocation():
-            a.getLocation()
+        #~ a.people = self
+        #~ if not a.hasLocation():
+            #~ a.getLocation()
+        a.startExecution(self)
         self.action = a
         #~ print self.name , " will ", a.type, " for ", a.price
 

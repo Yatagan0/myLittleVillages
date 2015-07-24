@@ -394,16 +394,12 @@ class LittleOldActions():
             
         for i in range(0,9):
             day = []
-            #~ day.append(LittleAction("sleep", [6, 0]))
-            day.append(LittleEatAction( people=people,startHour=[7, 0]))
-            #~ day.append(LittleAction(people,"do nothing", [8, 0]))
-            #~ day.append(LittleAction(people,"do nothing", [11, 0]))
-            day.append(LittleEatAction(people=people,startHour= [12, 0]))
-            #~ day.append(LittleAction(people,"do nothing", [13, 0]))
-            #~ day.append(LittleAction(people,"do nothing", [19, 0]))
-            day.append(LittleEatAction( people=people,startHour=[20, 0]))
-            #~ day.append(LittleAction(people,"do nothing", [21, 0]))
-            day.append(LittleSleepAction( people=people,startHour=[22, 0]))
+            #~ day.append(LittleEatAction( people=people,startHour=[7, 0]))
+            #~ day.append(LittleEatAction(people=people,startHour= [12, 0]))
+            #~ day.append(LittleEatAction( people=people,startHour=[20, 0]))
+            a = LittleNewAction( type="sleep")
+            a.startHour = [21, 0]
+            day.append(a)
             self.days.append(day)
                 
     def __str__(self):
