@@ -397,6 +397,15 @@ class LittleOldActions():
             #~ day.append(LittleEatAction( people=people,startHour=[7, 0]))
             #~ day.append(LittleEatAction(people=people,startHour= [12, 0]))
             #~ day.append(LittleEatAction( people=people,startHour=[20, 0]))
+            a = LittleNewAction( type="eat")
+            a.startHour = [7, 0]
+            day.append(a)
+            a = LittleNewAction( type="eat")
+            a.startHour = [12, 0]
+            day.append(a)
+            a = LittleNewAction( type="eat")
+            a.startHour = [20, 0]
+            day.append(a)
             a = LittleNewAction( type="sleep")
             a.startHour = [21, 0]
             day.append(a)

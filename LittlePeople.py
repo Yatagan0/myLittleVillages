@@ -90,6 +90,7 @@ class LittlePeople:
         
         if self.action is not None:
             if not self.action.execute():
+                print self.name," action finished"
                 if self.action.type != "move" and self.action.type != "do nothing" :
                     if self.action.remainingTime <= 0:
                         #don't add if you could not eat...
@@ -116,12 +117,12 @@ class LittlePeople:
                     possibleActions.append(a)
                     if a.type == self.shortTermGoal:
                         preferredActions.append(a)
-        self.shortTermGoal = ""
-        if len(preferredActions) > 0:
+        #~ self.shortTermGoal = ""
+        #~ if len(preferredActions) > 0:
             #~ print self.name, " want to ", preferredActions[0].type," here"
             
-            self.startAction(random.choice(preferredActions).copy())
-            return
+            #~ self.startAction(random.choice(preferredActions).copy())
+            #~ return
         
         
         #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
@@ -140,7 +141,11 @@ class LittlePeople:
         
 
         
-        myHabits = []#self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
+        myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
+        for a in myHabits:
+            if self.canDoAction(a):
+                possibleActions.append(a)        
+        #~ possibleActions = possibleActions + myHabits
         #~ myHabits = [LittleAction(self, "do nothing", [time.hour, time.minute])]
         
         #~ r = random.randint(0, 9)
@@ -159,13 +164,13 @@ class LittlePeople:
         #~ possibleActions.append(a)
             #~ return
 
-        a = LittleNewAction()
+        a = LittleNewAction(type="do nothing")
         #~ a = LittleAction(people=self, type="do nothing", startHour=[utils.globalTime.hour, utils.globalTime.minute])
         possibleActions.append(a)
         
         a = random.choice(possibleActions)
         #~ print "a.type ", a.type, " price ", a.price
-        if a.type is not "move" and a.type is not "do nothing":
+        if a.pos is None or ( a.type is not "move" and a.type is not "do nothing"):
             self.moveToAction(a)
             return
 
@@ -173,9 +178,9 @@ class LittlePeople:
 
 
     def moveToAction(self, a):
-        #~ self.shortTermGoal = a.type
-        #~ if not a.hasLocation():
-            #~ a.getLocation()
+        self.shortTermGoal = a.type
+        if not a.hasLocation():
+            a.getLocation(self)
         #~ a =  LittleMoveAction(people=self,  startHour=[utils.globalTime.hour, utils.globalTime.minute], pos=a.pos)
         #~ print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
         self.startAction(a)

@@ -55,13 +55,24 @@ class LittleNewAction:
             elem.set("posY", str(self.workslot.building.pos[1]))
         return elem
        
+    def canExecute(self):
+        if self.type not in allRecipes.keys():
+            print "unknown recipe"
+        
+       
     def startExecution(self, people):
         self.people = people
         t = utils.globalTime
         self.startHour = [t.hour, t.minute]
         self.status = "executing"
-        if not self.hasLocation():
-            self.getLocation()
+
+        if self.type not in allRecipes.keys():
+            self.remainingTime = 60
+            print people.name, " fait un truc"
+            
+        else:
+            self.remainingTime = random.randint(allRecipes[self.type].timeMin, allRecipes[self.type].timeMax)
+            print people.name, " ", allRecipes[self.type].description, " pendant ",self.remainingTime 
         
      
     def endExecution(self):
@@ -94,9 +105,9 @@ class LittleNewAction:
     def hasLocation(self):
         return self.pos != None
         
-    def getLocation(self):
-        #~ self.pos = [0., 0.]
-        self.pos = [self.people.pos[0], self.people.pos[1]]
+    def getLocation(self, people):
+        if self.pos is None:
+            self.pos = [people.pos[0], people.pos[1]]
         if isinstance(self.workslot, basestring):
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)

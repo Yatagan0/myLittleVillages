@@ -44,7 +44,7 @@ class WorkSlot:
         actions = []
         for o in self.objects:
             if o[0] == "bed" and o[1] == "clean":
-                actions.append(LittleNewAction(  price=1, workslot = self))
+                actions.append(LittleNewAction(  type="sleep",price=1, workslot = self))
         return actions
         
     def read(self, root):
@@ -201,14 +201,14 @@ class LittleRestaurant(LittleBuilding):
         self.cleanCouverts = int(root.attrib["cleancouverts"])
         
                 
-    def getPossibleActions(self, isOwner=False):
-        actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos, price=4)]
-        for i in range(self.couverts - self.meals):
-            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook", price=-3))
-        for i in range(self.couverts - self.cleanCouverts):
-            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez", type="dishes", price = -1))
+    #~ def getPossibleActions(self, isOwner=False):
+        #~ actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos, price=4)]
+        #~ for i in range(self.couverts - self.meals):
+            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook", price=-3))
+        #~ for i in range(self.couverts - self.cleanCouverts):
+            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez", type="dishes", price = -1))
         
-        return actions
+        #~ return actions
     
 
 class LittleHotel(LittleBuilding):
@@ -248,12 +248,12 @@ class LittleHotel(LittleBuilding):
         self.cleanBeds = int(root.attrib["cleanbeds"])
         
                 
-    def getPossibleActions(self, isOwner=False):
-        actions = [LittleSleepAction( people=None,startHour=[0, 0], pos=self.pos, price=1)]
-        for i in range(self.beds - self.cleanBeds):
-            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="nettoie une chambre chez", type="cleanbed", price = -1))
+    #~ def getPossibleActions(self, isOwner=False):
+        #~ actions = [LittleSleepAction( people=None,startHour=[0, 0], pos=self.pos, price=1)]
+        #~ for i in range(self.beds - self.cleanBeds):
+            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="nettoie une chambre chez", type="cleanbed", price = -1))
         
-        return actions
+        #~ return actions
         
 class LittleField(LittleBuilding):
     def __init__(self, root=None, owner=None, pos=None):
@@ -304,10 +304,10 @@ class LittleField(LittleBuilding):
 
         
                 
-    def getPossibleActions(self, isOwner=False):
-        actions = []
+    #~ def getPossibleActions(self, isOwner=False):
+        #~ actions = []
                
-        return actions
+        #~ return actions
         
 class LittleConstructingBuilding(LittleBuilding):
     def __init__(self, root=None, pos = [0., 0.], owner=None, futureType=None):
@@ -355,12 +355,12 @@ class LittleConstructingBuilding(LittleBuilding):
         #~ self.init()
         print "building in ",self.pos," is now finished ! Its name is ",self.name,"!"
         
-    def getPossibleActions(self, isOwner=False):
-        actions = []
-        for i in range(min(self.numWorkers, self.workTasks)):
-            actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="construit", type="construct", price = -2))
+    #~ def getPossibleActions(self, isOwner=False):
+        #~ actions = []
+        #~ for i in range(min(self.numWorkers, self.workTasks)):
+            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="construit", type="construct", price = -2))
         
-        return actions
+        #~ return actions
        
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.]):
