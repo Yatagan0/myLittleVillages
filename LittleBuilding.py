@@ -179,9 +179,9 @@ class LittleRestaurant(LittleBuilding):
                 from LittlePeople import peopleNamed
                 self.owner = peopleNamed(self.owner)
             
-            self.name = utils.randomRestaurantName(self.owner.name)
+            self.name = utils.randomBuidlingName("restaurant", self.owner.name)
         else:
-            self.name = utils.randomRestaurantName()
+            self.name = utils.randomRestaurantName("restaurant")
             
         self.couverts = 3
         self.meals = 0
@@ -228,9 +228,9 @@ class LittleHotel(LittleBuilding):
             if isinstance(self.owner, basestring):
                 from LittlePeople import peopleNamed
                 self.owner = peopleNamed(self.owner)
-            self.name = utils.randomHotelName(self.owner.name)
+            self.name = utils.randomBuildingName("hotel",self.owner.name)
         else:
-            self.name = utils.randomHotelName()
+            self.name = utils.randomHotelName("hotel")
             
         self.beds = 6
         self.cleanBeds = self.beds
