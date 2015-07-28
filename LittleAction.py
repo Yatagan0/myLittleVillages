@@ -1,104 +1,195 @@
 import utils, random
 import xml.etree.ElementTree as ET
 
-from LittleNewAction import *
+#~ from LittleNewAction import *
+from LittleRecipe import *
 
 class LittleAction:
-    def __init__(self, root=None, people=None, type="do nothing", startHour=None, pos=None, price=0., workslot=None):
-        self.people = people 
-        self.pos = pos
-        self.building = None
+    
+    def __init__(self, root=None, workslot = None, type="do nothing", price=0.):
         self.workslot = workslot
+        self.type = type
+        self.price = price
+        self.people = None
+        self.pos = None
+        self.startHour = None#[0., 0.]
+        self.remainingTime = 1
         if root is not None:
             self.read(root)
-            return
+        #~ else:
+            #~ self.remainingTime = 30
+            #~ self.status= "not started"
+            
+        if self.type not in allRecipes.keys():
+            print "unknown recipe"
+    
+    
+    #~ def __init__(self, root=None, people=None, type="do nothing", startHour=None, pos=None, price=0., workslot=None):
+        #~ self.people = people 
+        #~ self.pos = pos
+        #~ self.building = None
+        #~ self.workslot = workslot
+        #~ if root is not None:
+            #~ self.read(root)
+            #~ return
         
 
-        self.type = type
-        self.startHour = startHour
-        self.price=price
+        #~ self.type = type
+        #~ self.startHour = startHour
+        #~ self.price=price
  
-        self.init()
+        #~ self.init()
         
     def __str__(self):
         s = self.type+" starting "+str(self.startHour[0])+":"+str(self.startHour[1])+"\n"
         return s
         
-    def read(self, root):
-        self.type = root.attrib["type"]
-        self.startHour = [int(root.attrib["startHour"]),int(root.attrib["startMinute"]) ]
-        self.status = root.attrib["status"]
-        self.remainingTime = int(root.attrib["remainingTime"])
-        self.price = float(root.attrib["price"])
-        if "posX" in root.attrib.keys():
-            #~ print "has pos"
-            self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
-            from LittleBuilding import buildingImIn
-            self.building = buildingImIn(self.pos)
-        if "workslotName" in root.attrib.keys():
-            self.workslot = root.attrib["workslotName"]
-            if self.building is not None:
-                for s in self.building.workSlots:
-                    if s.name == root.attrib["workslotName"]:
-                        self.workslot = s
+    #~ def read(self, root):
+        #~ self.type = root.attrib["type"]
+        #~ self.startHour = [int(root.attrib["startHour"]),int(root.attrib["startMinute"]) ]
+        #~ self.status = root.attrib["status"]
+        #~ self.remainingTime = int(root.attrib["remainingTime"])
+        #~ self.price = float(root.attrib["price"])
+        #~ if "posX" in root.attrib.keys():
+            #~ self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+            #~ from LittleBuilding import buildingImIn
+            #~ self.building = buildingImIn(self.pos)
+        #~ if "workslotName" in root.attrib.keys():
+            #~ self.workslot = root.attrib["workslotName"]
+            #~ if self.building is not None:
+                #~ for s in self.building.workSlots:
+                    #~ if s.name == root.attrib["workslotName"]:
+                        #~ self.workslot = s
                 
         
             
             
         
+    #~ def write(self, root):
+        #~ elem =  ET.SubElement(root, 'action')
+        #~ elem.set("class", "LittleAction")
+        #~ elem.set("type", self.type)
+        #~ elem.set("startHour", str(self.startHour[0]))
+        #~ elem.set("startMinute", str(self.startHour[1]))
+        #~ elem.set("status", self.status)
+        #~ elem.set("remainingTime", str(self.remainingTime))
+        #~ elem.set("price", str(self.price))
+        #~ if self.pos is not None:
+            #~ elem.set("posX", str(self.pos[0]))
+            #~ elem.set("posY", str(self.pos[1]))
+        #~ if self.workslot is not None:
+            #~ elem.set("workslotName", self.workslot.name);
+        #~ return elem
+ 
+ 
+    def read(self, root):
+        self.type = root.attrib["type"]
+        if "startHour" in root.attrib.keys():
+            self.startHour = [int(root.attrib["startHour"]),int(root.attrib["startMinute"]) ]
+        self.remainingTime = int(root.attrib["remainingTime"])
+        self.price = float(root.attrib["price"])
+
+        if "workslotName" in root.attrib.keys():
+            self.workslot = root.attrib["workslotName"]
+            self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
+            from LittleBuilding import findWorkslot
+            self.workslot = findWorkslot( self.pos, self.workslot)
+
+        
     def write(self, root):
         elem =  ET.SubElement(root, 'action')
-        elem.set("class", "LittleAction")
+        elem.set("class", "LittleNewAction")
         elem.set("type", self.type)
-        elem.set("startHour", str(self.startHour[0]))
-        elem.set("startMinute", str(self.startHour[1]))
-        elem.set("status", self.status)
+        if self.startHour is not None:
+            elem.set("startHour", str(self.startHour[0]))
+            elem.set("startMinute", str(self.startHour[1]))
         elem.set("remainingTime", str(self.remainingTime))
         elem.set("price", str(self.price))
-        if self.pos is not None:
-            elem.set("posX", str(self.pos[0]))
-            elem.set("posY", str(self.pos[1]))
         if self.workslot is not None:
             elem.set("workslotName", self.workslot.name);
+            elem.set("posX", str(self.workslot.building.pos[0]))
+            elem.set("posY", str(self.workslot.building.pos[1]))
         return elem
+
+    def canExecute(self):
+        if self.type not in allRecipes.keys():
+            print "unknown recipe"
+        #TO DO
+        return True
+       
+    def startExecution(self, people):
+        self.people = people
+        t = utils.globalTime
+        self.startHour = [t.hour, t.minute]
+        #~ self.status = "executing"
+
+        if self.type not in allRecipes.keys():
+            self.remainingTime = 60
+            print people.name, " fait un truc"
+            
+        else:
+            self.remainingTime = random.randint(allRecipes[self.type].timeMin, allRecipes[self.type].timeMax)
+            print people.name, " ", allRecipes[self.type].description, " pendant ",self.remainingTime 
         
+     
+    def endExecution(self):
+        if self.workslot is not None:
+            self.people.money -= self.price
+            self.workslot.building.money += self.price
+            print "has workslot"
+            #~ self.workslot.objectStatus("bed", "clean", "dirty")
+       
     def execute(self):
-        if self.status == "not started":
-            t = utils.globalTime
-            self.startHour = [t.hour, t.minute]
-        self.status = "executing"
         self.remainingTime -= 1
         if self.remainingTime <= 0:
-            if self.building is not None:
-                self.people.money -= self.price
-                self.building.money += self.price
             
+            self.endExecution()
             return False
             
         return True
+
+
         
-    def init(self):
-        #~ print "init"
-        self.status = "not started"
-        self.remainingTime = 59
+    #~ def execute(self):
+        #~ if self.status == "not started":
+            #~ t = utils.globalTime
+            #~ self.startHour = [t.hour, t.minute]
+        #~ self.status = "executing"
+        #~ self.remainingTime -= 1
+        #~ if self.remainingTime <= 0:
+            #~ if self.building is not None:
+                #~ self.people.money -= self.price
+                #~ self.building.money += self.price
+            
+            #~ return False
+            
+        #~ return True
+        
+    #~ def init(self):
+        #~ self.status = "not started"
+        #~ self.remainingTime = 59
     
-    def copy(self):
-        a = LittleAction(people=self.people, type=self.type, startHour=self.startHour, pos=self.pos, price=self.price)
-        return a
-        
     #~ def copy(self):
-        #~ print "copy"
-        #~ root = ET.Element('village')
-        #~ act = self.write(root)
-        #~ a = readAction(root=act, people=None)
+        #~ a = LittleAction(people=self.people, type=self.type, startHour=self.startHour, pos=self.pos, price=self.price)
         #~ return a
+        
+    def copy(self):
+        #~ print "copy"
+        root = ET.Element('village')
+        act = self.write(root)
+        a = readAction(root=act, people=None)
+        return a
         
     def hasLocation(self):
         return self.pos != None
         
-    def getLocation(self):
-        self.pos = [self.people.pos[0], self.people.pos[1]]
-        
+    def getLocation(self, people):
+        if self.pos is None:
+            self.pos = [people.pos[0], people.pos[1]]
+        if isinstance(self.workslot, basestring):
+            from LittleBuilding import findWorkslot
+            self.workslot = findWorkslot( self.pos, self.workslot)
+            
 class LittleMoveAction(LittleAction):
     def __init__(self,root=None,people=None, startHour=None,pos=None, price=0.):
         LittleAction.__init__(self, root,people,"move", startHour, pos, price)
@@ -404,16 +495,20 @@ class LittleOldActions():
             #~ day.append(LittleEatAction( people=people,startHour=[7, 0]))
             #~ day.append(LittleEatAction(people=people,startHour= [12, 0]))
             #~ day.append(LittleEatAction( people=people,startHour=[20, 0]))
-            a = LittleNewAction( type="eat")
-            a.startHour = [7, 0]
-            day.append(a)
-            a = LittleNewAction( type="eat")
-            a.startHour = [12, 0]
-            day.append(a)
-            a = LittleNewAction( type="eat")
-            a.startHour = [20, 0]
-            day.append(a)
-            a = LittleNewAction( type="sleep")
+            #~ a = LittleNewAction( type="eat")
+            #~ a.startHour = [7, 0]
+            #~ day.append(a)
+            #~ a = LittleNewAction( type="eat")
+            #~ a.startHour = [12, 0]
+            #~ day.append(a)
+            #~ a = LittleNewAction( type="eat")
+            #~ a.startHour = [20, 0]
+            #~ day.append(a)
+            #~ a = LittleNewAction( type="sleep")
+            #~ a.startHour = [21, 0]
+            #~ day.append(a)
+            
+            a = LittleAction( )
             a.startHour = [21, 0]
             day.append(a)
             self.days.append(day)
@@ -464,7 +559,7 @@ class LittleOldActions():
         return day[index-1]
         
     def addAction(self, a):
-        a.init()
+        #~ a.init()
         #~ t = utils.globalTime
         #~ a.startHour = [t.hour, t.minute]
         lasta = self.days[-1][-1]
@@ -480,16 +575,18 @@ class LittleOldActions():
 
 def readAction(root, people):
     if root.attrib["class"] == "LittleEatAction":
-        a = LittleEatAction(root=root, people=people)
+        a = LittleEatAction(root=root)
     elif root.attrib["class"] == "LittleSleepAction":
-        a = LittleSleepAction(root=root, people=people)
+        a = LittleSleepAction(root=root)
     elif root.attrib["class"] == "LittleMoveAction":
-        a = LittleMoveAction(root=root, people=people)
+        a = LittleMoveAction(root=root)
     elif root.attrib["class"] == "LittleWorkAction":
-        a = LittleWorkAction(root=root, people=people)
-    elif root.attrib["class"] == "LittleNewAction":
-        a = LittleNewAction(root=root) 
-        a.people = people
+        a = LittleWorkAction(root=root)
+    #~ elif root.attrib["class"] == "LittleNewAction":
+        #~ a = LittleNewAction(root=root) 
+        #~ a.people = people
     else:
-        a = LittleAction(root=root, people=people)
+        a = LittleAction(root=root)
+        
+    a.people = people
     return a

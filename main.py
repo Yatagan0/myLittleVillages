@@ -12,7 +12,7 @@ from xml.dom import minidom
 
 if __name__ == '__main__':
 
-    newVillage =True
+    newVillage =False
     DO_DISPLAY =False
     
     allPeople = []
@@ -21,9 +21,9 @@ if __name__ == '__main__':
     if newVillage:
 
         mayor = LittlePeople()
-        bb = LittleBuilding(pos=[0.,0.])#
+        #~ bb = LittleBuilding(pos=[0.,0.])#
         bb = LittleHotel( pos=[0.,0.],owner = mayor)
-        b =LittleBuilding(pos=[0.,0.])# 
+        #~ b =LittleBuilding(pos=[0.,0.])# 
         b = LittleRestaurant( pos=[0.,0.], owner = mayor)
         print mayor.name
         allPeople.append(mayor)
@@ -40,12 +40,12 @@ if __name__ == '__main__':
 
 
         
-        #~ for i in range(0, 5):
-            #~ p = LittlePeople()
+        for i in range(0, 5):
+            p = LittlePeople()
             #~ p.knowledge["sleep"].seenBuilding(building=bb)
             #~ p.knowledge["eat"].seenBuilding(building=b)
             #~ print p.name
-            #~ allPeople.append(p)
+            allPeople.append(p)
             #~ LittleConstructingBuilding( pos = [0., 0.], owner=p, futureType="LittleField")
 
         for p in allPeople:

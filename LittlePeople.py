@@ -164,7 +164,7 @@ class LittlePeople:
         #~ possibleActions.append(a)
             #~ return
 
-        a = LittleNewAction(type="do nothing")
+        a = LittleAction(type="do nothing")
         #~ a = LittleAction(people=self, type="do nothing", startHour=[utils.globalTime.hour, utils.globalTime.minute])
         possibleActions.append(a)
         

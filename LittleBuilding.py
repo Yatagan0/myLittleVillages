@@ -26,7 +26,7 @@ def findWorkslot(pos, name):
     return None
 
 from LittleAction import *
-from LittleNewAction import *
+#~ from LittleNewAction import *
 
 class WorkSlot:
     def __init__(self, root=None, types=[], building=None, name=""):
@@ -44,7 +44,7 @@ class WorkSlot:
         actions = []
         for o in self.objects:
             if o[0] == "bed" and o[1] == "clean":
-                actions.append(LittleNewAction(  type="sleep",price=1, workslot = self))
+                actions.append(LittleAction(   workslot = self))
         return actions
         
     def read(self, root):

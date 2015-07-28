@@ -23,11 +23,9 @@ class LittleNewAction:
             
     
     def read(self, root):
-        #~ print "READ"
         self.type = root.attrib["type"]
         if "startHour" in root.attrib.keys():
             self.startHour = [int(root.attrib["startHour"]),int(root.attrib["startMinute"]) ]
-        #~ self.status = root.attrib["status"]
         self.remainingTime = int(root.attrib["remainingTime"])
         self.price = float(root.attrib["price"])
 
@@ -39,14 +37,12 @@ class LittleNewAction:
 
         
     def write(self, root):
-        #~ print "WRITING"
         elem =  ET.SubElement(root, 'action')
         elem.set("class", "LittleNewAction")
         elem.set("type", self.type)
         if self.startHour is not None:
             elem.set("startHour", str(self.startHour[0]))
             elem.set("startMinute", str(self.startHour[1]))
-        #~ elem.set("status", self.status)
         elem.set("remainingTime", str(self.remainingTime))
         elem.set("price", str(self.price))
         if self.workslot is not None:
@@ -58,7 +54,8 @@ class LittleNewAction:
     def canExecute(self):
         if self.type not in allRecipes.keys():
             print "unknown recipe"
-        
+        #TO DO
+        return True
        
     def startExecution(self, people):
         self.people = people
