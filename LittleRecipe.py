@@ -36,6 +36,13 @@ r.timeMax = 60
 r.description = "travaille"
 allRecipes["work"] = r
 
+
+r = LittleRecipe("move")
+r.timeMin = 0
+r.timeMax = 0
+r.description = ""
+allRecipes["move"] = r
+
 class workSlotType:
     def __init__(self, name):
         self.name = name

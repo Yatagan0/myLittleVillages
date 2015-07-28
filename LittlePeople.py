@@ -117,12 +117,12 @@ class LittlePeople:
                     possibleActions.append(a)
                     if a.type == self.shortTermGoal:
                         preferredActions.append(a)
-        #~ self.shortTermGoal = ""
-        #~ if len(preferredActions) > 0:
-            #~ print self.name, " want to ", preferredActions[0].type," here"
+        self.shortTermGoal = ""
+        if len(preferredActions) > 0:
+            print self.name, " want to ", preferredActions[0].type," there"
             
-            #~ self.startAction(random.choice(preferredActions).copy())
-            #~ return
+            self.startAction(random.choice(preferredActions).copy())
+            return
         
         
         #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
@@ -160,8 +160,8 @@ class LittlePeople:
         #~ dest = [0., 0.]
         #~ dest[0] = self.pos[0] + random.randint(-1, 1)
         #~ dest[1] = self.pos[1] + random.randint(-1, 1)
-        #~ a= LittleMoveAction(people=self,  startHour=[utils.globalTime.hour, utils.globalTime.minute])
-        #~ possibleActions.append(a)
+        a= LittleMoveAction()
+        possibleActions.append(a)
             #~ return
 
         a = LittleAction(type="do nothing")
@@ -181,7 +181,7 @@ class LittlePeople:
         self.shortTermGoal = a.type
         if not a.hasLocation():
             a.getLocation(self)
-        #~ a =  LittleMoveAction(people=self,  startHour=[utils.globalTime.hour, utils.globalTime.minute], pos=a.pos)
+        a =  LittleMoveAction( pos=a.pos)
         #~ print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
         self.startAction(a)
 
