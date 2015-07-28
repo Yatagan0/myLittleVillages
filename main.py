@@ -23,7 +23,8 @@ if __name__ == '__main__':
         mayor = LittlePeople()
         bb = LittleBuilding(pos=[0.,0.])#
         bb = LittleHotel( pos=[0.,0.],owner = mayor)
-        b =LittleBuilding(pos=[0.,0.])# LittleRestaurant( pos=[0.,0.], owner = mayor)
+        b =LittleBuilding(pos=[0.,0.])# 
+        b = LittleRestaurant( pos=[0.,0.], owner = mayor)
         print mayor.name
         allPeople.append(mayor)
         

@@ -86,6 +86,13 @@ class LittleAction:
         a = LittleAction(people=self.people, type=self.type, startHour=self.startHour, pos=self.pos, price=self.price)
         return a
         
+    #~ def copy(self):
+        #~ print "copy"
+        #~ root = ET.Element('village')
+        #~ act = self.write(root)
+        #~ a = readAction(root=act, people=None)
+        #~ return a
+        
     def hasLocation(self):
         return self.pos != None
         
