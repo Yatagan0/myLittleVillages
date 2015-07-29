@@ -16,6 +16,9 @@ class LittleAction:
         self.remainingTime = 1
         if root is not None:
             self.read(root)
+        else:
+            if self.workslot is not None:
+                self.pos = self.workslot.building.pos
             
         if self.type not in allRecipes.keys():
             print "unknown recipe"
@@ -56,7 +59,10 @@ class LittleAction:
         elem.set("remainingTime", str(self.remainingTime))
         elem.set("price", str(self.price))
         if self.workslot is not None:
-            elem.set("workslotName", self.workslot.name)
+            if isinstance(self.workslot, basestring) :
+                elem.set("workslotName", self.workslot)
+            else:
+                elem.set("workslotName", self.workslot.name)
         if self.pos is not None:
             #~ elem.set("posX", str(self.workslot.building.pos[0]))
             #~ elem.set("posY", str(self.workslot.building.pos[1]))
@@ -145,6 +151,7 @@ class LittleMoveAction(LittleAction):
     def write(self, root):
         elem =  LittleAction.write(self, root)
         elem.set("class", "LittleMoveAction")
+        return elem
 
     def canExecute(self):
         print "can execute move"
@@ -198,6 +205,7 @@ class LittleSleepAction(LittleAction):
         #~ elem.set("posX", str(self.pos[0]))
         #~ elem.set("posY", str(self.pos[1]))
         elem.set("class", "LittleSleepAction")
+        return elem
 
         
     #~ def copy(self):

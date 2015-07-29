@@ -12,7 +12,7 @@ from xml.dom import minidom
 
 if __name__ == '__main__':
 
-    newVillage =True
+    newVillage =False
     DO_DISPLAY =False
     
     allPeople = []

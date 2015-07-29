@@ -125,11 +125,11 @@ class LittlePeople:
             return
         
         
-        #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
-            #~ print "must sleep"
-            #~ a =  LittleSleepAction( people=self,startHour=[utils.globalTime.hour, utils.globalTime.minute])
-            #~ self.moveToAction(a)
-            #~ return
+        if self.tired > 20*60 and random.randint(0, 20) != 0:
+            print "must sleep"
+            a =  LittleSleepAction()
+            self.moveToAction(a)
+            return
         
         #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
             #~ print "must eat"
@@ -194,7 +194,7 @@ class LittlePeople:
             #~ a.getLocation()
         a.startExecution(self)
         self.action = a
-        #~ print self.name , " will ", a.type, " for ", a.price
+        print self.name , " will ", a.type, " for ", a.price
 
     def canDoAction(self, a):
         if a.type == "sleep" and self.tired < 5*60:

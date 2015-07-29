@@ -46,6 +46,7 @@ class WorkSlot:
             #~ if o[0] == "bed" and o[1] == "clean":
         #~ actions.append(LittleAction(workslot=self   ))
         actions.append(LittleAction(   ))
+        actions.append(LittleSleepAction(workslot=self))
         return actions
         
     def read(self, root):
@@ -250,6 +251,7 @@ class LittleHotel(LittleBuilding):
         
                 
     #~ def getPossibleActions(self, isOwner=False):
+        #~ actions = LittleBuilding.getPossibleActions(self, isOwner)
         #~ actions = [LittleSleepAction( people=None,startHour=[0, 0], pos=self.pos, price=1)]
         #~ for i in range(self.beds - self.cleanBeds):
             #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="nettoie une chambre chez", type="cleanbed", price = -1))
