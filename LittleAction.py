@@ -22,7 +22,6 @@ class LittleAction:
             
         if self.type not in allRecipes.keys():
             print "unknown recipe"
-    
 
         
     def __str__(self):
@@ -64,8 +63,6 @@ class LittleAction:
             else:
                 elem.set("workslotName", self.workslot.name)
         if self.pos is not None:
-            #~ elem.set("posX", str(self.workslot.building.pos[0]))
-            #~ elem.set("posY", str(self.workslot.building.pos[1]))
             elem.set("posX", str(self.pos[0]))
             elem.set("posY", str(self.pos[1]))
         return elem
@@ -95,18 +92,17 @@ class LittleAction:
      
     def endExecution(self):
         if isinstance(self.workslot, basestring) :
-            print "workslot name ",self.workslot, " pos ",self.pos
+            #~ print "workslot name ",self.workslot, " pos ",self.pos
             if self.pos is not None:
             
                 from LittleBuilding import findWorkslot
                 self.workslot = findWorkslot( self.pos, self.workslot)
             
-        print "ending ", self.workslot, " at ", self.pos
+        #~ print "ending ", self.workslot, " at ", self.pos
         if self.workslot is not None:
             self.people.money -= self.price
             self.workslot.building.money += self.price
-            #~ print "has workslot"
-            #~ self.workslot.objectStatus("bed", "clean", "dirty")
+
        
     def execute(self):
         self.remainingTime -= 1
@@ -142,11 +138,6 @@ class LittleMoveAction(LittleAction):
             pass
         else:
             self.pos = pos
-            
-    #~ def read(self, root):
-        #~ LittleAction.read(self,root)
-        #~ self.pos = [float(root.attrib["posX"]),float(root.attrib["posY"]) ]
-        
         
     def write(self, root):
         elem =  LittleAction.write(self, root)
@@ -220,16 +211,6 @@ class LittleWorkAction(LittleAction):
         LittleAction.__init__(self, root=root, type=type, workslot=workslot)
         if root is not None:
             self.read(root)
-
-        
-    #~ def init(self):
-        #~ self.status = "not started"
-        #~ self.remainingTime = 45 +random.randint(0, 15)
-            
-    #~ def read(self, root):
-        #~ LittleAction.read(self,root)
-        #~ self.description = root.attrib["description"]
-        
         
     def write(self, root):
         elem =  LittleAction.write(self, root)
@@ -237,69 +218,14 @@ class LittleWorkAction(LittleAction):
         #~ elem.set("description", self.description)
         return elem
 
-        
-    #~ def copy(self):
-        #~ a = LittleWorkAction(people=self.people, startHour=self.startHour, pos=self.pos, desc=self.description, type=self.type, price=self.price)
-        #~ return a      
-
-    #~ def execute(self):
-        
-        #~ if self.building is None:
-            #~ from LittleBuilding import buildingImIn
-            #~ self.building = buildingImIn(self.pos)
-        
-        #~ if self.status == "not started":
-            #~ t = utils.globalTime
-            #~ self.startHour = [t.hour, t.minute]
-            
-            #~ if self.type=="cook":
-                #~ self.remainingTime = 20 + random.randint(0, 20)
-            #~ elif self.type=="dishes":
-                #~ self.remainingTime = 10 + random.randint(0, 10)
-            #~ elif self.type=="cleanbed":
-                #~ self.remainingTime = 10 + random.randint(0, 10)
-            #~ elif self.type=="construct":
-                #~ self.remainingTime = 60 + random.randint(0, 60)
-                #~ self.building.numWorkers -=1
-                
-            #~ if self.description == "":
-                #~ print self.people.name, " travaille a ",self.building.name
-            #~ else:
-                #~ print self.people.name, " ", self.description, " ",self.building.name
-
-        #~ self.status = "executing"
-        #~ if self.people.go(self.pos):
-            #~ self.remainingTime -= 1
-            #~ if self.remainingTime > 0:
-                #~ return True
-                
-            #~ else:
-                #~ self.people.money -= self.price
-                #~ self.building.money += self.price
-                
-                
-                #~ if self.type=="cook":
-                    #~ self.building.meals +=1
-                #~ elif self.type=="dishes":
-                    #~ self.building.cleanCouverts +=1
-                #~ elif self.type=="cleanbed":
-                    #~ self.building.cleanBeds +=1
-                #~ elif self.type=="construct":
-                    #~ self.building.numWorkers +=1
-                    #~ self.building.workTasks -=1
-                    #~ if self.building.workTasks == 0:
-                        #~ self.building.finish()
-            
-                #~ self.people.knowledge["work"].seenBuilding(pos=self.pos,reliable=1)
-                #~ return False
-                
-        #~ return True
-
+    def endExecution(self):
+        LittleAction.endExecution(self)
+        self.people.knowledge["work"].seenBuilding(pos=self.pos, reliable=1)       
+ 
     def getLocation(self, people):
         if self.pos is None:
             self.pos = people.knowledge["work"].findClosest(people.pos)
-        #~ from LittleBuilding import buildingImIn
-        #~ self.building = buildingImIn(self.pos)
+
         
 class LittleOldActions():
     def __init__(self,people, root=None):
@@ -326,11 +252,8 @@ class LittleOldActions():
             a = LittleSleepAction()
             a.startHour = [21, 0]
             day.append(a)
-            
-            #~ a = LittleAction( )
-            #~ a.startHour = [21, 0]
-            #~ day.append(a)
-            #~ self.days.append(day)
+
+            self.days.append(day)
                 
     def __str__(self):
         s = ""
@@ -401,9 +324,6 @@ def readAction(root, people):
         a = LittleMoveAction(root=root)
     elif root.attrib["class"] == "LittleWorkAction":
         a = LittleWorkAction(root=root)
-    #~ elif root.attrib["class"] == "LittleNewAction":
-        #~ a = LittleNewAction(root=root) 
-        #~ a.people = people
     else:
         a = LittleAction(root=root)
         

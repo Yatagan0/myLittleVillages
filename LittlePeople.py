@@ -131,47 +131,25 @@ class LittlePeople:
             self.moveToAction(a)
             return
         
-        if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            print "must eat"
-            #~ a = LittleEatAction( people=self,startHour=[utils.globalTime.hour, utils.globalTime.minute]) 
-            a = LittleEatAction( )
-            self.moveToAction(a)
-            return
-        
-
-        
+        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
+            #~ print "must eat"
+            #~ a = LittleEatAction( )
+            #~ self.moveToAction(a)
+            #~ return
 
         
         myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
         for a in myHabits:
             if self.canDoAction(a):
                 possibleActions.append(a)        
-        #~ possibleActions = possibleActions + myHabits
-        #~ myHabits = [LittleAction(self, "do nothing", [time.hour, time.minute])]
-        
-        #~ r = random.randint(0, 9)
-        #~ if r < 9:
-            #~ a = random.choice(myHabits)
-            
-            #~ if self.canDoAction(a):
-                #~ possibleActions.append(a)
-     
-                
-        #~ if random.randint(0, 1)==0:
-        #~ dest = [0., 0.]
-        #~ dest[0] = self.pos[0] + random.randint(-1, 1)
-        #~ dest[1] = self.pos[1] + random.randint(-1, 1)
+
         a= LittleMoveAction()
         possibleActions.append(a)
-        
-        #~ a= LittleSleepAction()
-        #~ possibleActions.append(a)
 
-
-        a = LittleAction(type="do nothing")
-        #~ a = LittleAction(people=self, type="do nothing", startHour=[utils.globalTime.hour, utils.globalTime.minute])
+        a = LittleAction()
         possibleActions.append(a)
         
+        print "chosing between ", len(possibleActions), " actions"
         a = random.choice(possibleActions)
         #~ print "a.type ", a.type, " price ", a.price
         if a.pos is None or ( a.type is not "move" and a.type is not "do nothing"):

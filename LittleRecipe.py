@@ -23,6 +23,14 @@ r.transforming.append(["bed", "clean", "dirty"])
 r.description = "dort"
 allRecipes["sleep"] = r
 
+r = LittleRecipe("clean_room")
+r.timeMin = 15
+r.timeMax = 30
+r.transforming.append(["bed", "dirty", "clean"])
+r.description = "nettoie une chambre"
+allRecipes[r.name] = r
+
+
 r = LittleRecipe("eat")
 r.timeMin = 30
 r.timeMax = 60
@@ -46,5 +54,12 @@ allRecipes["move"] = r
 class workSlotType:
     def __init__(self, name):
         self.name = name
+        self.recipes=[]
+        self.objects = []
 
 workSlotTypes = {}
+
+t = workSlotType("room")
+t.recipes = ["sleep", "clean_room"]
+t.objects = ["bed", "clean"]
+workSlotTypes [t.name] = t

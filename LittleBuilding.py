@@ -45,9 +45,22 @@ class WorkSlot:
         #~ for o in self.objects:
             #~ if o[0] == "bed" and o[1] == "clean":
         #~ actions.append(LittleAction(workslot=self   ))
-        actions.append(LittleAction(   ))
-        actions.append(LittleSleepAction(workslot=self))
-        actions.append(LittleEatAction(workslot=self))
+        #~ actions.append(LittleAction(   ))
+        #~ actions.append(LittleSleepAction(workslot=self))
+        #~ actions.append(LittleEatAction(workslot=self))
+        #~ actions.append(LittleWorkAction(workslot=self))
+        for type in self.types:
+            if type not in workSlotTypes.keys():
+                print "no actions for workslot type ",type
+            else:
+                for a in workSlotTypes[type].recipes:
+                    if a == "sleep":
+                        actions.append(LittleSleepAction(workslot=self))
+                    elif a == "eat":
+                        actions.append(LittleEatAction(workslot=self))
+                    else:
+                        actions.append(LittleWorkAction(workslot=self, type=a))
+        
         return actions
         
     def read(self, root):
@@ -106,9 +119,9 @@ class LittleBuilding:
             self.owner = owner
             self.money=0
             
-            print "new work slots"
-            for i in range(0, 3):
-                self.workSlots.append(WorkSlot(types=["test", "building"], building=self, name = "slot"+str(i)))
+            #~ print "new work slots"
+            #~ for i in range(0, 3):
+                #~ self.workSlots.append(WorkSlot(types=["test", "building"], building=self, name = "slot"+str(i)))
         
         global allBuildings
         allBuildings.append(self)
@@ -237,6 +250,9 @@ class LittleHotel(LittleBuilding):
             
         self.beds = 6
         self.cleanBeds = self.beds
+        for i in range(0, 3):
+            self.workSlots.append(WorkSlot(types=["room"], building=self, name = "slot"+str(i)))
+        
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
