@@ -90,7 +90,7 @@ class LittlePeople:
         
         if self.action is not None:
             if not self.action.execute():
-                print self.name," action finished"
+                #~ print self.name," action finished"
                 if self.action.type != "move" and self.action.type != "do nothing" :
                     if self.action.remainingTime <= 0:
                         #don't add if you could not eat...
@@ -162,7 +162,10 @@ class LittlePeople:
         #~ dest[1] = self.pos[1] + random.randint(-1, 1)
         a= LittleMoveAction()
         possibleActions.append(a)
-            #~ return
+        
+        a= LittleSleepAction()
+        possibleActions.append(a)
+
 
         a = LittleAction(type="do nothing")
         #~ a = LittleAction(people=self, type="do nothing", startHour=[utils.globalTime.hour, utils.globalTime.minute])
