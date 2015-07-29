@@ -47,6 +47,7 @@ class WorkSlot:
         #~ actions.append(LittleAction(workslot=self   ))
         actions.append(LittleAction(   ))
         actions.append(LittleSleepAction(workslot=self))
+        actions.append(LittleEatAction(workslot=self))
         return actions
         
     def read(self, root):

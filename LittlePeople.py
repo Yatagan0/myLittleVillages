@@ -131,11 +131,12 @@ class LittlePeople:
             self.moveToAction(a)
             return
         
-        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            #~ print "must eat"
+        if self.hungry > 10*60 and random.randint(0, 20) != 0:
+            print "must eat"
             #~ a = LittleEatAction( people=self,startHour=[utils.globalTime.hour, utils.globalTime.minute]) 
-            #~ self.moveToAction(a)
-            #~ return
+            a = LittleEatAction( )
+            self.moveToAction(a)
+            return
         
 
         
@@ -163,8 +164,8 @@ class LittlePeople:
         a= LittleMoveAction()
         possibleActions.append(a)
         
-        a= LittleSleepAction()
-        possibleActions.append(a)
+        #~ a= LittleSleepAction()
+        #~ possibleActions.append(a)
 
 
         a = LittleAction(type="do nothing")
