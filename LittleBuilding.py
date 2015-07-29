@@ -42,9 +42,10 @@ class WorkSlot:
         
     def getPossibleActions(self):
         actions = []
-        for o in self.objects:
-            if o[0] == "bed" and o[1] == "clean":
-                actions.append(LittleAction(   workslot = self))
+        #~ for o in self.objects:
+            #~ if o[0] == "bed" and o[1] == "clean":
+        #~ actions.append(LittleAction(workslot=self   ))
+        actions.append(LittleAction(   ))
         return actions
         
     def read(self, root):

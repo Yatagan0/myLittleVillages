@@ -41,7 +41,9 @@ class LittleAction:
             self.workslot = root.attrib["workslotName"]
             if self.pos is not None:
                 from LittleBuilding import findWorkslot
-                self.workslot = findWorkslot( self.pos, self.workslot)
+                WS = findWorkslot( self.pos, self.workslot)
+                if WS is not None:
+                    self.workslot = WS
 
         
     def write(self, root):
@@ -72,7 +74,8 @@ class LittleAction:
         self.people = people
         t = utils.globalTime
         self.startHour = [t.hour, t.minute]
-        #~ self.status = "executing"
+        
+        print "starting ", self.workslot, " at ", self.pos
 
         if self.type not in allRecipes.keys():
             self.remainingTime = 60
@@ -85,10 +88,12 @@ class LittleAction:
         
      
     def endExecution(self):
-        if isinstance(self.workslot, basestring) and self.pos is not None:
+        if isinstance(self.workslot, basestring) :
+            print "workslot name ",self.workslot, " pos ",self.pos
+            if self.pos is not None:
             
-            from LittleBuilding import findWorkslot
-            self.workslot = findWorkslot( self.pos, self.workslot)
+                from LittleBuilding import findWorkslot
+                self.workslot = findWorkslot( self.pos, self.workslot)
             
         print "ending ", self.workslot, " at ", self.pos
         if self.workslot is not None:

@@ -40,12 +40,12 @@ if __name__ == '__main__':
 
 
         
-        for i in range(0, 5):
-            p = LittlePeople()
+        #~ for i in range(0, 5):
+            #~ p = LittlePeople()
             #~ p.knowledge["sleep"].seenBuilding(building=bb)
             #~ p.knowledge["eat"].seenBuilding(building=b)
             #~ print p.name
-            allPeople.append(p)
+            #~ allPeople.append(p)
             #~ LittleConstructingBuilding( pos = [0., 0.], owner=p, futureType="LittleField")
 
         for p in allPeople:
