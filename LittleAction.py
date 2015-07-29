@@ -216,98 +216,90 @@ class LittleEatAction(LittleAction):
             self.pos = people.knowledge["eat"].findClosest(people.pos)
 
 class LittleWorkAction(LittleAction):
-    def __init__(self,root=None,people=None, startHour=None,pos=None, desc="", type="work", price=0., workslot=None):
-        LittleAction.__init__(self, root,people,type, startHour, pos, price, workslot)
+    def __init__(self,root=None,workslot=None, type="work"):
+        LittleAction.__init__(self, root=root, type=type, workslot=workslot)
         if root is not None:
             self.read(root)
-        else:
-            self.description = desc
-            self.init()
-            
-        #~ print self.description, " ", self.type
+
         
-    def init(self):
-        self.status = "not started"
-        self.remainingTime = 45 +random.randint(0, 15)
+    #~ def init(self):
+        #~ self.status = "not started"
+        #~ self.remainingTime = 45 +random.randint(0, 15)
             
-    def read(self, root):
-        LittleAction.read(self,root)
-        self.description = root.attrib["description"]
+    #~ def read(self, root):
+        #~ LittleAction.read(self,root)
+        #~ self.description = root.attrib["description"]
         
         
     def write(self, root):
         elem =  LittleAction.write(self, root)
         elem.set("class", "LittleWorkAction")
-        elem.set("description", self.description)
+        #~ elem.set("description", self.description)
+        return elem
 
         
-    def copy(self):
-        a = LittleWorkAction(people=self.people, startHour=self.startHour, pos=self.pos, desc=self.description, type=self.type, price=self.price)
-        return a      
+    #~ def copy(self):
+        #~ a = LittleWorkAction(people=self.people, startHour=self.startHour, pos=self.pos, desc=self.description, type=self.type, price=self.price)
+        #~ return a      
 
-    def execute(self):
+    #~ def execute(self):
         
-        if self.building is None:
-            from LittleBuilding import buildingImIn
-            self.building = buildingImIn(self.pos)
+        #~ if self.building is None:
+            #~ from LittleBuilding import buildingImIn
+            #~ self.building = buildingImIn(self.pos)
         
-        if self.status == "not started":
-            t = utils.globalTime
-            self.startHour = [t.hour, t.minute]
+        #~ if self.status == "not started":
+            #~ t = utils.globalTime
+            #~ self.startHour = [t.hour, t.minute]
             
-            if self.type=="cook":
-                self.remainingTime = 20 + random.randint(0, 20)
-            elif self.type=="dishes":
-                self.remainingTime = 10 + random.randint(0, 10)
-            elif self.type=="cleanbed":
-                self.remainingTime = 10 + random.randint(0, 10)
-            elif self.type=="construct":
-                self.remainingTime = 60 + random.randint(0, 60)
-                self.building.numWorkers -=1
+            #~ if self.type=="cook":
+                #~ self.remainingTime = 20 + random.randint(0, 20)
+            #~ elif self.type=="dishes":
+                #~ self.remainingTime = 10 + random.randint(0, 10)
+            #~ elif self.type=="cleanbed":
+                #~ self.remainingTime = 10 + random.randint(0, 10)
+            #~ elif self.type=="construct":
+                #~ self.remainingTime = 60 + random.randint(0, 60)
+                #~ self.building.numWorkers -=1
                 
-            if self.description == "":
-                print self.people.name, " travaille a ",self.building.name
-            else:
-                print self.people.name, " ", self.description, " ",self.building.name
+            #~ if self.description == "":
+                #~ print self.people.name, " travaille a ",self.building.name
+            #~ else:
+                #~ print self.people.name, " ", self.description, " ",self.building.name
 
-        self.status = "executing"
-        if self.people.go(self.pos):
-            self.remainingTime -= 1
-            if self.remainingTime > 0:
-                return True
+        #~ self.status = "executing"
+        #~ if self.people.go(self.pos):
+            #~ self.remainingTime -= 1
+            #~ if self.remainingTime > 0:
+                #~ return True
                 
-            else:
-                #~ print "fini !"
-                #~ print "finin ",self.description, " ", self.type
-                self.people.money -= self.price
-                self.building.money += self.price
+            #~ else:
+                #~ self.people.money -= self.price
+                #~ self.building.money += self.price
                 
                 
-                if self.type=="cook":
-                    self.building.meals +=1
-                    #~ print "now ",self.building.meals, " meals at ", self.building.name
-                elif self.type=="dishes":
-                    self.building.cleanCouverts +=1
-                    #~ print "now ",self.building.cleanCouverts, " clean couverts at ", self.building.name
-                elif self.type=="cleanbed":
-                    self.building.cleanBeds +=1
-                    #~ print "now ",self.building.cleanBeds, " clean beds at ", self.building.name
-                elif self.type=="construct":
-                    self.building.numWorkers +=1
-                    self.building.workTasks -=1
-                    if self.building.workTasks == 0:
-                        self.building.finish()
+                #~ if self.type=="cook":
+                    #~ self.building.meals +=1
+                #~ elif self.type=="dishes":
+                    #~ self.building.cleanCouverts +=1
+                #~ elif self.type=="cleanbed":
+                    #~ self.building.cleanBeds +=1
+                #~ elif self.type=="construct":
+                    #~ self.building.numWorkers +=1
+                    #~ self.building.workTasks -=1
+                    #~ if self.building.workTasks == 0:
+                        #~ self.building.finish()
             
-                self.people.knowledge["work"].seenBuilding(pos=self.pos,reliable=1)
-                return False
+                #~ self.people.knowledge["work"].seenBuilding(pos=self.pos,reliable=1)
+                #~ return False
                 
-        return True
+        #~ return True
 
-    def getLocation(self):
+    def getLocation(self, people):
         if self.pos is None:
-            self.pos = self.people.knowledge["work"].findClosest(self.people.pos)
-        from LittleBuilding import buildingImIn
-        self.building = buildingImIn(self.pos)
+            self.pos = people.knowledge["work"].findClosest(people.pos)
+        #~ from LittleBuilding import buildingImIn
+        #~ self.building = buildingImIn(self.pos)
         
 class LittleOldActions():
     def __init__(self,people, root=None):
@@ -322,23 +314,23 @@ class LittleOldActions():
             #~ day.append(LittleEatAction( people=people,startHour=[7, 0]))
             #~ day.append(LittleEatAction(people=people,startHour= [12, 0]))
             #~ day.append(LittleEatAction( people=people,startHour=[20, 0]))
-            #~ a = LittleNewAction( type="eat")
-            #~ a.startHour = [7, 0]
-            #~ day.append(a)
-            #~ a = LittleNewAction( type="eat")
-            #~ a.startHour = [12, 0]
-            #~ day.append(a)
-            #~ a = LittleNewAction( type="eat")
-            #~ a.startHour = [20, 0]
-            #~ day.append(a)
-            #~ a = LittleNewAction( type="sleep")
-            #~ a.startHour = [21, 0]
-            #~ day.append(a)
-            
-            a = LittleAction( )
+            a = LittleEatAction()
+            a.startHour = [7, 0]
+            day.append(a)
+            a = LittleEatAction()
+            a.startHour = [12, 0]
+            day.append(a)
+            a = LittleEatAction( )
+            a.startHour = [20, 0]
+            day.append(a)
+            a = LittleSleepAction()
             a.startHour = [21, 0]
             day.append(a)
-            self.days.append(day)
+            
+            #~ a = LittleAction( )
+            #~ a.startHour = [21, 0]
+            #~ day.append(a)
+            #~ self.days.append(day)
                 
     def __str__(self):
         s = ""
