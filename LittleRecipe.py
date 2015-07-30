@@ -63,3 +63,7 @@ t = workSlotType("room")
 t.recipes = ["sleep", "clean_room"]
 t.objects = ["bed", "clean"]
 workSlotTypes [t.name] = t
+
+t = workSlotType("table")
+t.recipes = ["eat"]
+workSlotTypes [t.name] = t

@@ -109,13 +109,16 @@ class LittlePeople:
                 
         possibleActions = []      
         preferredActions = []    
+        print "sort term goal ",self.shortTermGoal
         b = buildingImIn(self.pos)
         if b is not None:
             aa = b.getPossibleActions()
+            print len(aa)," possible actions in building"
             for a in aa:
                 if self.canDoAction(a):
                     possibleActions.append(a)
                     if a.type == self.shortTermGoal:
+                        print "found action !"
                         preferredActions.append(a)
         self.shortTermGoal = ""
         if len(preferredActions) > 0:
@@ -131,11 +134,11 @@ class LittlePeople:
             self.moveToAction(a)
             return
         
-        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            #~ print "must eat"
-            #~ a = LittleEatAction( )
-            #~ self.moveToAction(a)
-            #~ return
+        if self.hungry > 10*60 and random.randint(0, 20) != 0:
+            print "must eat"
+            a = LittleEatAction( )
+            self.moveToAction(a)
+            return
 
         
         myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
@@ -160,7 +163,8 @@ class LittlePeople:
 
 
     def moveToAction(self, a):
-        self.shortTermGoal = a.type
+        if a.type != "move" and a.type != "do nothing" :
+            self.shortTermGoal = a.type
         if not a.hasLocation():
             a.getLocation(self)
         a =  LittleMoveAction( pos=a.pos)

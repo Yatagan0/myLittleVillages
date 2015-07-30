@@ -78,6 +78,11 @@ class LittleAction:
         t = utils.globalTime
         self.startHour = [t.hour, t.minute]
         
+        if self.workslot is None or isinstance(self.workslot, basestring):
+            print 'find workslot ', self.type
+            from LittleBuilding import findWorkslot
+            self.workslot = findWorkslot( self.pos, self.workslot)
+        
         print "starting ", self.workslot, " at ", self.pos
 
         if self.type not in allRecipes.keys():

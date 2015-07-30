@@ -37,7 +37,7 @@ class WorkSlot:
             self.read(root)
         else:
             self.types = types
-            self.objects.append(["bed", "clean"])
+            #~ self.objects.append(["bed", "clean"])
             self.name = name
         
     def getPossibleActions(self):
@@ -202,6 +202,8 @@ class LittleRestaurant(LittleBuilding):
         self.couverts = 3
         self.meals = 0
         self.cleanCouverts = self.couverts 
+        for i in range(0, 3):
+            self.workSlots.append(WorkSlot(types=["table"], building=self, name = "slot"+str(i)))
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
