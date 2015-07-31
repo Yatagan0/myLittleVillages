@@ -90,23 +90,38 @@ class LittleAction:
             print people.name, " fait un truc"
             
         else:
-            self.remainingTime = random.randint(allRecipes[self.type].timeMin, allRecipes[self.type].timeMax)
-            if allRecipes[self.type].description != "":
-                print people.name, " ", allRecipes[self.type].description, " pendant ",self.remainingTime 
+            recipe = allRecipes[self.type]
+            self.remainingTime = random.randint(recipe.timeMin, recipe.timeMax)
+            if recipe.description != "":
+                print people.name, " ", recipe.description, " pendant ",self.remainingTime 
+             
+            print "transforming"
+            for t in recipe.transformingStart:
+                print t
+                self.workslot.objectStatus(t[0], t[1], t[2])
         
      
     def endExecution(self):
         if isinstance(self.workslot, basestring) :
             #~ print "workslot name ",self.workslot, " pos ",self.pos
             if self.pos is not None:
-            
-                from LittleBuilding import findWorkslot
-                self.workslot = findWorkslot( self.pos, self.workslot)
+                if self.workslot is None or isinstance(self.workslot, basestring):
+                    from LittleBuilding import findWorkslot
+                    self.workslot = findWorkslot( self.pos, self.workslot)
             
         #~ print "ending ", self.workslot, " at ", self.pos
         if self.workslot is not None:
             self.people.money -= self.price
             self.workslot.building.money += self.price
+
+
+        if self.type in allRecipes.keys():
+            recipe = allRecipes[self.type]
+             
+            print "transforming"
+            for t in recipe.transformingEnd:
+                print t
+                self.workslot.objectStatus(t[0], t[1], t[2])
 
        
     def execute(self):
