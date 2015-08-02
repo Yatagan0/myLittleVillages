@@ -37,10 +37,14 @@ class WorkSlot:
             self.read(root)
         else:
             self.types = types
-            #~ self.objects.append(["bed", "clean"])
+            #~ 
             self.name = name
+            self.occupied = False
         
     def getPossibleActions(self):
+        if self.occupied:
+            return []
+        
         actions = []
         #~ for o in self.objects:
             #~ if o[0] == "bed" and o[1] == "clean":
@@ -53,13 +57,18 @@ class WorkSlot:
             if type not in workSlotTypes.keys():
                 print "no actions for workslot type ",type
             else:
+                
                 for a in workSlotTypes[type].recipes:
                     if a == "sleep":
-                        actions.append(LittleSleepAction(workslot=self))
+                        act = LittleSleepAction(workslot=self)
                     elif a == "eat":
-                        actions.append(LittleEatAction(workslot=self))
+                        act = LittleEatAction(workslot=self)
                     else:
-                        actions.append(LittleWorkAction(workslot=self, type=a))
+                        act = LittleWorkAction(workslot=self, type=a)
+                        
+                    if act.canExecute():
+                        actions.append(act)
+                    
         
         return actions
         
@@ -69,6 +78,7 @@ class WorkSlot:
             self.types = []
         #~ print self.types
         self.name = root.attrib["name"]
+        self.occupied = root.attrib["occupied"]=="True"
         for child in root:
             if child.tag == "object":
                 self.objects.append([child.attrib["name"], child.attrib["state"]])
@@ -84,6 +94,7 @@ class WorkSlot:
         #~ print s
         elem.set("types", s)
         elem.set("name", self.name)
+        elem.set("occupied", str(self.occupied))
         for o in self.objects:
             sub =  ET.SubElement(elem, 'object')
             sub.set("name", o[0])
@@ -93,7 +104,9 @@ class WorkSlot:
         for o in self.objects:
             if o[0] == name:
                 if state == "" or state==o[1]:
+                    #~ print "has object ",name, state
                     return True
+        #~ print "dont have object ",name, state
         return False
         
     def objectStatus(self, name, prev, new):
@@ -198,35 +211,15 @@ class LittleRestaurant(LittleBuilding):
             self.name = utils.randomBuildingName("restaurant", self.owner.name)
         else:
             self.name = utils.randomBuildingName("restaurant")
-            
-        self.couverts = 3
-        self.meals = 0
-        self.cleanCouverts = self.couverts 
+
         for i in range(0, 3):
-            self.workSlots.append(WorkSlot(types=["table"], building=self, name = "slot"+str(i)))
+            ws = WorkSlot(types=["table"], building=self, name = "slot"+str(i))
+            ws.objects.append(["table", "clean"])
+            self.workSlots.append(ws)
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleRestaurant")
-        elem.set("couverts", str(self.couverts))
-        elem.set("meals", str(self.meals))
-        elem.set("cleancouverts", str(self.cleanCouverts))
-        
-    def read(self, root):
-        LittleBuilding.read(self, root)
-        self.couverts = int(root.attrib["couverts"])
-        self.meals = int(root.attrib["meals"])
-        self.cleanCouverts = int(root.attrib["cleancouverts"])
-        
-                
-    #~ def getPossibleActions(self, isOwner=False):
-        #~ actions = [LittleEatAction( people=None,startHour=[0, 0], pos=self.pos, price=4)]
-        #~ for i in range(self.couverts - self.meals):
-            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="prepare a manger chez", type="cook", price=-3))
-        #~ for i in range(self.couverts - self.cleanCouverts):
-            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="fait la plonge chez", type="dishes", price = -1))
-        
-        #~ return actions
     
 
 class LittleHotel(LittleBuilding):
@@ -249,33 +242,22 @@ class LittleHotel(LittleBuilding):
             self.name = utils.randomBuildingName("hotel",self.owner.name)
         else:
             self.name = utils.randomBuildingNameName("hotel")
-            
-        self.beds = 6
-        self.cleanBeds = self.beds
+
         for i in range(0, 3):
-            self.workSlots.append(WorkSlot(types=["room"], building=self, name = "slot"+str(i)))
+            ws = WorkSlot(types=["room"], building=self, name = "slot"+str(i))
+            ws.objects.append(["bed", "clean"])
+            self.workSlots.append(ws)
         
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleHotel")
-        elem.set("beds", str(self.beds))
-        elem.set("cleanbeds", str(self.cleanBeds))
+
         
     def read(self, root):
         print "read hotel"
         LittleBuilding.read(self, root)
-        self.beds= int(root.attrib["beds"])
-        self.cleanBeds = int(root.attrib["cleanbeds"])
-        
-                
-    #~ def getPossibleActions(self, isOwner=False):
-        #~ actions = LittleBuilding.getPossibleActions(self, isOwner)
-        #~ actions = [LittleSleepAction( people=None,startHour=[0, 0], pos=self.pos, price=1)]
-        #~ for i in range(self.beds - self.cleanBeds):
-            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="nettoie une chambre chez", type="cleanbed", price = -1))
-        
-        #~ return actions
+
         
 class LittleField(LittleBuilding):
     def __init__(self, root=None, owner=None, pos=None):

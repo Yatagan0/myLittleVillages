@@ -109,33 +109,33 @@ class LittlePeople:
                 
         possibleActions = []      
         preferredActions = []    
-        print "sort term goal ",self.shortTermGoal
+        #~ print "sort term goal ",self.shortTermGoal
         b = buildingImIn(self.pos)
         if b is not None:
             aa = b.getPossibleActions()
-            print len(aa)," possible actions in building"
+            #~ print len(aa)," possible actions in building"
             for a in aa:
                 if self.canDoAction(a):
                     possibleActions.append(a)
                     if a.type == self.shortTermGoal:
-                        print "found action !"
+                        #~ print "found action !"
                         preferredActions.append(a)
         self.shortTermGoal = ""
         if len(preferredActions) > 0:
-            print self.name, " want to ", preferredActions[0].type," there"
+            #~ print self.name, " want to ", preferredActions[0].type," there"
             
             self.startAction(random.choice(preferredActions).copy())
             return
         
         
         if self.tired > 20*60 and random.randint(0, 20) != 0:
-            print "must sleep"
+            #~ print "must sleep"
             a =  LittleSleepAction()
             self.moveToAction(a)
             return
         
         if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            print "must eat"
+            #~ print "must eat"
             a = LittleEatAction( )
             self.moveToAction(a)
             return
@@ -152,7 +152,7 @@ class LittlePeople:
         a = LittleAction()
         possibleActions.append(a)
         
-        print "chosing between ", len(possibleActions), " actions"
+        #~ print "chosing between ", len(possibleActions), " actions"
         a = random.choice(possibleActions)
         #~ print "a.type ", a.type, " price ", a.price
         if a.pos is None or ( a.type is not "move" and a.type is not "do nothing"):
@@ -163,11 +163,14 @@ class LittlePeople:
 
 
     def moveToAction(self, a):
+        #~ if not a.hasLocation():
+        a.getLocation(self)
+            
         if a.type != "move" and a.type != "do nothing" :
-            self.shortTermGoal = a.type
-        if not a.hasLocation():
-            a.getLocation(self)
-        a =  LittleMoveAction( pos=a.pos)
+
+            if a.pos[0] != self.pos[0] or a.pos[1] != self.pos[1] or a.workslot is None:
+                self.shortTermGoal = a.type
+                a =  LittleMoveAction( pos=a.pos)
         #~ print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
         self.startAction(a)
 
@@ -177,7 +180,7 @@ class LittlePeople:
             #~ a.getLocation()
         a.startExecution(self)
         self.action = a
-        print self.name , " will ", a.type, " for ", a.price
+        #~ print self.name , " will ", a.type, " for ", a.price
 
     def canDoAction(self, a):
         if a.type == "sleep" and self.tired < 5*60:

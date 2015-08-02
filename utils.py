@@ -22,7 +22,7 @@ voyellesFinNom = voyellesFinNom.split('.')
 
 finVille = ["touille", "mont", "vert", "gny","lieu", "guen", "fort", "puy"]
 finNom = [ "mont", "vert",  "leaux", "lieu", "guen"]
-prenoms = ["Ahmed","Albert","Alexandre","Andre","Antoine","Arnaud","Augustin", "Basile", "Benoit",
+prenoms = ["Ahmed","Albert","Alexandre","Alexis","Andre","Antoine","Arnaud","Augustin", "Basile", "Benoit",
 "Bertrand","Charles","Christian", "Christophe","Claude","Clement","Damien","Denis","Dominique",
 "Edouard","Emile","Etienne","Fabrice","Ferdinand", "Fernand","Florent", "Florian", "Francois", "Gabriel", 
 "Gautier","Germain","Georges","Gregoire","Guillaume", "Guy", "Henri","Jacques","Jean", 

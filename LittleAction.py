@@ -68,8 +68,16 @@ class LittleAction:
         return elem
 
     def canExecute(self):
-        if self.type not in allRecipes.keys():
+        if self.workslot is None or isinstance(self.workslot, basestring):
+            from LittleBuilding import findWorkslot
+            self.workslot = findWorkslot( self.pos, self.workslot)
+        if self.type not in allRecipes.keys() or self.workslot is None:
             print "unknown recipe"
+            return True
+        recipe = allRecipes[self.type]
+        for t in recipe.transformingStart:
+            if not self.workslot.hasObject(t[0], t[1]):
+                return False
         #TO DO
         return True
        
@@ -79,11 +87,11 @@ class LittleAction:
         self.startHour = [t.hour, t.minute]
         
         if self.workslot is None or isinstance(self.workslot, basestring):
-            print 'find workslot ', self.type
+            #~ print 'find workslot ', self.type
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)
         
-        print "starting ", self.workslot, " at ", self.pos
+        #~ print "starting ", self.workslot, " at ", self.pos
 
         if self.type not in allRecipes.keys():
             self.remainingTime = 60
@@ -93,12 +101,14 @@ class LittleAction:
             recipe = allRecipes[self.type]
             self.remainingTime = random.randint(recipe.timeMin, recipe.timeMax)
             if recipe.description != "":
-                print people.name, " ", recipe.description, " pendant ",self.remainingTime 
+                print people.name, " ", recipe.description
+            if self.workslot is not None:
+                self.workslot.occupied = True
              
-            print "transforming"
-            for t in recipe.transformingStart:
-                print t
-                self.workslot.objectStatus(t[0], t[1], t[2])
+                #~ print "transforming"
+                for t in recipe.transformingStart:
+                    print t
+                    self.workslot.objectStatus(t[0], t[1], t[2])
         
      
     def endExecution(self):
@@ -113,12 +123,13 @@ class LittleAction:
         if self.workslot is not None:
             self.people.money -= self.price
             self.workslot.building.money += self.price
+            self.workslot.occupied = False
 
 
         if self.type in allRecipes.keys():
             recipe = allRecipes[self.type]
              
-            print "transforming"
+            #~ print "transforming"
             for t in recipe.transformingEnd:
                 print t
                 self.workslot.objectStatus(t[0], t[1], t[2])
@@ -146,7 +157,7 @@ class LittleAction:
     def getLocation(self, people):
         if self.pos is None:
             self.pos = [people.pos[0], people.pos[1]]
-        if isinstance(self.workslot, basestring):
+        if isinstance(self.workslot, basestring) or self.workslot is None:
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)
             
@@ -205,7 +216,9 @@ class LittleSleepAction(LittleAction):
     def getLocation(self, people):
         if self.pos is None:
             self.pos = people.knowledge["sleep"].findClosest(people.pos)
-
+        if isinstance(self.workslot, basestring) or self.workslot is None:
+            from LittleBuilding import findWorkslot
+            self.workslot = findWorkslot( self.pos, self.workslot)
         
 class LittleEatAction(LittleAction):
     def __init__(self,root=None,workslot=None):
@@ -225,7 +238,10 @@ class LittleEatAction(LittleAction):
     def getLocation(self, people):
         if self.pos is None:
             self.pos = people.knowledge["eat"].findClosest(people.pos)
-
+        if isinstance(self.workslot, basestring) or self.workslot is None:
+            from LittleBuilding import findWorkslot
+            self.workslot = findWorkslot( self.pos, self.workslot)
+            
 class LittleWorkAction(LittleAction):
     def __init__(self,root=None,workslot=None, type="work"):
         LittleAction.__init__(self, root=root, type=type, workslot=workslot)
@@ -245,7 +261,9 @@ class LittleWorkAction(LittleAction):
     def getLocation(self, people):
         if self.pos is None:
             self.pos = people.knowledge["work"].findClosest(people.pos)
-
+        if isinstance(self.workslot, basestring) or self.workslot is None:
+            from LittleBuilding import findWorkslot
+            self.workslot = findWorkslot( self.pos, self.workslot)
         
 class LittleOldActions():
     def __init__(self,people, root=None):

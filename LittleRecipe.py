@@ -20,15 +20,15 @@ allRecipes["do nothing"] = r
 r = LittleRecipe("sleep")
 r.timeMin = 6*60
 r.timeMax = 9*60
-r.transformingStart.append(["bed", "clean", "used"])
-r.transformingEnd.append(["bed", "used", "dirty"])
+r.transformingStart.append(["bed", "clean", "dirty"])
+#~ r.transformingEnd.append(["bed", "used", "dirty"])
 r.description = "dort"
 allRecipes["sleep"] = r
 
 r = LittleRecipe("clean_room")
 r.timeMin = 15
 r.timeMax = 30
-r.transformingEnd.append(["bed", "dirty", "clean"])
+r.transformingStart.append(["bed", "dirty", "clean"])
 r.description = "nettoie une chambre"
 allRecipes[r.name] = r
 
@@ -37,7 +37,22 @@ r = LittleRecipe("eat")
 r.timeMin = 30
 r.timeMax = 60
 r.description = "mange"
-allRecipes["eat"] = r
+r.transformingStart.append(["table", "served", "dirty"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("cook")
+r.timeMin = 20
+r.timeMax = 40
+r.description = "cuisine"
+r.transformingStart.append(["table", "clean","served"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("clean_table")
+r.timeMin = 5
+r.timeMax = 15
+r.description = "nettoie une table"
+r.transformingStart.append(["table",  "dirty", "clean"])
+allRecipes[r.name] = r
 
 
 r = LittleRecipe("work")
@@ -63,9 +78,10 @@ workSlotTypes = {}
 
 t = workSlotType("room")
 t.recipes = ["sleep", "clean_room"]
-t.objects = ["bed", "clean"]
+#~ t.objects = [["bed", "clean"]]
 workSlotTypes [t.name] = t
 
 t = workSlotType("table")
-t.recipes = ["eat"]
+t.recipes = ["eat", "cook", "clean_table"]
+#~ t.objects = ["table", "clean"]
 workSlotTypes [t.name] = t

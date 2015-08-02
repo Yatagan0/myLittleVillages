@@ -24,19 +24,19 @@ if __name__ == '__main__':
         #~ bb = LittleBuilding(pos=[0.,0.])#
         bb = LittleHotel( pos=[1.,0.],owner = mayor)
         #~ b =LittleBuilding(pos=[0.,0.])# 
-        b = LittleRestaurant( pos=[0.,1.], owner = mayor)
-        print mayor.name
+        #~ b = LittleRestaurant( pos=[0.,1.], owner = mayor)
+        #~ print mayor.name
         allPeople.append(mayor)
         
-        #~ p1= LittlePeople()
-        #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p1)
+        p1= LittlePeople()
+        b = LittleRestaurant( pos=[0.,0.], owner=p1)
         #~ print p1.name
-        #~ allPeople.append(p1)
+        allPeople.append(p1)
 
-        #~ p2= LittlePeople()
+        p2= LittlePeople()
         #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
-        #~ print p1.name
-        #~ allPeople.append(p2)
+        #~ print p2.name
+        allPeople.append(p2)
 
 
         
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
     
 
-    counter = 400
+    counter = 4000
     
     while counter > 0:
         counter -= 1
