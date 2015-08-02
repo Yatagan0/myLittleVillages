@@ -46,26 +46,26 @@ class WorkSlot:
             return []
         
         actions = []
-        #~ for o in self.objects:
-            #~ if o[0] == "bed" and o[1] == "clean":
-        #~ actions.append(LittleAction(workslot=self   ))
-        #~ actions.append(LittleAction(   ))
-        #~ actions.append(LittleSleepAction(workslot=self))
-        #~ actions.append(LittleEatAction(workslot=self))
-        #~ actions.append(LittleWorkAction(workslot=self))
+
         for type in self.types:
             if type not in workSlotTypes.keys():
                 print "no actions for workslot type ",type
             else:
                 
                 for a in workSlotTypes[type].recipes:
+                    recipe = allRecipes[a]
+                    meanTime = (recipe.timeMax - recipe.timeMin)/2.
+                    price=int(10*self.building.basePrice*meanTime)/10.
                     if a == "sleep":
                         act = LittleSleepAction(workslot=self)
+                        act.price = price
                     elif a == "eat":
                         act = LittleEatAction(workslot=self)
+                        act.price = price
                     else:
                         act = LittleWorkAction(workslot=self, type=a)
-                        
+                        act.price = -price
+                    
                     if act.canExecute():
                         actions.append(act)
                     
@@ -131,6 +131,7 @@ class LittleBuilding:
             self.name = "unnamed building"
             self.owner = owner
             self.money=0
+            self.basePrice = 0.1
             
             #~ print "new work slots"
             #~ for i in range(0, 3):
@@ -147,6 +148,7 @@ class LittleBuilding:
         elem.set("type", self.type)
         elem.set("name", self.name)
         elem.set("money", str(self.money))
+        elem.set("basePrice", str(self.basePrice))
         if self.owner is None:
             elem.set("owner", "")
         elif isinstance(self.owner, basestring):
@@ -165,6 +167,7 @@ class LittleBuilding:
         self.name = root.attrib["name"]
         #~ print self.name
         self.money = float(root.attrib["money"])
+        self.basePrice = float(root.attrib["basePrice"])
         from LittlePeople import peopleNamed
         self.owner = peopleNamed(root.attrib["owner"])
         if self.owner is None and root.attrib["owner"] is not "" :
@@ -438,12 +441,15 @@ class LittleBuildingList:
         self.known.append(b)
         return b
         
-    def findClosest(self, pos, checkReliable= True):
+    def findClosest(self, pos, checkReliable= True, notHere=None):
         dist = -1
         bestb=None
         #~ rpos = [0., 0.]
         
         for b in self.known:
+            if notHere is not None and notHere[0] == b.pos[0] and notHere[1] == b.pos[1] :
+                continue
+            
             d = utils.distance(pos, b.pos)
             if dist == -1:
                 dist = d
@@ -460,8 +466,9 @@ class LittleBuildingList:
                 dist = d
                 bestb = b
                 
-        #~ print rpos
-        return bestb.pos
+        if bestb is not None:
+            return bestb.pos
+        return None
         
     def getLastSeen(self):
         blast = None

@@ -72,7 +72,7 @@ if __name__ == '__main__':
     #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
     
 
-    counter = 4000
+    counter = 400
     
     while counter > 0:
         counter -= 1

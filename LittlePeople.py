@@ -106,6 +106,15 @@ class LittlePeople:
         for c in candiscuss:
             if random.randint(0, 9) == 0:
                 self.tellInfo(c)
+ 
+
+        
+        if self.tired > 20*60 and random.randint(0, 20) != 0:
+            self.shortTermGoal="eat"
+        
+        if self.hungry > 10*60 and random.randint(0, 20) != 0:
+            self.shortTermGoal="sleep"
+
                 
         possibleActions = []      
         preferredActions = []    
@@ -118,27 +127,38 @@ class LittlePeople:
                 if self.canDoAction(a):
                     possibleActions.append(a)
                     if a.type == self.shortTermGoal:
-                        #~ print "found action !"
+                        print "found action !"
                         preferredActions.append(a)
-        self.shortTermGoal = ""
+
         if len(preferredActions) > 0:
             #~ print self.name, " want to ", preferredActions[0].type," there"
-            
+            self.shortTermGoal = ""
             self.startAction(random.choice(preferredActions).copy())
             return
+            
+        if self.shortTermGoal != "":
+            print "but I want to ",self.shortTermGoal
+            goalPos = self.knowledge[self.shortTermGoal].findClosest(self.pos, notHere=self.pos)
+            if goalPos is not None:
+                print "I can ",self.shortTermGoal," at ",goalPos
+                a= LittleMoveAction()
+                a.pos = goalPos
+                self.startAction(a)
+                return
+        self.shortTermGoal = ""
         
         
-        if self.tired > 20*60 and random.randint(0, 20) != 0:
+        #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
             #~ print "must sleep"
-            a =  LittleSleepAction()
-            self.moveToAction(a)
-            return
+            #~ a =  LittleSleepAction()
+            #~ self.moveToAction(a)
+            #~ return
         
-        if self.hungry > 10*60 and random.randint(0, 20) != 0:
+        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
             #~ print "must eat"
-            a = LittleEatAction( )
-            self.moveToAction(a)
-            return
+            #~ a = LittleEatAction( )
+            #~ self.moveToAction(a)
+            #~ return
 
         
         myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
