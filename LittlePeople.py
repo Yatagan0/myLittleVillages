@@ -20,7 +20,7 @@ class LittlePeople:
 
         
         self.speed = 0.04
-        
+        self.shortTermGoal = ""
         if root is not None:
             self.read(root)
         else:
@@ -35,7 +35,7 @@ class LittlePeople:
             
             self.habits = LittleOldActions(self)
             
-            self.shortTermGoal = ""
+            
             
             
             self.tired = -5*60
@@ -52,7 +52,10 @@ class LittlePeople:
         self.tired = int(root.attrib["tired"])
         self.hungry = int(root.attrib["hungry"])
         self.money = float(root.attrib["money"])
-        self.shortTermGoal = root.attrib["shorttermgoal"]
+        if "shorttermgoal" in root.attrib.keys():
+            self.shortTermGoal = root.attrib["shorttermgoal"]
+
+            
         
         for child in root:
             if (child.tag == "habits"):     
@@ -74,6 +77,7 @@ class LittlePeople:
         elem.set("hungry", str(self.hungry))
         elem.set("money", str(self.money))
         elem.set("shorttermgoal", self.shortTermGoal)
+
         if self.action is not None:
             self.action.write(elem)
         
@@ -108,17 +112,13 @@ class LittlePeople:
                 self.tellInfo(c)
  
 
-        
-        if self.tired > 20*60 and random.randint(0, 20) != 0:
-            self.shortTermGoal="eat"
-        
-        if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            self.shortTermGoal="sleep"
+        #~ self.defineShortTermGoal()
+
 
                 
         possibleActions = []      
         preferredActions = []    
-        #~ print "sort term goal ",self.shortTermGoal
+        print self.name, "short term goal ",self.shortTermGoal
         b = buildingImIn(self.pos)
         if b is not None:
             aa = b.getPossibleActions()
@@ -127,7 +127,7 @@ class LittlePeople:
                 if self.canDoAction(a):
                     possibleActions.append(a)
                     if a.type == self.shortTermGoal:
-                        print "found action !"
+                        #~ print "found action !"
                         preferredActions.append(a)
 
         if len(preferredActions) > 0:
@@ -136,29 +136,37 @@ class LittlePeople:
             self.startAction(random.choice(preferredActions).copy())
             return
             
-        if self.shortTermGoal != "":
-            print "but I want to ",self.shortTermGoal
+        goalPos = None
+        if self.shortTermGoal in self.knowledge.keys():
             goalPos = self.knowledge[self.shortTermGoal].findClosest(self.pos, notHere=self.pos)
-            if goalPos is not None:
-                print "I can ",self.shortTermGoal," at ",goalPos
-                a= LittleMoveAction()
-                a.pos = goalPos
-                self.startAction(a)
-                return
-        self.shortTermGoal = ""
+            
+        #~ if self.shortTermGoal != []:
+        #~ print "but I want to ",self.shortTermGoal[0]
+
+        if goalPos is not None:
+            
+            print "I can ",self.shortTermGoal," at ",goalPos
+            
+            self.shortTermGoal=[self.shortTermGoal]+goalPos
+            a= LittleMoveAction()
+            a.pos = goalPos
+            self.startAction(a)
+            return
+                
+        #~ self.shortTermGoal = []
         
         
-        #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
-            #~ print "must sleep"
-            #~ a =  LittleSleepAction()
-            #~ self.moveToAction(a)
-            #~ return
+        if self.tired > 20*60 and random.randint(0, 20) != 0:
+            print "must sleep"
+            a =  LittleSleepAction()
+            self.moveToAction(a)
+            return
         
-        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            #~ print "must eat"
-            #~ a = LittleEatAction( )
-            #~ self.moveToAction(a)
-            #~ return
+        if self.hungry > 10*60 and random.randint(0, 20) != 0:
+            print "must eat"
+            a = LittleEatAction( )
+            self.moveToAction(a)
+            return
 
         
         myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
@@ -175,12 +183,31 @@ class LittlePeople:
         #~ print "chosing between ", len(possibleActions), " actions"
         a = random.choice(possibleActions)
         #~ print "a.type ", a.type, " price ", a.price
-        if a.pos is None or ( a.type is not "move" and a.type is not "do nothing"):
-            self.moveToAction(a)
+        #~ if a.pos is None or ( a.type is not "move" and a.type is not "do nothing"):
+        self.moveToAction(a)
+            #~ return
+
+        #~ self.startAction(a)
+
+    def defineShortTermGoal(self):
+        if self.tired > 20*60 and random.randint(0, 20) != 0:
+            self.shortTermGoal=["eat"]
             return
-
-        self.startAction(a)
-
+        
+        if self.hungry > 10*60 and random.randint(0, 20) != 0:
+            self.shortTermGoal=["sleep"]
+            return
+            
+        possibleGoals= [["do nothing"]]
+        myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
+        for a in myHabits:
+            if self.canDoAction(a):
+                goal = [a.type]
+                if a.pos is not None:
+                    goal = goal + a.pos
+                possibleGoals.append(goal)   
+        print possibleGoals
+        self.shortTermGoal = random.choice(possibleGoals)
 
     def moveToAction(self, a):
         #~ if not a.hasLocation():
@@ -191,19 +218,24 @@ class LittlePeople:
                 self.shortTermGoal = ""
                 return
 
-            if a.pos[0] != self.pos[0] or a.pos[1] != self.pos[1] or a.workslot is None:
-                self.shortTermGoal = a.type
-                a =  LittleMoveAction( pos=a.pos)
-        #~ print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
+            #~ if a.pos[0] != self.pos[0] or a.pos[1] != self.pos[1] or
+            #~ if a.workslot is None:
+            self.shortTermGoal = a.type
+            print self.name," new short term goal ",self.shortTermGoal
+            a =  LittleMoveAction( pos=a.pos)
+        print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
         self.startAction(a)
 
     def startAction(self, a):
         #~ a.people = self
         #~ if not a.hasLocation():
-            #~ a.getLocation()
+            #~ a.getLocation(self)
+        if a.type=="build":
+            print a.workslot.name, a.workslot.building.name
+            
         a.startExecution(self)
         self.action = a
-        #~ print self.name , " will ", a.type, " for ", a.price
+        print self.name , " will ", a.type, " for ", a.price
 
     def canDoAction(self, a):
         if a.type == "sleep" and self.tired < 5*60:
