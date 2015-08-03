@@ -13,7 +13,7 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage =False
-    DO_DISPLAY =False
+    DO_DISPLAY =True
     
     allPeople = []
     path = "village.xml"
@@ -34,6 +34,7 @@ if __name__ == '__main__':
         allPeople.append(p1)
 
         p2= LittlePeople()
+        b = LittleField( pos=[0.,0.], owner=p2)
         #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
         #~ print p2.name
         allPeople.append(p2)

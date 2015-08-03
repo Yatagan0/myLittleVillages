@@ -68,6 +68,38 @@ r.timeMax = 0
 r.description = ""
 allRecipes["move"] = r
 
+
+r = LittleRecipe("plant_potatoes")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "plante des patates"
+r.transformingStart.append(["field",  "clear", "planted-potatoes"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("weed_potatoes")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "desherbe des patates"
+r.transformingStart.append(["field", "planted-potatoes", "weeded-potatoes"])
+allRecipes[r.name] = r
+
+
+r = LittleRecipe("reweed_potatoes")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "desherbe des patates"
+r.transformingStart.append(["field", "weeded-potatoes", "re-weeded-potatoes"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("recolt_potatoes")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "recolte des patates"
+r.transformingStart.append(["field","re-weeded-potatoes", "clear"])
+r.transformingEnd.append(["potatoes","new", ""])
+allRecipes[r.name] = r
+
+
 class workSlotType:
     def __init__(self, name):
         self.name = name
@@ -83,5 +115,10 @@ workSlotTypes [t.name] = t
 
 t = workSlotType("table")
 t.recipes = ["eat", "cook", "clean_table"]
+#~ t.objects = ["table", "clean"]
+workSlotTypes [t.name] = t
+
+t = workSlotType("field")
+t.recipes = ["plant_potatoes", "weed_potatoes", "reweed_potatoes", "recolt_potatoes"]
 #~ t.objects = ["table", "clean"]
 workSlotTypes [t.name] = t

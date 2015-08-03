@@ -281,40 +281,16 @@ class LittleField(LittleBuilding):
                 self.owner = peopleNamed(self.owner)
         self.name = "field"
 
-        self.planted=[["nothing", "none", [0, 0, 0, 0, 0]]]*3
-        print self.planted
-
+        for i in range(0, 3):
+            ws = WorkSlot(types=["field"], building=self, name = "slot"+str(i))
+            ws.objects.append(["field", "clear"])
+            self.workSlots.append(ws)
+        
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleField")
-        for p in self.planted:
-            sub = ET.SubElement(elem, 'planted')
-            sub.set("planted", p[0])
-            sub.set("state", p[1])
-            sub.set("minute", str(p[2][0]))
-            sub.set("hour", str(p[2][1]))
-            sub.set("day", str(p[2][2]))
-            sub.set("month", str(p[2][3]))
-            sub.set("year", str(p[2][4]))
-        
-    def read(self, root):
-        LittleBuilding.read(self, root)
-        self.planted = []
-        for child in root:
-            if (child.tag == "planted"):   
-                p = []
-                p.append(child.attrib["planted"])
-                p.append(child.attrib["state"])
-                p.append([int(child.attrib["minute"]), int(child.attrib["hour"]),int(child.attrib["day"]),int(child.attrib["month"]),int(child.attrib["year"])])
-                self.planted.append(p)
 
-        
-                
-    #~ def getPossibleActions(self, isOwner=False):
-        #~ actions = []
-               
-        #~ return actions
         
 class LittleConstructingBuilding(LittleBuilding):
     def __init__(self, root=None, pos = [0., 0.], owner=None, futureType=None):
