@@ -187,6 +187,9 @@ class LittlePeople:
         a.getLocation(self)
             
         if a.type != "move" and a.type != "do nothing" :
+            if a.pos is None:
+                self.shortTermGoal = ""
+                return
 
             if a.pos[0] != self.pos[0] or a.pos[1] != self.pos[1] or a.workslot is None:
                 self.shortTermGoal = a.type

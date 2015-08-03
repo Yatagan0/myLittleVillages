@@ -68,6 +68,12 @@ r.timeMax = 0
 r.description = ""
 allRecipes["move"] = r
 
+r = LittleRecipe("build")
+r.timeMin = 30
+r.timeMax = 90
+r.description = "construit un batiment"
+allRecipes[r.name] = r
+
 
 r = LittleRecipe("plant_potatoes")
 r.timeMin = 60

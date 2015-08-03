@@ -133,6 +133,8 @@ class LittleAction:
             for t in recipe.transformingEnd:
                 print t
                 self.workslot.objectStatus(t[0], t[1], t[2])
+                
+
 
        
     def execute(self):
@@ -256,6 +258,11 @@ class LittleWorkAction(LittleAction):
 
     def endExecution(self):
         LittleAction.endExecution(self)
+        if self.type == "build":
+            print self.workslot.types
+            print self.workslot.building.name, self.workslot.name
+            self.workslot.types.remove("constructing")
+        
         self.people.knowledge["work"].seenBuilding(pos=self.pos, reliable=1)       
  
     def getLocation(self, people):

@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
         mayor = LittlePeople()
         #~ bb = LittleBuilding(pos=[0.,0.])#
-        bb = LittleHotel( pos=[1.,0.],owner = mayor)
+        bb = LittleHotel( pos=[0.,0.],owner = mayor)
         #~ b =LittleBuilding(pos=[0.,0.])# 
         #~ b = LittleRestaurant( pos=[0.,1.], owner = mayor)
         #~ print mayor.name
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         allPeople.append(p1)
 
         p2= LittlePeople()
-        b = LittleField( pos=[0.,0.], owner=p2)
+        bbb = LittleField( pos=[0.,0.], owner=p2)
         #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
         #~ print p2.name
         allPeople.append(p2)

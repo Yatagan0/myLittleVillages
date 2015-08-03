@@ -36,7 +36,7 @@ class WorkSlot:
         if root is not None:
             self.read(root)
         else:
-            self.types = types
+            self.types = types +["constructing"]*10
             #~ 
             self.name = name
             self.occupied = False
@@ -44,6 +44,17 @@ class WorkSlot:
     def getPossibleActions(self):
         if self.occupied:
             return []
+            
+            
+        if "constructing" in self.types:
+            print "construct me ! ", self.types
+            print self.building.name, self.name
+            recipe = allRecipes["build"]
+            meanTime = (recipe.timeMax - recipe.timeMin)/2.
+            price=int(10*self.building.basePrice*meanTime)/10.
+            act = LittleWorkAction(workslot=self, type="build" )
+            act.price = -price
+            return [act]
         
         actions = []
 
