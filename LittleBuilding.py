@@ -302,59 +302,7 @@ class LittleField(LittleBuilding):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleField")
 
-        
-class LittleConstructingBuilding(LittleBuilding):
-    def __init__(self, root=None, pos = [0., 0.], owner=None, futureType=None):
-        
-        LittleBuilding.__init__(self, root=root, pos=pos, type="constructing", owner=owner)
-        
-        if root is not None:
-            pass
-            #~ self.read(root)
-        else:
-        
-            self.name = "constructing"
-            self.futureType = futureType
-            self.numWorkers = 4
-            self.workTasks = 4
-            
-    def read(self, root):
-        LittleBuilding.read(self, root)
-        self.numWorkers= int(root.attrib["numWorkers"])
-        self.workTasks = int(root.attrib["workTasks"])
-        self.futureType = root.attrib["futureType"]
-        
-    def write(self, root):
-        elem = LittleBuilding.write(self, root)
-        elem.set("class", "LittleConstructingBuilding")
-        elem.set("numWorkers", str(self.numWorkers))
-        elem.set("workTasks", str(self.workTasks))      
-        elem.set("futureType", self.futureType)      
-        
-    def finish(self):
-        global allBuildings
-        allBuildings.remove(self)
-        if self.futureType == "LittleHotel":
-            #~ self.__class__= LittleHotel
-            self= LittleHotel( owner=self.owner, pos=self.pos)
-        elif self.futureType == "LittleRestaurant":
-            #~ self.__class__= LittleRestaurant
-            self= LittleRestaurant( owner=self.owner, pos=self.pos)
-        elif self.futureType == "LittleField":
-            #~ self.__class__= LittleRestaurant
-            self= LittleField( owner=self.owner, pos=self.pos) 
-        else:
-            #~ self.__class__= LittleBuilding
-            self= LittleBuilding( owner=self.owner, pos=self.pos)
-        #~ self.init()
-        print "building in ",self.pos," is now finished ! Its name is ",self.name,"!"
-        
-    #~ def getPossibleActions(self, isOwner=False):
-        #~ actions = []
-        #~ for i in range(min(self.numWorkers, self.workTasks)):
-            #~ actions.append( LittleWorkAction( people=None,startHour=[0, 0], pos=self.pos, desc="construit", type="construct", price = -2))
-        
-        #~ return actions
+
        
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.]):
@@ -458,16 +406,17 @@ class LittleBuildingList:
         return None
         
     def getLastSeen(self):
-        blast = None
-        dmin = -1
-        for b in self.known:
-            t = -utils.globalTime.durationTo(b.lastSeen)
-            #~ print t
-            if dmin == -1 or t < dmin:
-                dmin = t
-                blast = b
+        #~ blast = None
+        #~ dmin = -1
+        #~ for b in self.known:
+            #~ t = -utils.globalTime.durationTo(b.lastSeen)
+
+            #~ if dmin == -1 or t < dmin:
+                #~ dmin = t
+                #~ blast = b
                 
-        return blast
+        #~ return blast
+        return random.choice(self.known)
             
             
 def readBuilding(root):

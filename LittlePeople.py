@@ -118,7 +118,7 @@ class LittlePeople:
                 
         possibleActions = []      
         preferredActions = []    
-        print self.name, "short term goal ",self.shortTermGoal
+        #~ print self.name, "short term goal ",self.shortTermGoal
         b = buildingImIn(self.pos)
         if b is not None:
             aa = b.getPossibleActions()
@@ -145,7 +145,7 @@ class LittlePeople:
 
         if goalPos is not None:
             
-            print "I can ",self.shortTermGoal," at ",goalPos
+            #~ print "I can ",self.shortTermGoal," at ",goalPos
             
             self.shortTermGoal=[self.shortTermGoal]+goalPos
             a= LittleMoveAction()
@@ -221,21 +221,21 @@ class LittlePeople:
             #~ if a.pos[0] != self.pos[0] or a.pos[1] != self.pos[1] or
             #~ if a.workslot is None:
             self.shortTermGoal = a.type
-            print self.name," new short term goal ",self.shortTermGoal
+            #~ print self.name," new short term goal ",self.shortTermGoal
             a =  LittleMoveAction( pos=a.pos)
-        print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
+        #~ print self.name , " will go to ", a.pos, " for ", self.shortTermGoal
         self.startAction(a)
 
     def startAction(self, a):
         #~ a.people = self
         #~ if not a.hasLocation():
             #~ a.getLocation(self)
-        if a.type=="build":
-            print a.workslot.name, a.workslot.building.name
+        #~ if a.type=="build":
+            #~ print a.workslot.name, a.workslot.building.name
             
         a.startExecution(self)
         self.action = a
-        print self.name , " will ", a.type, " for ", a.price
+        #~ print self.name , " will ", a.type, " for ", a.price
 
     def canDoAction(self, a):
         if a.type == "sleep" and self.tired < 5*60:
