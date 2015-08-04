@@ -107,7 +107,7 @@ class LittleAction:
              
                 #~ print "transforming"
                 for t in recipe.transformingStart:
-                    print t
+                    #~ print t
                     self.workslot.objectStatus(t[0], t[1], t[2])
         
      
@@ -121,9 +121,18 @@ class LittleAction:
             
         #~ print "ending ", self.workslot, " at ", self.pos
         if self.workslot is not None:
-            self.people.money -= self.price
-            self.workslot.building.money += self.price
+            if self.price > 0.:
+                peopleRatio = 1.
+                buildingRatio = 0.95
+            else:
+                peopleRatio = 0.95
+                buildingRatio = 1.
+                
+            self.people.money -= peopleRatio*self.price
+            self.workslot.building.money += buildingRatio*self.price
             self.workslot.occupied = False
+            
+            self.people.village.money += 0.05*abs(self.price)
 
 
         if self.type in allRecipes.keys():
@@ -131,7 +140,7 @@ class LittleAction:
              
             #~ print "transforming"
             for t in recipe.transformingEnd:
-                print t
+                #~ print t
                 self.workslot.objectStatus(t[0], t[1], t[2])
                 
 
@@ -259,8 +268,8 @@ class LittleWorkAction(LittleAction):
     def endExecution(self):
         LittleAction.endExecution(self)
         if self.type == "build":
-            print self.workslot.types
-            print self.workslot.building.name, self.workslot.name
+            #~ print self.workslot.types
+            #~ print self.workslot.building.name, self.workslot.name
             self.workslot.types.remove("constructing")
         
         self.people.knowledge["work"].seenBuilding(pos=self.pos, reliable=1)       
@@ -271,6 +280,40 @@ class LittleWorkAction(LittleAction):
         if isinstance(self.workslot, basestring) or self.workslot is None:
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)
+            
+class LittleManageAction(LittleAction):
+    def __init__(self,root=None,workslot=None ):
+        LittleAction.__init__(self, root=root, type="manage", workslot=workslot)
+        if root is not None:
+            self.read(root)
+                
+    def write(self, root):
+        elem =  LittleAction.write(self, root)
+        elem.set("class", "LittleManageAction")
+        #~ elem.set("description", self.description)
+        return elem
+        
+        
+    def canExecute(self):
+        print "can execute move"
+        return True
+        
+     
+    def startExecution(self, people):
+        LittleAction.startExecution(self, people)
+        print self.people.name," manage ",self.workslot.business.name
+
+    def execute(self):
+        #~ if self.people.go(self.pos):
+            #~ self.endExecution()
+            #~ return False
+            
+        return True
+
+    #~ def getLocation(self, people):
+        #~ if self.pos is None:
+            #~ self.pos = [people.pos[0]+random.randint(-1, 1), people.pos[1]+random.randint(-1, 1)]
+            #~ print "self pos ",self.pos
         
 class LittleOldActions():
     def __init__(self,people, root=None):
@@ -369,6 +412,8 @@ def readAction(root, people):
         a = LittleMoveAction(root=root)
     elif root.attrib["class"] == "LittleWorkAction":
         a = LittleWorkAction(root=root)
+    elif root.attrib["class"] == "LittleManageAction":
+        a = LittleManageAction(root=root)
     else:
         a = LittleAction(root=root)
         

@@ -3,8 +3,9 @@
 
 import random, utils
 
-from LittlePeople import *
+
 from LittleBuilding import *
+from LittleVillage import *
 
 
 import xml.etree.ElementTree as ET
@@ -15,30 +16,40 @@ if __name__ == '__main__':
     newVillage =False
     DO_DISPLAY =True
     
-    allPeople = []
     path = "village.xml"
     
     if newVillage:
-
-        mayor = LittlePeople()
+        
+        village = LittleVillage()
+        
+        for i in range(0, 1):
+            village.addPeople()
+        village.money = 0
+        #~ mayor = LittlePeople()
         #~ bb = LittleBuilding(pos=[0.,0.])#
-        bb = LittleHotel( pos=[0.,0.],owner = mayor)
+        #~ bb = LittleHotel( pos=[0.,0.],owner = mayor)
         #~ b =LittleBuilding(pos=[0.,0.])# 
         #~ b = LittleRestaurant( pos=[0.,1.], owner = mayor)
         #~ print mayor.name
-        allPeople.append(mayor)
+        #~ allPeople.append(mayor)
         
-        p1= LittlePeople()
-        b = LittleRestaurant( pos=[0.,0.], owner=p1)
+        #~ p1= LittlePeople()
+        #~ b = LittleRestaurant( pos=[0.,0.], owner=p1)
         #~ print p1.name
-        allPeople.append(p1)
+        #~ allPeople.append(p1)
 
-        p2= LittlePeople()
-        bbb = LittleField( pos=[0.,0.], owner=p2)
+        #~ p2= LittlePeople()
+        #~ bbb = LittleField( pos=[0.,0.], owner=p2)
         #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
         #~ print p2.name
-        allPeople.append(p2)
+        #~ allPeople.append(p2)
 
+        #~ village.people.append(mayor)
+        #~ mayor.village = village
+        #~ village.people.append(p1)
+        #~ p1.village = village
+        #~ village.people.append(p2)
+        #~ p2.village = village
 
         
         #~ for i in range(0, 5):
@@ -49,9 +60,9 @@ if __name__ == '__main__':
             #~ allPeople.append(p)
             #~ LittleConstructingBuilding( pos = [0., 0.], owner=p, futureType="LittleField")
 
-        for p in allPeople:
-            p.knowledge["sleep"].seenBuilding(building=bb)
-            p.knowledge["eat"].seenBuilding(building=b)            
+        #~ for p in allPeople:
+            #~ p.knowledge["sleep"].seenBuilding(building=bb)
+            #~ p.knowledge["eat"].seenBuilding(building=b)            
 
         #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
         #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
@@ -61,16 +72,8 @@ if __name__ == '__main__':
     else:
         tree =  ET.parse(path)
         root = tree.getroot()
-        for child in root:
-            if (child.tag == "time"):
-                utils.globalTime.read(child)
-            elif (child.tag == "people"):
-                p=LittlePeople(child)
-                allPeople.append(p)
-            elif child.tag == "building":
-                b = readBuilding(child)
+        village = LittleVillage(root)
 
-    #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
     
 
     counter = 400
@@ -78,25 +81,23 @@ if __name__ == '__main__':
     while counter > 0:
         counter -= 1
         
+        village.update()
+        
         #~ print "------------------"
-        utils.globalTime.addTime()
-        print utils.globalTime
-        for p in allPeople:
-            p.update()
+        #~ utils.globalTime.addTime()
+        #~ print utils.globalTime
+        #~ for p in village.people:
+            #~ p.update()
         if DO_DISPLAY:
             from LittleDisplay import *
-            if not display(allPeople, allBuildings):
+            if not display(village.people, allBuildings):
                 counter=0
             
-    #~ print allPeople[0].habits
-    
-#~ lv.writeVillage(path)
     root = ET.Element('village')
     utils.globalTime.write(root)
     
-    for p in allPeople:
-        p.write(root)
-        
+    village.write(root)
+    
     for b in allBuildings:
         print b.type
         b.write(root)

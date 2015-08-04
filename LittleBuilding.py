@@ -47,8 +47,8 @@ class WorkSlot:
             
             
         if "constructing" in self.types:
-            print "construct me ! ", self.types
-            print self.building.name, self.name
+            #~ print "construct me ! ", self.types
+            #~ print self.building.name, self.name
             recipe = allRecipes["build"]
             meanTime = (recipe.timeMax - recipe.timeMin)/2.
             price=int(10*self.building.basePrice*meanTime)/10.
@@ -416,6 +416,9 @@ class LittleBuildingList:
                 #~ blast = b
                 
         #~ return blast
+        if len(self.known) == 0:
+            return None
+        
         return random.choice(self.known)
             
             

@@ -147,7 +147,7 @@ class LittlePeople:
             
             #~ print "I can ",self.shortTermGoal," at ",goalPos
             
-            self.shortTermGoal=[self.shortTermGoal]+goalPos
+            #~ self.shortTermGoal=[self.shortTermGoal]+goalPos
             a= LittleMoveAction()
             a.pos = goalPos
             self.startAction(a)
@@ -156,15 +156,21 @@ class LittlePeople:
         #~ self.shortTermGoal = []
         
         
-        if self.tired > 20*60 and random.randint(0, 20) != 0:
-            print "must sleep"
+        if self.tired > 20*60 and random.randint(0, 10) != 0:
+            #~ print "must sleep"
             a =  LittleSleepAction()
             self.moveToAction(a)
             return
         
-        if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            print "must eat"
+        if self.hungry > 10*60 and random.randint(0, 10) != 0:
+            #~ print "must eat"
             a = LittleEatAction( )
+            self.moveToAction(a)
+            return
+            
+        if self.money < 5.0 and random.randint(0, 10) != 0:
+            #~ print "must eat"
+            a = LittleWorkAction( )
             self.moveToAction(a)
             return
 
@@ -189,25 +195,25 @@ class LittlePeople:
 
         #~ self.startAction(a)
 
-    def defineShortTermGoal(self):
-        if self.tired > 20*60 and random.randint(0, 20) != 0:
-            self.shortTermGoal=["eat"]
-            return
+    #~ def defineShortTermGoal(self):
+        #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
+            #~ self.shortTermGoal=["eat"]
+            #~ return
         
-        if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            self.shortTermGoal=["sleep"]
-            return
+        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
+            #~ self.shortTermGoal=["sleep"]
+            #~ return
             
-        possibleGoals= [["do nothing"]]
-        myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
-        for a in myHabits:
-            if self.canDoAction(a):
-                goal = [a.type]
-                if a.pos is not None:
-                    goal = goal + a.pos
-                possibleGoals.append(goal)   
-        print possibleGoals
-        self.shortTermGoal = random.choice(possibleGoals)
+        #~ possibleGoals= [["do nothing"]]
+        #~ myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
+        #~ for a in myHabits:
+            #~ if self.canDoAction(a):
+                #~ goal = [a.type]
+                #~ if a.pos is not None:
+                    #~ goal = goal + a.pos
+                #~ possibleGoals.append(goal)   
+        #~ print possibleGoals
+        #~ self.shortTermGoal = random.choice(possibleGoals)
 
     def moveToAction(self, a):
         #~ if not a.hasLocation():
