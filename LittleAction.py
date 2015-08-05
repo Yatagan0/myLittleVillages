@@ -305,10 +305,10 @@ class LittleManageAction(LittleAction):
 
     def execute(self):
         #~ if self.people.go(self.pos):
-            #~ self.endExecution()
-            #~ return False
+        self.endExecution()
+        return False
             
-        return True
+        #~ return True
 
     #~ def getLocation(self, people):
         #~ if self.pos is None:

@@ -40,6 +40,7 @@ class WorkSlot:
             #~ 
             self.name = name
             self.occupied = False
+
         
     def getPossibleActions(self):
         if self.occupied:
@@ -143,6 +144,7 @@ class LittleBuilding:
             self.owner = owner
             self.money=0
             self.basePrice = 0.1
+            self.managed = False
             
             #~ print "new work slots"
             #~ for i in range(0, 3):
@@ -198,6 +200,7 @@ class LittleBuilding:
         return self.findFreePos(pos, size+1)
         
     def getPossibleActions(self, isOwner=False):
+        print self.owner
         actions = []
         for s in self.workSlots:
             actions = actions + s.getPossibleActions()

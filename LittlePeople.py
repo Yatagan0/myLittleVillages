@@ -18,7 +18,6 @@ class LittlePeople:
     def __init__(self, root=None):
         self.action = None
 
-        
         self.speed = 0.04
         self.shortTermGoal = ""
         if root is not None:
