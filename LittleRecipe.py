@@ -66,7 +66,13 @@ r = LittleRecipe("move")
 r.timeMin = 0
 r.timeMax = 0
 r.description = ""
-allRecipes["move"] = r
+allRecipes[r.name] = r
+
+r = LittleRecipe("manage")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = ""
+allRecipes[r.name] = r
 
 r = LittleRecipe("build")
 r.timeMin = 30

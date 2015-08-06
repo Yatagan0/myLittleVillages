@@ -20,8 +20,8 @@ class LittleAction:
             if self.workslot is not None:
                 self.pos = self.workslot.building.pos
             
-        if self.type not in allRecipes.keys():
-            print "unknown recipe"
+        #~ if self.type not in allRecipes.keys():
+            #~ print "unknown recipe in init ", self.type
 
         
     def __str__(self):
@@ -72,13 +72,13 @@ class LittleAction:
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)
         if self.type not in allRecipes.keys() or self.workslot is None:
-            print "unknown recipe"
+            print "unknown recipeee ",self.type
             return True
         recipe = allRecipes[self.type]
         for t in recipe.transformingStart:
             if not self.workslot.hasObject(t[0], t[1]):
                 return False
-        #TO DO
+
         return True
        
     def startExecution(self, people):
@@ -112,6 +112,7 @@ class LittleAction:
         
      
     def endExecution(self):
+        print self.people.name, "end action"
         if isinstance(self.workslot, basestring) :
             #~ print "workslot name ",self.workslot, " pos ",self.pos
             if self.pos is not None:
@@ -295,20 +296,32 @@ class LittleManageAction(LittleAction):
         
         
     def canExecute(self):
-        print "can execute move"
+        print "can execute manage"
         return True
         
      
     def startExecution(self, people):
+        print "start manage"
         LittleAction.startExecution(self, people)
         print self.people.name," manage ",self.workslot.building.name
 
-    def execute(self):
-        #~ if self.people.go(self.pos):
-        self.endExecution()
-        return False
-            
         #~ return True
+
+    def endExecution(self):
+        LittleAction.endExecution(self)
+        self.workslot.building.lastManaged = 0
+        if self.workslot.building.money >=0:
+            print self.people.name, " recupere ", self.workslot.building.money
+            self.people.money += self.workslot.building.money
+            self.workslot.money = 0.
+            
+        else:
+            toGive = max(min (-self.workslot.building.money, self.people.money - 5.) , 0.)
+            print self.people.name, " donne ", toGive
+            self.people.money -= toGive
+            self.workslot.building.money += toGive
+        
+        
 
     #~ def getLocation(self, people):
         #~ if self.pos is None:

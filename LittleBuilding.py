@@ -222,7 +222,7 @@ class LittleBuilding:
             if len(self.workSlots) == 0:
                 print "can't manage without workslots !"
             else:
-                print "manage action possible"
+                #~ print "manage action possible"
                 actions.append(LittleManageAction(workslot=self.workSlots[0]))
             
         return actions
