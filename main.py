@@ -14,7 +14,7 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage =False
-    DO_DISPLAY =True
+    DO_DISPLAY =False
     
     path = "village.xml"
     
@@ -99,7 +99,6 @@ if __name__ == '__main__':
     village.write(root)
     
     for b in allBuildings:
-        print b.type
         b.write(root)
     
     

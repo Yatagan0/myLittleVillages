@@ -301,7 +301,7 @@ class LittleManageAction(LittleAction):
      
     def startExecution(self, people):
         LittleAction.startExecution(self, people)
-        print self.people.name," manage ",self.workslot.business.name
+        print self.people.name," manage ",self.workslot.building.name
 
     def execute(self):
         #~ if self.people.go(self.pos):

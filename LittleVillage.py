@@ -41,6 +41,7 @@ class LittleVillage:
         
         if utils.globalTime.minute == 0:
             print "hourly update"
+            self.hourlyUpdate()
             if utils.globalTime.hour == 0:
                 print "daily update"
                 self.dailyUpdate()
@@ -48,7 +49,24 @@ class LittleVillage:
         for p in self.people:
             p.update()
             
+        for b in allBuildings:
+            b.update()
+    
+            
+    def hourlyUpdate(self):
+        for p in self.people:
+            p.hourlyUpdate()
+            
+        for b in allBuildings:
+            b.hourlyUpdate()
+            
     def dailyUpdate(self):
+        for p in self.people:
+            p.dailyUpdate()
+            
+        for b in allBuildings:
+            b.dailyUpdate()
+            
         if self.money >= 5.0:
             self.addPeople()
         

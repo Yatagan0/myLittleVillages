@@ -20,6 +20,7 @@ class LittlePeople:
 
         self.speed = 0.04
         self.shortTermGoal = ""
+        self.ownedBuildings = []
         if root is not None:
             self.read(root)
         else:
@@ -65,6 +66,9 @@ class LittlePeople:
                 self.knowledge = {}
                 for cc in child:
                     self.knowledge[cc.attrib["type"]] = LittleBuildingList(cc)
+            elif child.tag=="ownedBuilding":
+                print "owned building"
+                self.ownedBuildings.append([float(child.attrib["posX"]), float(child.attrib["posY"])])
                 
                 
     def write(self, root):
@@ -85,8 +89,18 @@ class LittlePeople:
         sub =  ET.SubElement(elem, 'knowledge')
         for k in self.knowledge.values():
             k.write(sub)
+        
+        for b in self.ownedBuildings:
+            sub =  ET.SubElement(elem, 'ownedBuilding')
+            sub.set("posX", str(b[0]))
+            sub.set("posY", str(b[1]))
             
-   
+    def hourlyUpdate(self):
+        pass
+            
+    def dailyUpdate(self):
+        pass
+        
     def update(self):
         self.tired+=1
         self.hungry +=1
@@ -120,7 +134,13 @@ class LittlePeople:
         #~ print self.name, "short term goal ",self.shortTermGoal
         b = buildingImIn(self.pos)
         if b is not None:
-            aa = b.getPossibleActions()
+            buildingIsMine = False
+            for mb in self.ownedBuildings:
+                if b.pos[0] == mb[0] and b.pos[1] == mb[1]:
+                    buildingIsMine = True
+                    break
+            
+            aa = b.getPossibleActions(isOwner=buildingIsMine)
             #~ print len(aa)," possible actions in building"
             for a in aa:
                 if self.canDoAction(a):
@@ -181,6 +201,11 @@ class LittlePeople:
 
         a= LittleMoveAction()
         possibleActions.append(a)
+        
+        for mb in self.ownedBuildings:
+            a= LittleMoveAction()
+            a.pos = mb
+            possibleActions.append(a)           
 
         a = LittleAction()
         possibleActions.append(a)

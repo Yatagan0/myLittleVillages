@@ -133,7 +133,8 @@ class LittleBuilding:
 
         self.possibleActions = []
         self.workSlots=[]
-
+        
+        
         if root is not None:
             self.read(root)
         else:
@@ -142,13 +143,12 @@ class LittleBuilding:
             self.type = type
             self.name = "unnamed building"
             self.owner = owner
+            if self.owner is not None:
+                self.owner.ownedBuildings.append(self.pos)
             self.money=0
             self.basePrice = 0.1
-            self.managed = False
-            
-            #~ print "new work slots"
-            #~ for i in range(0, 3):
-                #~ self.workSlots.append(WorkSlot(types=["test", "building"], building=self, name = "slot"+str(i)))
+            self.lastManaged =0
+
         
         global allBuildings
         allBuildings.append(self)
@@ -162,6 +162,7 @@ class LittleBuilding:
         elem.set("name", self.name)
         elem.set("money", str(self.money))
         elem.set("basePrice", str(self.basePrice))
+        elem.set("lastManaged", str(self.lastManaged))
         if self.owner is None:
             elem.set("owner", "")
         elif isinstance(self.owner, basestring):
@@ -181,10 +182,12 @@ class LittleBuilding:
         #~ print self.name
         self.money = float(root.attrib["money"])
         self.basePrice = float(root.attrib["basePrice"])
+        self.lastManaged = float(root.attrib["lastManaged"])
         from LittlePeople import peopleNamed
         self.owner = peopleNamed(root.attrib["owner"])
         if self.owner is None and root.attrib["owner"] is not "" :
             self.owner = root.attrib["owner"]
+            
             
         for child in root:
             if child.tag == "workslot":
@@ -199,11 +202,29 @@ class LittleBuilding:
             return [r0, r1]
         return self.findFreePos(pos, size+1)
         
+    def hourlyUpdate(self):
+        print "building hourly update"
+        self.lastManaged +=1
+            
+    def dailyUpdate(self):
+        pass       
+ 
+    def update(self):
+        pass   
+        
     def getPossibleActions(self, isOwner=False):
-        print self.owner
+        #~ print self.owner
         actions = []
         for s in self.workSlots:
             actions = actions + s.getPossibleActions()
+            
+        if isOwner:
+            if len(self.workSlots) == 0:
+                print "can't manage without workslots !"
+            else:
+                print "manage action possible"
+                actions.append(LittleManageAction(workslot=self.workSlots[0]))
+            
         return actions
  
 class LittleRestaurant(LittleBuilding):
