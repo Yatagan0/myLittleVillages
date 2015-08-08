@@ -203,7 +203,7 @@ class LittleBuilding:
         return self.findFreePos(pos, size+1)
         
     def hourlyUpdate(self):
-        print "building hourly update"
+        #~ print "building hourly update"
         self.lastManaged +=1
             
     def dailyUpdate(self):

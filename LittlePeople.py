@@ -100,10 +100,12 @@ class LittlePeople:
             
     def dailyUpdate(self):
         pass
-        
+   
     def update(self):
         self.tired+=1
         self.hungry +=1
+        
+        
         
         if self.action is not None:
             if not self.action.execute():
@@ -116,23 +118,64 @@ class LittlePeople:
                         self.habits.addAction(self.action)
                 self.action = None
             return
-            
-            
-            
+
         candiscuss = self.canDiscuss()
         for c in candiscuss:
             if random.randint(0, 9) == 0:
                 self.tellInfo(c)
- 
-
-        #~ self.defineShortTermGoal()
 
         #~ print "a"
+        
+        b = buildingImIn(self.pos)
+        if self.shortTermGoal != "":
+            print self.name, " has short term goal ", self.shortTermGoal
+            a = self.canDoActionHere( b, self.shortTermGoal)
+            if a is not None:
+                print self.name," can do short term goal ",self.shortTermGoal
+                self.startAction(a)
+                self.shortTermGoal = ""
+                return
+             
+        goalPos = None
+        if self.shortTermGoal in self.knowledge.keys():
+            goalPos = self.knowledge[self.shortTermGoal].findClosest(self.pos, notHere=self.pos)
+
+        if goalPos is not None:
+            print self.name," will go in ", goalPos, " for short term goal ",self.shortTermGoal
+            a= LittleMoveAction()
+            a.pos = goalPos
+            self.startAction(a)
+            return
+                
+        if self.tired > 20*60 and random.randint(0, 10) != 0:
+            #~ a = canDoActionHere(self, b, "sleep")
+            #~ if a is not None:
+                #~ self.startAction(a)
+                #~ return
+            #~ else:
+                a =  LittleSleepAction()
+                self.moveToAction(a)
+                return
+        
+        if self.hungry > 10*60 and random.randint(0, 10) != 0:
+            #~ a = canDoActionHere(self, b, "eat")
+            #~ if a is not None:
+                #~ self.startAction(a)
+                #~ return
+            #~ else:
+                a = LittleEatAction( )
+                self.moveToAction(a)
+                return
+            
+        if self.money < 5.0 and random.randint(0, 10) != 0:
+            a = LittleWorkAction( )
+            self.moveToAction(a)
+            return
+                
+                
                 
         possibleActions = []      
-        preferredActions = []    
-        #~ print self.name, "short term goal ",self.shortTermGoal
-        b = buildingImIn(self.pos)
+        
         if b is not None:
             buildingIsMine = False
             for mb in self.ownedBuildings:
@@ -141,71 +184,31 @@ class LittlePeople:
                     break
             
             aa = b.getPossibleActions(isOwner=buildingIsMine)
-            #~ print len(aa)," possible actions in building"
             for a in aa:
                 if self.canDoAction(a):
                     possibleActions.append(a)
-                    if a.type == self.shortTermGoal:
-                        #~ print "found action !"
-                        preferredActions.append(a)
 
-        if len(preferredActions) > 0:
-            #~ print self.name, " want to ", preferredActions[0].type," there"
-            self.shortTermGoal = ""
-            self.startAction(random.choice(preferredActions).copy())
-            return
-            
-        #~ print "b"
-            
-        goalPos = None
-        if self.shortTermGoal in self.knowledge.keys():
-            goalPos = self.knowledge[self.shortTermGoal].findClosest(self.pos, notHere=self.pos)
-            
-        #~ if self.shortTermGoal != []:
-        #~ print "but I want to ",self.shortTermGoal[0]
-
-        if goalPos is not None:
-            
-            #~ print "I can ",self.shortTermGoal," at ",goalPos
-            
-            #~ self.shortTermGoal=[self.shortTermGoal]+goalPos
-            a= LittleMoveAction()
-            a.pos = goalPos
-            self.startAction(a)
-            return
-                
-        #~ self.shortTermGoal = []
-        
-        
-        #~ if self.tired > 20*60 and random.randint(0, 10) != 0:
-            #~ a =  LittleSleepAction()
-            #~ self.moveToAction(a)
-            #~ return
-        
-        #~ if self.hungry > 10*60 and random.randint(0, 10) != 0:
-            #~ a = LittleEatAction( )
-            #~ self.moveToAction(a)
-            #~ return
-            
-        #~ if self.money < 5.0 and random.randint(0, 10) != 0:
-            #~ a = LittleWorkAction( )
-            #~ self.moveToAction(a)
-            #~ return
-
-        #~ print "c"
         
         myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
         for a in myHabits:
             if self.canDoAction(a):
-                possibleActions.append(a)        
+                #~ if a.pos is not None and a.pos[0]==self.pos[0] and a.pos[1]==self.pos[1] :
+                    #~ #check that action is possible to avoid move
+                    #~ for aa in possibleActions:
+                        #~ if aa.type == a.type:
+                            #~ possibleActions.append(aa) 
+                            #~ break
+                #~ else:
+                    possibleActions.append(a)        
 
         a= LittleMoveAction()
         possibleActions.append(a)
         
         for mb in self.ownedBuildings:
-            a= LittleMoveAction()
-            a.pos = mb
-            possibleActions.append(a)           
+            if mb[0] != self.pos[0] or mb[1] != self.pos[1]:
+                a= LittleMoveAction()
+                a.pos = mb
+                possibleActions.append(a)           
 
         a = LittleAction()
         possibleActions.append(a)
@@ -220,27 +223,37 @@ class LittlePeople:
 
         #~ self.startAction(a)
 
-    #~ def defineShortTermGoal(self):
-        #~ if self.tired > 20*60 and random.randint(0, 20) != 0:
-            #~ self.shortTermGoal=["eat"]
-            #~ return
-        
-        #~ if self.hungry > 10*60 and random.randint(0, 20) != 0:
-            #~ self.shortTermGoal=["sleep"]
-            #~ return
+
+    def canDoActionHere(self, building,  action):
+        preferredActions = []
+        if building is not None:
+            buildingIsMine = False
+            for mb in self.ownedBuildings:
+                if building.pos[0] == mb[0] and building.pos[1] == mb[1]:
+                    buildingIsMine = True
+                    break
             
-        #~ possibleGoals= [["do nothing"]]
-        #~ myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
-        #~ for a in myHabits:
-            #~ if self.canDoAction(a):
-                #~ goal = [a.type]
-                #~ if a.pos is not None:
-                    #~ goal = goal + a.pos
-                #~ possibleGoals.append(goal)   
-        #~ print possibleGoals
-        #~ self.shortTermGoal = random.choice(possibleGoals)
+            aa = building.getPossibleActions(isOwner=buildingIsMine)
+            #~ print len(aa)," possible actions in building"
+            for a in aa:
+                if self.canDoAction(a):
+                    if action=="work" and a.type not in speacialWorks:
+                        preferredActions.append(a)
+                    if a.type == action:
+                         preferredActions.append(a)
+
+        if len(preferredActions) > 0:
+            return random.choice(preferredActions).copy()
+            
+        return None
 
     def moveToAction(self, a):
+        b = buildingImIn(self.pos)
+        aa = self.canDoActionHere( b, a.type)
+        if aa is not None:
+            self.startAction(aa)
+            return
+        
         #~ if not a.hasLocation():
         a.getLocation(self)
             
@@ -251,7 +264,7 @@ class LittlePeople:
 
                 return
 
-            #~ if a.pos[0] != self.pos[0] or a.pos[1] != self.pos[1] or
+            #~ if a.pos[0] != self.pos[0] or a.pos[1] != self.pos[1]:
             #~ if a.workslot is None:
             self.shortTermGoal = a.type
             #~ print self.name," new short term goal ",self.shortTermGoal

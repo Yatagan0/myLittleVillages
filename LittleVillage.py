@@ -40,10 +40,10 @@ class LittleVillage:
         print utils.globalTime
         
         if utils.globalTime.minute == 0:
-            print "hourly update"
+            #~ print "hourly update"
             self.hourlyUpdate()
             if utils.globalTime.hour == 0:
-                print "daily update"
+                #~ print "daily update"
                 self.dailyUpdate()
         
         for p in self.people:
@@ -78,13 +78,13 @@ class LittleVillage:
         self.people.append(p)
         if buildingType=="restaurant":
             b = LittleRestaurant( pos=[0.,0.], owner=p)
-            p.knowledge["eat"].seenBuilding(building=b)
+            #~ p.knowledge["eat"].seenBuilding(building=b)
         elif buildingType=="hotel":
             b = LittleHotel( pos=[0.,0.], owner=p)
-            p.knowledge["sleep"].seenBuilding(building=b)
+            #~ p.knowledge["sleep"].seenBuilding(building=b)
         elif buildingType=="field":
             b = LittleField( pos=[0.,0.], owner=p)
-            p.knowledge["work"].seenBuilding(building=b)
+            #~ p.knowledge["work"].seenBuilding(building=b)
         
         p.village = self
             

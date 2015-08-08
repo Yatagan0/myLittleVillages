@@ -22,51 +22,9 @@ if __name__ == '__main__':
         
         village = LittleVillage()
         
-        for i in range(0, 1):
+        for i in range(0, 2):
             village.addPeople()
         village.money = 0
-        #~ mayor = LittlePeople()
-        #~ bb = LittleBuilding(pos=[0.,0.])#
-        #~ bb = LittleHotel( pos=[0.,0.],owner = mayor)
-        #~ b =LittleBuilding(pos=[0.,0.])# 
-        #~ b = LittleRestaurant( pos=[0.,1.], owner = mayor)
-        #~ print mayor.name
-        #~ allPeople.append(mayor)
-        
-        #~ p1= LittlePeople()
-        #~ b = LittleRestaurant( pos=[0.,0.], owner=p1)
-        #~ print p1.name
-        #~ allPeople.append(p1)
-
-        #~ p2= LittlePeople()
-        #~ bbb = LittleField( pos=[0.,0.], owner=p2)
-        #~ bbb = LittleRestaurant( pos=[0.,0.], owner=p2)
-        #~ print p2.name
-        #~ allPeople.append(p2)
-
-        #~ village.people.append(mayor)
-        #~ mayor.village = village
-        #~ village.people.append(p1)
-        #~ p1.village = village
-        #~ village.people.append(p2)
-        #~ p2.village = village
-
-        
-        #~ for i in range(0, 5):
-            #~ p = LittlePeople()
-            #~ p.knowledge["sleep"].seenBuilding(building=bb)
-            #~ p.knowledge["eat"].seenBuilding(building=b)
-            #~ print p.name
-            #~ allPeople.append(p)
-            #~ LittleConstructingBuilding( pos = [0., 0.], owner=p, futureType="LittleField")
-
-        #~ for p in allPeople:
-            #~ p.knowledge["sleep"].seenBuilding(building=bb)
-            #~ p.knowledge["eat"].seenBuilding(building=b)            
-
-        #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleHotel")
-        #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
-        #~ b = LittleConstructingBuilding( pos = [0., 0.], owner=None, futureType="LittleRestaurant")
 
             
     else:

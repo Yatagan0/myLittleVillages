@@ -9,6 +9,8 @@ class LittleRecipe:
         self.description = name
         
         
+speacialWorks = ["move", "eat", "sleep", "manage"]
+        
 allRecipes = {}
 
 r = LittleRecipe("do nothing")

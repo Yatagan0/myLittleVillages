@@ -250,6 +250,7 @@ class LittleEatAction(LittleAction):
     def getLocation(self, people):
         if self.pos is None:
             self.pos = people.knowledge["eat"].findClosest(people.pos)
+            print "closest eat ",self.pos
         if isinstance(self.workslot, basestring) or self.workslot is None:
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)
@@ -341,18 +342,18 @@ class LittleOldActions():
             #~ day.append(LittleEatAction( people=people,startHour=[7, 0]))
             #~ day.append(LittleEatAction(people=people,startHour= [12, 0]))
             #~ day.append(LittleEatAction( people=people,startHour=[20, 0]))
-            a = LittleEatAction()
-            a.startHour = [7, 0]
-            day.append(a)
-            a = LittleEatAction()
-            a.startHour = [12, 0]
-            day.append(a)
-            a = LittleEatAction( )
-            a.startHour = [20, 0]
-            day.append(a)
-            a = LittleSleepAction()
-            a.startHour = [21, 0]
-            day.append(a)
+            #~ a = LittleEatAction()
+            #~ a.startHour = [7, 0]
+            #~ day.append(a)
+            #~ a = LittleEatAction()
+            #~ a.startHour = [12, 0]
+            #~ day.append(a)
+            #~ a = LittleEatAction( )
+            #~ a.startHour = [20, 0]
+            #~ day.append(a)
+            #~ a = LittleSleepAction()
+            #~ a.startHour = [21, 0]
+            #~ day.append(a)
 
             self.days.append(day)
                 
@@ -381,7 +382,9 @@ class LittleOldActions():
     def findHabits(self, time):
         habits = []
         for d in self.days[:-1]: #not today
-            habits.append(self.closestAction(d, time))
+            c =self.closestAction(d, time)
+            if c is not None:
+                habits.append(c)
             
         return habits
             
@@ -399,14 +402,20 @@ class LittleOldActions():
                 break
         #~ print diff
         #~ print index
+        if index -1 < 0:
+            return None
+        
         return day[index-1]
         
     def addAction(self, a):
         #~ a.init()
         #~ t = utils.globalTime
         #~ a.startHour = [t.hour, t.minute]
-        lasta = self.days[-1][-1]
-        diff = (a.startHour[0] - lasta.startHour[0])*60 + (a.startHour[1] - lasta.startHour[1])
+        if len( self.days[-1]) > 0:
+            lasta = self.days[-1][-1]
+            diff = (a.startHour[0] - lasta.startHour[0])*60 + (a.startHour[1] - lasta.startHour[1])
+        else:
+            diff = -1
         if diff < 0:
             #~ print a.startHour
             #~ print lasta.startHour
