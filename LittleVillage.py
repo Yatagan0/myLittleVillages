@@ -2,7 +2,7 @@ import utils
 from LittlePeople import *
 from LittleBuilding import *
 
-buildings = ["restaurant", "hotel"]+[ "field"]*3
+buildings = ["restaurant", "hotel"]+[ "field"]*3+[""]*3
 
 class LittleVillage:
     def __init__(self, root=None):
@@ -67,7 +67,7 @@ class LittleVillage:
         for b in allBuildings:
             b.dailyUpdate()
             
-        if self.money >= 5.0:
+        while self.money >= 5.0:
             self.addPeople()
         
     def addPeople(self):

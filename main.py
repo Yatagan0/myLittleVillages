@@ -14,7 +14,7 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage =False
-    DO_DISPLAY =False
+    DO_DISPLAY =True
     
     path = "village.xml"
     

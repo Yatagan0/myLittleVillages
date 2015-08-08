@@ -421,7 +421,7 @@ class LittleBuildingList:
                     bestb = b    
                     continue
                     
-            if d < dist:
+            if d < dist+1 and random.randint(0, 2) == 0:
                 dist = d
                 bestb = b
                 

@@ -114,6 +114,69 @@ r.transformingEnd.append(["potatoes","new", ""])
 allRecipes[r.name] = r
 
 
+
+r = LittleRecipe("plant_carrots")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "plante des carottes"
+r.transformingStart.append(["field",  "clear", "planted-carrots"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("weed_carrots")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "desherbe des carottes"
+r.transformingStart.append(["field", "planted-carrots", "weeded-carrots"])
+allRecipes[r.name] = r
+
+
+r = LittleRecipe("reweed_carrots")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "desherbe des carottes"
+r.transformingStart.append(["field", "weeded-carrots", "re-weeded-carrots"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("recolt_carrots")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "recolte des carottes"
+r.transformingStart.append(["field","re-weeded-carrots", "clear"])
+r.transformingEnd.append(["carrots","new", ""])
+allRecipes[r.name] = r
+
+
+r = LittleRecipe("plant_salads")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "plante des salades"
+r.transformingStart.append(["field",  "clear", "planted-salads"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("weed_salads")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "desherbe des salades"
+r.transformingStart.append(["field", "planted-salads", "weeded-salads"])
+allRecipes[r.name] = r
+
+
+r = LittleRecipe("reweed_salads")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "desherbe des salades"
+r.transformingStart.append(["field", "weeded-salads", "re-weeded-salads"])
+allRecipes[r.name] = r
+
+r = LittleRecipe("recolt_salads")
+r.timeMin = 60
+r.timeMax = 2*60
+r.description = "recolte des salades"
+r.transformingStart.append(["field","re-weeded-salads", "clear"])
+r.transformingEnd.append(["salads","new", ""])
+allRecipes[r.name] = r
+
+
 class workSlotType:
     def __init__(self, name):
         self.name = name
@@ -133,6 +196,8 @@ t.recipes = ["eat", "cook", "clean_table"]
 workSlotTypes [t.name] = t
 
 t = workSlotType("field")
-t.recipes = ["plant_potatoes", "weed_potatoes", "reweed_potatoes", "recolt_potatoes"]
+t.recipes = ["plant_potatoes", "weed_potatoes", "reweed_potatoes", "recolt_potatoes",
+"plant_carrots", "weed_carrots", "reweed_carrots", "recolt_carrots",
+"plant_salads", "weed_salads", "reweed_salads", "recolt_salads"]
 #~ t.objects = ["table", "clean"]
 workSlotTypes [t.name] = t

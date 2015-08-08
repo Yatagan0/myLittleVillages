@@ -128,10 +128,10 @@ class LittlePeople:
         
         b = buildingImIn(self.pos)
         if self.shortTermGoal != "":
-            print self.name, " has short term goal ", self.shortTermGoal
+            #~ print self.name, " has short term goal ", self.shortTermGoal
             a = self.canDoActionHere( b, self.shortTermGoal)
             if a is not None:
-                print self.name," can do short term goal ",self.shortTermGoal
+                #~ print self.name," can do short term goal ",self.shortTermGoal
                 self.startAction(a)
                 self.shortTermGoal = ""
                 return
@@ -141,28 +141,18 @@ class LittlePeople:
             goalPos = self.knowledge[self.shortTermGoal].findClosest(self.pos, notHere=self.pos)
 
         if goalPos is not None:
-            print self.name," will go in ", goalPos, " for short term goal ",self.shortTermGoal
+            #~ print self.name," will go in ", goalPos, " for short term goal ",self.shortTermGoal
             a= LittleMoveAction()
             a.pos = goalPos
             self.startAction(a)
             return
                 
         if self.tired > 20*60 and random.randint(0, 10) != 0:
-            #~ a = canDoActionHere(self, b, "sleep")
-            #~ if a is not None:
-                #~ self.startAction(a)
-                #~ return
-            #~ else:
                 a =  LittleSleepAction()
                 self.moveToAction(a)
                 return
         
         if self.hungry > 10*60 and random.randint(0, 10) != 0:
-            #~ a = canDoActionHere(self, b, "eat")
-            #~ if a is not None:
-                #~ self.startAction(a)
-                #~ return
-            #~ else:
                 a = LittleEatAction( )
                 self.moveToAction(a)
                 return
@@ -236,7 +226,9 @@ class LittlePeople:
             aa = building.getPossibleActions(isOwner=buildingIsMine)
             #~ print len(aa)," possible actions in building"
             for a in aa:
+                #~ print "can do ",a.type,"?"
                 if self.canDoAction(a):
+                    #~ print a.type
                     if action=="work" and a.type not in speacialWorks:
                         preferredActions.append(a)
                     if a.type == action:
