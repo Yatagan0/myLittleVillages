@@ -97,31 +97,33 @@ namesOwner = {}
 namesOwner[""] = ["tonton", "l'oncle", "le cousin", "papy", "le capitaine", "le jeune"]
 namesOwner["restaurant"] = ["le chef", "maitre"]
 namesOwner["hotel"] = []
+namesOwner["shop"] = ["le marchand"]
 
 buildingsNames = {}
-buildingsNames[""] = [["coin"],["cachette"]]
-buildingsNames["restaurant"] = [["jardin", "delice", "bouchon", "grill", "troquet", "rendez-vous", "diner", "cuisinier", 
-    "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal", "gosier"],
+buildingsNames[""] = [["coin","rendez-vous", "bonheur"],["cachette"]]
+buildingsNames["restaurant"] = [["jardin", "delice", "bouchon", "grill", "troquet",  "diner", "cuisinier", 
+    "estaminet","coutelas", "pain", "jambon", "fromage", "bistrot","regal", "gosier","boui-boui"],
                     ["table", "fourchette", "causerie", "marmite", "cuisine", "assiette",  "escapade",
                     "brasserie", "tartine", "reverie", "escale", "pause", "auberge", "taverne"]]
                 
 buildingsNames["hotel"] = [["jardin", "lit", "repos", "dortoir", "oreiller", "reve", "abri", "hotel", "matelas", "berceau", "drap", "couffin", "silence", "plumard"],
                     ["escapade", "escale", "pause", "auberge", "auberge de jeunesse", "couette", "plume", "hotellerie", "berceuse"]]
-                   
+buildingsNames["shop"] = [["magasin","bazar","marche","vendeur","fourre-tout","grenier","inventaire","necessaire","etalage","comptoir"],["echoppe","caverne","etagere","armoire"]]
  
 allAdjectives = {}
 allAdjectives[""] = {"merveilleux":"merveilleuse", "magique":"magique","lointain":"lointaine", "traditionnel":"traditionnelle", "enchante":"enchantee"}
 allAdjectives["restaurant"] = {"gastronomique":"gastronomique","gourmand":"gourmande", "delicat":"delicate", "succulent":"succulente",
 "délicieux":"délicieuse", "juteux":"juteuse"}
 allAdjectives["hotel"] = {"douillet":"douillette", "calme":"calme", "reposant":"reposante"}
-
+allAdjectives["shop"] = {"bien rempli":"bien remplie","exotique":"exotique","frais":"fraiche","indispensable":"indispensable"}
 
 
 buildingsLastNames = {}
-buildingsLastNames[""] = ["des lutins", "des familles", "de chez nous", "d'antan", "du printemps",
-        "des amis", "du port", "de la gare", "du centre", "des reves", "du pays", "du bon Dieu"]
+buildingsLastNames[""] = ["des lutins", "des familles", "de chez nous", "d'antan", "du printemps","du coin de la rue",
+        "des amis", "du port", "de la gare", "du centre", "des reves", "du pays", "du bon Dieu", "des dames", "des messieurs"]
 buildingsLastNames["restaurant"] = ["du gourmet"]
 buildingsLastNames["hotel"] = ["de Morphee"]
+buildingsLastNames["shop"] = ["d'Ali Baba","des curieux","des professionnels"]
 
     
 def randomBuildingName(type="", owner=""):
@@ -310,18 +312,21 @@ global globalTime
 globalTime = Time()
     
 if __name__ == '__main__':
-    for i in range(0, 30):
-        print randomName()
-    print "---"
-    for i in range(0, 20):
-        print randomCityName()
-    print "---"
-    for i in range(0, 20):
-        print randomBuildingName(type="restaurant")
+    #~ for i in range(0, 30):
+        #~ print randomName()
+    #~ print "---"
+    #~ for i in range(0, 20):
+        #~ print randomCityName()
+    #~ print "---"
+    #~ for i in range(0, 20):
+        #~ print randomBuildingName(type="restaurant")
  
+    #~ print "---"
+    #~ for i in range(0, 20):
+        #~ print randomBuildingName(type="hotel")
     print "---"
     for i in range(0, 20):
-        print randomBuildingName(type="hotel")
+        print randomBuildingName(type="shop")
 
  
     #~ dict = {"test":2}

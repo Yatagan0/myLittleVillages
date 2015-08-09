@@ -339,6 +339,30 @@ class LittleField(LittleBuilding):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleField")
 
+ 
+class LittleShop(LittleBuilding):
+    def __init__(self, root=None, owner=None, pos=None):
+        LittleBuilding.__init__(self, root=root, pos=pos, type="shop", owner=owner)
+        
+        if root is not None:
+            #~ self.read(root)
+            pass
+        else:
+            self.owner = owner
+            if self.owner is not None:
+                self.name = utils.randomBuildingName("shop",self.owner.name)
+            else:
+                self.name = utils.randomBuildingNameName("shop")
+
+            #~ for i in range(0, 3):
+                #~ ws = WorkSlot(types=["field"], building=self, name = "slot"+str(i))
+                #~ ws.objects.append(["field", "clear"])
+                #~ self.workSlots.append(ws)
+        
+                
+    def write(self, root):
+        elem = LittleBuilding.write(self, root)
+        elem.set("class", "LittleShop")
 
        
 class LittleKnownBuilding:
