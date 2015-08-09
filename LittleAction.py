@@ -141,7 +141,7 @@ class LittleAction:
              
             #~ print "transforming"
             for t in recipe.transformingEnd:
-                #~ print t
+                print t
                 self.workslot.objectStatus(t[0], t[1], t[2])
                 
 

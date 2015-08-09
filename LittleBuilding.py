@@ -122,8 +122,14 @@ class WorkSlot:
         return False
         
     def objectStatus(self, name, prev, new):
+        if prev=="new":
+            print "object ", name, " created in ", self.building.pos
+            self.building.objects.append(name)
+            return
+        
         for o in self.objects:
             if o[0] == name:
+                
                 if prev == "" or prev==o[1]:
                     o[1] = new
                     return
@@ -133,6 +139,7 @@ class LittleBuilding:
 
         self.possibleActions = []
         self.workSlots=[]
+        self.objects=[]
         
         
         if root is not None:
@@ -170,6 +177,10 @@ class LittleBuilding:
         else:
             elem.set("owner", self.owner.name)
             
+        for o in self.objects:
+            sub =  ET.SubElement(elem, 'object')
+            sub.set("name", o)
+            
         for s in self.workSlots:
             s.write(elem)
         elem.set("class", "LittleBuilding")
@@ -193,7 +204,9 @@ class LittleBuilding:
             if child.tag == "workslot":
                 #~ print "append workslot"
                 self.workSlots.append(WorkSlot(root=child, building=self))
-        
+            elif child.tag == "object":
+                self.objects.append(child.attrib["name"])        
+                
     def findFreePos(self, pos, size):
         r0 = random.randint(pos[0]-size, pos[0]+size)
         r1 = random.randint(pos[1]-size, pos[1]+size)
