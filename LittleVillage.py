@@ -2,7 +2,7 @@ import utils
 from LittlePeople import *
 from LittleBuilding import *
 
-buildings = ["restaurant", "hotel"]+[ "field"]*3+[""]*3
+buildings =  ["restaurant", "hotel", "shop"]+[ "field"]*3+[""]*3
 
 class LittleVillage:
     def __init__(self, root=None):
@@ -84,6 +84,8 @@ class LittleVillage:
             #~ p.knowledge["sleep"].seenBuilding(building=b)
         elif buildingType=="field":
             b = LittleField( pos=[0.,0.], owner=p)
+        elif buildingType=="shop":
+            b = LittleShop( pos=[0.,0.], owner=p)
             #~ p.knowledge["work"].seenBuilding(building=b)
         
         p.village = self

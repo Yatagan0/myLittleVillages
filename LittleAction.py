@@ -250,7 +250,7 @@ class LittleEatAction(LittleAction):
     def getLocation(self, people):
         if self.pos is None:
             self.pos = people.knowledge["eat"].findClosest(people.pos)
-            print "closest eat ",self.pos
+            #~ print "closest eat ",self.pos
         if isinstance(self.workslot, basestring) or self.workslot is None:
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)
@@ -323,11 +323,43 @@ class LittleManageAction(LittleAction):
             self.workslot.building.money += toGive
         
         
+class LittleBuyAction(LittleAction):
+    def __init__(self,root=None,object="",workslot=None):
+        LittleAction.__init__(self, root=root, type="buy",workslot=workslot)
+        if root is not None:
+            #~ self.read(root)
+            pass
+        else:
+            self.object=object
 
+            
+    def read(self,root):
+        LittleAction.read(self,root)
+        self.object = root.attrib["object"]
+        
+    def write(self, root):
+        elem =  LittleAction.write(self, root)
+        elem.set("object", self.object)
+        elem.set("class", "LittleBuyAction")
+        return elem
+        
+     
+    def startExecution(self, people):
+        LittleAction.startExecution(self, people)
+        #~ print self.workslot
+        print self.people.name," achete ",self.object, " a ",self.workslot.building.name
+        self.people.money-=1
+        self.workslot.building.money +=1
+        self.people.objects.append(self.object)
+        self.workslot.building.objects.remove(self.object)
+
+            
     #~ def getLocation(self, people):
         #~ if self.pos is None:
             #~ self.pos = [people.pos[0]+random.randint(-1, 1), people.pos[1]+random.randint(-1, 1)]
             #~ print "self pos ",self.pos
+
+        
         
 class LittleOldActions():
     def __init__(self,people, root=None):
@@ -436,6 +468,8 @@ def readAction(root, people):
         a = LittleWorkAction(root=root)
     elif root.attrib["class"] == "LittleManageAction":
         a = LittleManageAction(root=root)
+    elif root.attrib["class"] == "LittleBuyAction":
+        a = LittleBuyAction(root=root)
     else:
         a = LittleAction(root=root)
         

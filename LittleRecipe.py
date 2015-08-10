@@ -9,7 +9,7 @@ class LittleRecipe:
         self.description = name
         
         
-speacialWorks = ["move", "eat", "sleep", "manage"]
+specialWorks = ["move", "eat", "sleep", "manage", "buy", "sell"]
         
 allRecipes = {}
 
@@ -73,6 +73,18 @@ allRecipes[r.name] = r
 r = LittleRecipe("manage")
 r.timeMin = 60
 r.timeMax = 2*60
+r.description = ""
+allRecipes[r.name] = r
+
+r = LittleRecipe("buy")
+r.timeMin = 10
+r.timeMax = 20
+r.description = ""
+allRecipes[r.name] = r
+
+r = LittleRecipe("sell")
+r.timeMin = 10
+r.timeMax = 20
 r.description = ""
 allRecipes[r.name] = r
 
@@ -201,3 +213,8 @@ t.recipes = ["plant_potatoes", "weed_potatoes", "reweed_potatoes", "recolt_potat
 "plant_salads", "weed_salads", "reweed_salads", "recolt_salads"]
 #~ t.objects = ["table", "clean"]
 workSlotTypes [t.name] = t
+
+t = workSlotType("shop")
+t.recipes = []#["buy", "sell"]
+workSlotTypes [t.name] = t
+

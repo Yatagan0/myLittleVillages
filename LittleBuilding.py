@@ -42,14 +42,13 @@ class WorkSlot:
             self.occupied = False
 
         
-    def getPossibleActions(self):
+    def getPossibleActions(self, actionType=[]):
         if self.occupied:
             return []
             
             
-        if "constructing" in self.types:
-            #~ print "construct me ! ", self.types
-            #~ print self.building.name, self.name
+        if "constructing" in self.types and (actionType==[] or "work" in actionType or "build" in actionType):
+
             recipe = allRecipes["build"]
             meanTime = (recipe.timeMax - recipe.timeMin)/2.
             price=int(10*self.building.basePrice*meanTime)/10.
@@ -66,6 +65,16 @@ class WorkSlot:
                 
                 for a in workSlotTypes[type].recipes:
                     recipe = allRecipes[a]
+                    
+                    if actionType != []:
+                        #~ print "recipe ",a, "action types ",actionType
+                        if a in specialWorks and a not in actionType:
+                            #~ print "special, not here"
+                            continue
+                        if a not in specialWorks and a not in actionType and "work" not in actionType:
+                            #~ print "not special, not here"
+                            continue
+                    
                     meanTime = (recipe.timeMax - recipe.timeMin)/2.
                     price=int(10*self.building.basePrice*meanTime)/10.
                     if a == "sleep":
@@ -225,13 +234,13 @@ class LittleBuilding:
     def update(self):
         pass   
         
-    def getPossibleActions(self, isOwner=False):
+    def getPossibleActions(self, isOwner=False, actionTypes=[]):
         #~ print self.owner
         actions = []
         for s in self.workSlots:
-            actions = actions + s.getPossibleActions()
+            actions = actions + s.getPossibleActions(actionTypes)
             
-        if isOwner:
+        if isOwner and (actionTypes == [] or "manage" in actionTypes):
             if len(self.workSlots) == 0:
                 print "can't manage without workslots !"
             else:
@@ -354,16 +363,26 @@ class LittleShop(LittleBuilding):
             else:
                 self.name = utils.randomBuildingNameName("shop")
 
-            #~ for i in range(0, 3):
-                #~ ws = WorkSlot(types=["field"], building=self, name = "slot"+str(i))
-                #~ ws.objects.append(["field", "clear"])
-                #~ self.workSlots.append(ws)
+            for i in range(0,1):
+                ws = WorkSlot(types=["shop"], building=self, name = "slot"+str(i))
+                self.workSlots.append(ws)
+                
+            self.objects += ["pain", "pain", "pain"]
         
                 
     def write(self, root):
         elem = LittleBuilding.write(self, root)
         elem.set("class", "LittleShop")
 
+    def getPossibleActions(self, isOwner=False, actionTypes=[]):
+        actions = LittleBuilding.getPossibleActions(self, isOwner, actionTypes)
+
+        if actionTypes == [] or "buy" in actionTypes:
+            for o in self.objects:
+                print "can sell ",o
+                actions.append(LittleBuyAction(workslot=self.workSlots[0], object=o))
+            
+        return actions
        
 class LittleKnownBuilding:
     def __init__(self, root=None, pos=[0., 0.]):
@@ -489,10 +508,10 @@ def readBuilding(root):
         b = LittleRestaurant(root=root)
     elif root.attrib["class"] == "LittleHotel":
         b = LittleHotel(root=root) 
-    elif root.attrib["class"] == "LittleConstructingBuilding":
-        b = LittleConstructingBuilding(root=root) 
     elif root.attrib["class"] == "LittleField":
         b = LittleField(root=root) 
+    elif root.attrib["class"] == "LittleShop":
+        b = LittleShop(root=root)  
     else:
         b = LittleBuilding(root=root)
     return b

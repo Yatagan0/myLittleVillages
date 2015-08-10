@@ -21,6 +21,7 @@ class LittlePeople:
         self.speed = 0.04
         self.shortTermGoal = ""
         self.ownedBuildings = []
+        self.objects = []
         if root is not None:
             self.read(root)
         else:
@@ -34,6 +35,7 @@ class LittlePeople:
             self.knowledge["work"] = LittleBuildingList(type="work")
             
             self.habits = LittleOldActions(self)
+            
             
             
             
@@ -67,9 +69,9 @@ class LittlePeople:
                 for cc in child:
                     self.knowledge[cc.attrib["type"]] = LittleBuildingList(cc)
             elif child.tag=="ownedBuilding":
-                print "owned building"
                 self.ownedBuildings.append([float(child.attrib["posX"]), float(child.attrib["posY"])])
-                
+            elif child.tag == "object":
+                self.objects.append(child.attrib["name"])                     
                 
     def write(self, root):
         elem =  ET.SubElement(root, 'people')
@@ -94,6 +96,12 @@ class LittlePeople:
             sub =  ET.SubElement(elem, 'ownedBuilding')
             sub.set("posX", str(b[0]))
             sub.set("posY", str(b[1]))
+  
+            
+        for o in self.objects:
+            sub =  ET.SubElement(elem, 'object')
+            sub.set("name", o)
+            
             
     def hourlyUpdate(self):
         pass
@@ -215,6 +223,7 @@ class LittlePeople:
 
 
     def canDoActionHere(self, building,  action):
+        print "searching for acton of type ",action
         preferredActions = []
         if building is not None:
             buildingIsMine = False
@@ -223,16 +232,16 @@ class LittlePeople:
                     buildingIsMine = True
                     break
             
-            aa = building.getPossibleActions(isOwner=buildingIsMine)
-            #~ print len(aa)," possible actions in building"
-            for a in aa:
+            preferredActions = building.getPossibleActions(isOwner=buildingIsMine, actionTypes=[action])
+            print len(preferredActions)," possible actions in building"
+            #~ for a in aa:
                 #~ print "can do ",a.type,"?"
-                if self.canDoAction(a):
+                #~ if self.canDoAction(a):
                     #~ print a.type
-                    if action=="work" and a.type not in speacialWorks:
-                        preferredActions.append(a)
-                    if a.type == action:
-                         preferredActions.append(a)
+                    #~ if action=="work" and a.type not in specialWorks:
+                        #~ preferredActions.append(a)
+                    #~ if a.type == action:
+                         #~ preferredActions.append(a)
 
         if len(preferredActions) > 0:
             return random.choice(preferredActions).copy()
@@ -268,8 +277,10 @@ class LittlePeople:
         #~ a.people = self
         #~ if not a.hasLocation():
             #~ a.getLocation(self)
-            
+        #~ if a.type== "buy":
+            #~ print "startActionn ",a.workslot," ",a.pos
         a.startExecution(self)
+        #~ print "startActionn ",a.workslot
         self.action = a
         #~ print self.name , " will ", a.type, " for ", a.price
 

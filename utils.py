@@ -15,10 +15,10 @@ voyelles = voyelles_frequentes.split('.')*2 + voyelles_rares.split('.')
 
 consonnesDoubles = "ss.ll.rr.rt"
 consonnesDoubles = consonnesDoubles.split('.') + consonnes
-voyellesFinVille = "ac.es.art.ant.eaux.e.and.as.ard"
+voyellesFinVille = "ac.es.art.ant.eaux.e.and.as.ard.and"
 voyellesFinVille = voyellesFinVille.split('.')
 
-voyellesFinNom = "es.art.ant.eaux.e.and.ot.er.ard"
+voyellesFinNom = "es.art.ant.eaux.e.and.ot.er.ard.and"
 voyellesFinNom = voyellesFinNom.split('.')
 
 
