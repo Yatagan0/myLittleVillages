@@ -75,11 +75,13 @@ class LittleAction:
             print "unknown recipeee ",self.type
             return True
         recipe = allRecipes[self.type]
-        for t in recipe.transformingStart:
-            if not self.workslot.hasObject(t[0], t[1]):
-                return False
+        return self.workslot.hasObjects(recipe.transformingStart)
+        
+        #~ for t in recipe.transformingStart:
+            #~ if not self.workslot.hasObject(t[0], t[1]):
+                #~ return False
 
-        return True
+        #~ return True
        
     def startExecution(self, people):
         self.people = people

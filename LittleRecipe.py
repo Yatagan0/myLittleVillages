@@ -49,6 +49,14 @@ r.description = "cuisine"
 r.transformingStart.append(["table", "clean","served"])
 allRecipes[r.name] = r
 
+r = LittleRecipe("cook_carrots")
+r.timeMin = 20
+r.timeMax = 40
+r.description = "cuisine une salade de carrottes"
+r.transformingStart.append(["table", "clean","served"])
+r.transformingStart.append(["carrots", "","delete"])
+allRecipes[r.name] = r
+
 r = LittleRecipe("clean_table")
 r.timeMin = 5
 r.timeMax = 15
@@ -203,7 +211,7 @@ t.recipes = ["sleep", "clean_room"]
 workSlotTypes [t.name] = t
 
 t = workSlotType("table")
-t.recipes = ["eat", "cook", "clean_table"]
+t.recipes = ["eat", "cook", "clean_table", "cook_carrots"]
 #~ t.objects = ["table", "clean"]
 workSlotTypes [t.name] = t
 

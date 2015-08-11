@@ -32,7 +32,7 @@ class WorkSlot:
     def __init__(self, root=None, types=[], building=None, name=""):
         
         self.building = building
-        self.objects = []
+        self.workTools = []
         if root is not None:
             self.read(root)
         else:
@@ -101,8 +101,8 @@ class WorkSlot:
         self.name = root.attrib["name"]
         self.occupied = root.attrib["occupied"]=="True"
         for child in root:
-            if child.tag == "object":
-                self.objects.append([child.attrib["name"], child.attrib["state"]])
+            if child.tag == "worktool":
+                self.workTools.append([child.attrib["name"], child.attrib["state"]])
         
     def write(self, root):
         elem =  ET.SubElement(root, 'workslot')
@@ -116,13 +116,33 @@ class WorkSlot:
         elem.set("types", s)
         elem.set("name", self.name)
         elem.set("occupied", str(self.occupied))
-        for o in self.objects:
-            sub =  ET.SubElement(elem, 'object')
+        for o in self.workTools:
+            sub =  ET.SubElement(elem, 'worktool')
             sub.set("name", o[0])
             sub.set("state", o[1])
 
+    def hasObjects(self, objects):
+        #~ print "has objectss"
+        takenObjects = []
+        result = True
+        for o in objects:
+            if o[2] == "delete":
+                if not o[0] in self.building.objects:
+                    result = False
+                    break
+                self.building.objects.remove(o[0])
+                takenObjects.append(o[0])
+            else:
+                if not self.hasObject(o[0], o[1]):
+                    result = False
+                    break
+        self.building.objects += takenObjects
+        return result
+                    
+            
+
     def hasObject(self, name, state=""):
-        for o in self.objects:
+        for o in self.workTools:
             if o[0] == name:
                 if state == "" or state==o[1]:
                     #~ print "has object ",name, state
@@ -135,8 +155,13 @@ class WorkSlot:
             print "object ", name, " created in ", self.building.pos
             self.building.objects.append(name)
             return
+            
+        if new == "delete":
+            print "object ", name, " removed in ", self.building.pos
+            self.building.objects.remove(name)
+            return         
         
-        for o in self.objects:
+        for o in self.workTools:
             if o[0] == name:
                 
                 if prev == "" or prev==o[1]:
@@ -274,7 +299,7 @@ class LittleRestaurant(LittleBuilding):
 
         for i in range(0, 3):
             ws = WorkSlot(types=["table"], building=self, name = "slot"+str(i))
-            ws.objects.append(["table", "clean"])
+            ws.workTools.append(["table", "clean"])
             self.workSlots.append(ws)
                 
     def write(self, root):
@@ -305,7 +330,7 @@ class LittleHotel(LittleBuilding):
 
         for i in range(0, 3):
             ws = WorkSlot(types=["room"], building=self, name = "slot"+str(i))
-            ws.objects.append(["bed", "clean"])
+            ws.workTools.append(["bed", "clean"])
             self.workSlots.append(ws)
         
                 
@@ -340,7 +365,7 @@ class LittleField(LittleBuilding):
 
         for i in range(0, 3):
             ws = WorkSlot(types=["field"], building=self, name = "slot"+str(i))
-            ws.objects.append(["field", "clear"])
+            ws.workTools.append(["field", "clear"])
             self.workSlots.append(ws)
         
                 
