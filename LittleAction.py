@@ -315,12 +315,13 @@ class LittleManageAction(LittleAction):
             self.people.money -= toGive
             self.workslot.building.money += toGive
             
-        for o in self.workslot.building.wantObjects:
-            if o not in self.workslot.building.wantToBuy.keys():
-                self.workslot.building.wantToBuy[o] = 1.*24/self.workslot.building.lastManaged
-            else:
-                self.workslot.building.wantToBuy[o] += 1.*24/self.workslot.building.lastManaged
-        self.workslot.building.wantObjects = []
+        for o in self.workslot.building.wantObjects.keys():
+            utils.addToDict(self.workslot.building.wantToBuy, o, self.workslot.building.wantObjects[o]*24/self.workslot.building.lastManaged)
+            #~ if o not in self.workslot.building.wantToBuy.keys():
+                #~ self.workslot.building.wantToBuy[o] = 1.*24/self.workslot.building.lastManaged
+            #~ else:
+                #~ self.workslot.building.wantToBuy[o] += 1.*24/self.workslot.building.lastManaged
+        self.workslot.building.wantObjects = {}
                 
         for o in self.workslot.building.wantToBuy.keys():
             self.workslot.building.wantToBuy[o] *= 0.9
@@ -349,7 +350,7 @@ class LittleBuyAction(LittleAction):
         
     def canExecute(self):
         result = LittleAction.canExecute(self)
-        if self.object not in self.workslot.building.objects:
+        if self.object not in self.workslot.building.objects.keys():
             return False
         return result
      
@@ -359,8 +360,9 @@ class LittleBuyAction(LittleAction):
         print self.people.name," achete ",self.object, " a ",self.workslot.building.name
         self.people.money-=1
         self.workslot.building.money +=1
+        utils.addToDict(self.workslot.building.objects, self.object, -1)
         self.people.objects.append(self.object)
-        self.workslot.building.objects.remove(self.object)
+        #~ self.workslot.building.objects.remove(self.object)
 
 
 class LittleSellAction(LittleAction):
@@ -391,7 +393,8 @@ class LittleSellAction(LittleAction):
         self.people.money+=1
         self.workslot.building.money -=1
         self.people.objects.remove(self.object)
-        self.workslot.building.objects.append(self.object)
+        #~ self.workslot.building.objects.append(self.object)
+        utils.addToDict(self.workslot.building.objects, self.object, 1)
 
     def canExecute(self):
         result = LittleAction.canExecute(self)

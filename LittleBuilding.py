@@ -132,17 +132,22 @@ class WorkSlot:
         result = True
         for o in objects:
             if o[2] == "delete":
-                if not o[0] in self.building.objects:
+                if not o[0] in self.building.objects.keys():
                     result = False
-                    self.building.wantObjects.append(o[0])
+                    utils.addToDict(self.building.wantObjects, o[0], 1)
+                    #~ self.building.wantObjects.append(o[0])
                     break
-                self.building.objects.remove(o[0])
+                utils.addToDict(self.building.objects, o[0], -1)
+                #~ self.building.objects.remove(o[0])
                 takenObjects.append(o[0])
             else:
                 if not self.hasObject(o[0], o[1]):
                     result = False
                     break
-        self.building.objects += takenObjects
+                    
+        for o in takenObjects:
+            utils.addToDict(self.building.objects, o, 1)
+        #~ self.building.objects += takenObjects
         return result
                     
             
@@ -159,12 +164,14 @@ class WorkSlot:
     def objectStatus(self, name, prev, new):
         if prev=="new":
             print "object ", name, " created in ", self.building.pos
-            self.building.objects.append(name)
+            utils.addToDict(self.building.objects, name, 1)
+            #~ self.building.objects.append(name)
             return
             
         if new == "delete":
             print "object ", name, " removed in ", self.building.pos
-            self.building.objects.remove(name)
+            #~ self.building.objects.remove(name)
+            utils.addToDict(self.building.objects, name, -1)
             return         
         
         for o in self.workTools:
@@ -179,8 +186,8 @@ class LittleBuilding:
 
         self.possibleActions = []
         self.workSlots=[]
-        self.objects=[]
-        self.wantObjects = []
+        self.objects={}
+        self.wantObjects = {}
         self.wantToBuy = {}
         
         if root is not None:
@@ -218,13 +225,20 @@ class LittleBuilding:
         else:
             elem.set("owner", self.owner.name)
             
-        for o in self.objects:
+        #~ for o in self.objects:
+            #~ sub =  ET.SubElement(elem, 'object')
+            #~ sub.set("name", o)
+        #~ for o in self.wantObjects:
+            #~ sub =  ET.SubElement(elem, 'wantobject')
+            #~ sub.set("name", o)          
+        for o in self.objects.keys():
             sub =  ET.SubElement(elem, 'object')
-            sub.set("name", o)
-        for o in self.wantObjects:
+            sub.set("name", o)    
+            sub.set("quantity", str(self.objects[o]))
+        for o in self.wantObjects.keys():
             sub =  ET.SubElement(elem, 'wantobject')
-            sub.set("name", o)          
-            
+            sub.set("name", o)    
+            sub.set("quantity", str(self.wantObjects[o]))            
         for o in self.wantToBuy.keys():
             sub =  ET.SubElement(elem, 'wanttobuy')
             sub.set("name", o)    
@@ -253,9 +267,13 @@ class LittleBuilding:
                 #~ print "append workslot"
                 self.workSlots.append(WorkSlot(root=child, building=self))
             elif child.tag == "object":
-                self.objects.append(child.attrib["name"])        
+                self.objects[child.attrib["name"]] = float(child.attrib["quantity"])
+                #~ utils.addToDict(self.objects, child.attrib["name"], 1.)
+                #~ self.objects.append(child.attrib["name"])        
             elif child.tag == "wantobject":
-                self.wantObjects.append(child.attrib["name"])   
+                self.wantObjects[child.attrib["name"]] = float(child.attrib["quantity"])
+                #~ utils.addToDict(self.wantObjects, child.attrib["name"], 1.)
+                #~ self.wantObjects.append(child.attrib["name"])   
             elif child.tag == "wanttobuy":
                 self.wantToBuy[child.attrib["name"]] = float(child.attrib["quantity"])
                 
@@ -294,11 +312,12 @@ class LittleBuilding:
         reallyWantToBuy = copy.deepcopy(self.wantToBuy)
             
         if actionTypes == [] or "buy" in actionTypes:
-            for o in self.objects:
-                if o in reallyWantToBuy.keys() and reallyWantToBuy[o] > 0:
-                    reallyWantToBuy[o] -=1
-                else:
-                    print "can sell ",o
+            for o in self.objects.keys():
+                if utils.getDict(self.wantToBuy, o) > self.objects[o]:
+                #~ if o in reallyWantToBuy.keys() and reallyWantToBuy[o] > 0:
+                    #~ reallyWantToBuy[o] -=1
+                #~ else:
+                    #~ print "can sell ",o
                     actions.append(LittleBuyAction(workslot=self.workSlots[0], object=o))
             
         #~ print len(actions)," possible actions for type ",actionTypes," in ",self.name
