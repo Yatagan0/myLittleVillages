@@ -2,7 +2,7 @@ import utils
 from LittlePeople import *
 from LittleBuilding import *
 
-buildings =  ["restaurant", "hotel", "shop"]+[ "field"]*3+[""]*3
+buildings =  ["restaurant", "hotel", "shop"]+[ "field", ""]*3+[""]*3
 
 class LittleVillage:
     def __init__(self, root=None):

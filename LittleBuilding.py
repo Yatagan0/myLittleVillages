@@ -1,4 +1,4 @@
-import utils, random
+import utils, random, copy
 import xml.etree.ElementTree as ET
 
 
@@ -47,20 +47,25 @@ class WorkSlot:
             return []
             
             
-        if "constructing" in self.types and (actionType==[] or "work" in actionType or "build" in actionType):
+        if "constructing" in self.types :
+        
+            if(actionType==[] or "work" in actionType or "build" in actionType):
 
-            recipe = allRecipes["build"]
-            meanTime = (recipe.timeMax - recipe.timeMin)/2.
-            price=int(10*self.building.basePrice*meanTime)/10.
-            act = LittleWorkAction(workslot=self, type="build" )
-            act.price = -price
-            return [act]
+                recipe = allRecipes["build"]
+                meanTime = (recipe.timeMax - recipe.timeMin)/2.
+                price=int(10*self.building.basePrice*meanTime)/10.
+                act = LittleWorkAction(workslot=self, type="build" )
+                act.price = -price
+                return [act]
+            return []
+            
         
         actions = []
 
         for type in self.types:
             if type not in workSlotTypes.keys():
-                print "no actions for workslot type ",type
+                #~ print "no actions for workslot type ",type
+                continue
             else:
                 
                 for a in workSlotTypes[type].recipes:
@@ -129,6 +134,7 @@ class WorkSlot:
             if o[2] == "delete":
                 if not o[0] in self.building.objects:
                     result = False
+                    self.building.wantObjects.append(o[0])
                     break
                 self.building.objects.remove(o[0])
                 takenObjects.append(o[0])
@@ -174,7 +180,8 @@ class LittleBuilding:
         self.possibleActions = []
         self.workSlots=[]
         self.objects=[]
-        
+        self.wantObjects = []
+        self.wantToBuy = {}
         
         if root is not None:
             self.read(root)
@@ -214,7 +221,14 @@ class LittleBuilding:
         for o in self.objects:
             sub =  ET.SubElement(elem, 'object')
             sub.set("name", o)
+        for o in self.wantObjects:
+            sub =  ET.SubElement(elem, 'wantobject')
+            sub.set("name", o)          
             
+        for o in self.wantToBuy.keys():
+            sub =  ET.SubElement(elem, 'wanttobuy')
+            sub.set("name", o)    
+            sub.set("quantity", str(self.wantToBuy[o]))    
         for s in self.workSlots:
             s.write(elem)
         elem.set("class", "LittleBuilding")
@@ -240,6 +254,10 @@ class LittleBuilding:
                 self.workSlots.append(WorkSlot(root=child, building=self))
             elif child.tag == "object":
                 self.objects.append(child.attrib["name"])        
+            elif child.tag == "wantobject":
+                self.wantObjects.append(child.attrib["name"])   
+            elif child.tag == "wanttobuy":
+                self.wantToBuy[child.attrib["name"]] = float(child.attrib["quantity"])
                 
     def findFreePos(self, pos, size):
         r0 = random.randint(pos[0]-size, pos[0]+size)
@@ -271,7 +289,19 @@ class LittleBuilding:
             else:
                 #~ print "manage action possible"
                 actions.append(LittleManageAction(workslot=self.workSlots[0]))
+
             
+        reallyWantToBuy = copy.deepcopy(self.wantToBuy)
+            
+        if actionTypes == [] or "buy" in actionTypes:
+            for o in self.objects:
+                if o in reallyWantToBuy.keys() and reallyWantToBuy[o] > 0:
+                    reallyWantToBuy[o] -=1
+                else:
+                    print "can sell ",o
+                    actions.append(LittleBuyAction(workslot=self.workSlots[0], object=o))
+            
+        #~ print len(actions)," possible actions for type ",actionTypes," in ",self.name
         return actions
  
 class LittleRestaurant(LittleBuilding):
@@ -328,7 +358,7 @@ class LittleHotel(LittleBuilding):
         else:
             self.name = utils.randomBuildingNameName("hotel")
 
-        for i in range(0, 3):
+        for i in range(0, 5):
             ws = WorkSlot(types=["room"], building=self, name = "slot"+str(i))
             ws.workTools.append(["bed", "clean"])
             self.workSlots.append(ws)

@@ -9,8 +9,8 @@ seasonIndex = 0
 consonnes_rares = "B.D.F.G.H.J.V.Qu.Ch.Pr.Cr.Sc"
 consonnes_frequentes = "C.L.M.N.P.R.S.T.St.Tr"
 consonnes = consonnes_frequentes.split('.')*2 + consonnes_rares.split('.')
-voyelles_rares = "u.in.ai"
-voyelles_frequentes = "a.e.i.o.on.ou.en"
+voyelles_rares = "u.in.ai.ei.eu.ia.ui.io"
+voyelles_frequentes = "a.e.i.o.on.ou.en.au"
 voyelles = voyelles_frequentes.split('.')*2 + voyelles_rares.split('.')
 
 consonnesDoubles = "ss.ll.rr.rt"
@@ -55,7 +55,7 @@ def isNameOk(name):
 
 def randomName():
     s= random.choice(consonnes)+random.choice(voyelles)
-    taille= [0]*5+[1]*2+[2]*1
+    taille= [0]*10+[1]*5+[2]*1
     r =random.choice(taille)
     
     #~ r = random.randint(0, 2)
@@ -312,11 +312,11 @@ global globalTime
 globalTime = Time()
     
 if __name__ == '__main__':
-    #~ for i in range(0, 30):
-        #~ print randomName()
-    #~ print "---"
-    #~ for i in range(0, 20):
-        #~ print randomCityName()
+    for i in range(0, 30):
+        print randomName()
+    print "---"
+    for i in range(0, 20):
+        print randomCityName()
     #~ print "---"
     #~ for i in range(0, 20):
         #~ print randomBuildingName(type="restaurant")
@@ -324,9 +324,9 @@ if __name__ == '__main__':
     #~ print "---"
     #~ for i in range(0, 20):
         #~ print randomBuildingName(type="hotel")
-    print "---"
-    for i in range(0, 20):
-        print randomBuildingName(type="shop")
+    #~ print "---"
+    #~ for i in range(0, 20):
+        #~ print randomBuildingName(type="shop")
 
  
     #~ dict = {"test":2}

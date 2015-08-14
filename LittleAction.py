@@ -72,7 +72,7 @@ class LittleAction:
             from LittleBuilding import findWorkslot
             self.workslot = findWorkslot( self.pos, self.workslot)
         if self.type not in allRecipes.keys() or self.workslot is None:
-            print "unknown recipeee ",self.type
+            #~ print "unknown recipeee ",self.type
             return True
         recipe = allRecipes[self.type]
         return self.workslot.hasObjects(recipe.transformingStart)
@@ -114,7 +114,7 @@ class LittleAction:
         
      
     def endExecution(self):
-        print self.people.name, "end action"
+        #~ print self.people.name, "end action"
         if isinstance(self.workslot, basestring) :
             #~ print "workslot name ",self.workslot, " pos ",self.pos
             if self.pos is not None:
@@ -188,15 +188,11 @@ class LittleMoveAction(LittleAction):
         elem =  LittleAction.write(self, root)
         elem.set("class", "LittleMoveAction")
         return elem
-
-    def canExecute(self):
-        print "can execute move"
-        return True
         
      
     def startExecution(self, people):
         LittleAction.startExecution(self, people)
-        print self.people.name," va de ",self.people.pos," vers ", self.pos
+        #~ print self.people.name," va de ",self.people.pos," vers ", self.pos
 
     def execute(self):
         if self.people.go(self.pos):
@@ -297,14 +293,9 @@ class LittleManageAction(LittleAction):
         #~ elem.set("description", self.description)
         return elem
         
-        
-    def canExecute(self):
-        print "can execute manage"
-        return True
-        
      
     def startExecution(self, people):
-        print "start manage"
+        #~ print "start manage"
         LittleAction.startExecution(self, people)
         print self.people.name," manage ",self.workslot.building.name
 
@@ -312,18 +303,29 @@ class LittleManageAction(LittleAction):
 
     def endExecution(self):
         LittleAction.endExecution(self)
-        self.workslot.building.lastManaged = 0
+        
         if self.workslot.building.money >=0:
             print self.people.name, " recupere ", self.workslot.building.money
             self.people.money += self.workslot.building.money
-            self.workslot.money = 0.
+            self.workslot.building.money = 0.
             
         else:
             toGive = max(min (-self.workslot.building.money, self.people.money - 5.) , 0.)
             print self.people.name, " donne ", toGive
             self.people.money -= toGive
             self.workslot.building.money += toGive
+            
+        for o in self.workslot.building.wantObjects:
+            if o not in self.workslot.building.wantToBuy.keys():
+                self.workslot.building.wantToBuy[o] = 1.*24/self.workslot.building.lastManaged
+            else:
+                self.workslot.building.wantToBuy[o] += 1.*24/self.workslot.building.lastManaged
+        self.workslot.building.wantObjects = []
+                
+        for o in self.workslot.building.wantToBuy.keys():
+            self.workslot.building.wantToBuy[o] *= 0.9
         
+        self.workslot.building.lastManaged = 0
         
 class LittleBuyAction(LittleAction):
     def __init__(self,root=None,object="",workslot=None):
@@ -345,6 +347,11 @@ class LittleBuyAction(LittleAction):
         elem.set("class", "LittleBuyAction")
         return elem
         
+    def canExecute(self):
+        result = LittleAction.canExecute(self)
+        if self.object not in self.workslot.building.objects:
+            return False
+        return result
      
     def startExecution(self, people):
         LittleAction.startExecution(self, people)
@@ -355,13 +362,42 @@ class LittleBuyAction(LittleAction):
         self.people.objects.append(self.object)
         self.workslot.building.objects.remove(self.object)
 
-            
-    #~ def getLocation(self, people):
-        #~ if self.pos is None:
-            #~ self.pos = [people.pos[0]+random.randint(-1, 1), people.pos[1]+random.randint(-1, 1)]
-            #~ print "self pos ",self.pos
 
+class LittleSellAction(LittleAction):
+    def __init__(self,root=None,object="",workslot=None):
+        LittleAction.__init__(self, root=root, type="sell",workslot=workslot)
+        if root is not None:
+            #~ self.read(root)
+            pass
+        else:
+            self.object=object
+
+            
+    def read(self,root):
+        LittleAction.read(self,root)
+        self.object = root.attrib["object"]
         
+    def write(self, root):
+        elem =  LittleAction.write(self, root)
+        elem.set("object", self.object)
+        elem.set("class", "LittleSellAction")
+        return elem
+        
+     
+    def startExecution(self, people):
+        LittleAction.startExecution(self, people)
+        #~ print self.workslot
+        print self.people.name," vend ",self.object, " a ",self.workslot.building.name
+        self.people.money+=1
+        self.workslot.building.money -=1
+        self.people.objects.remove(self.object)
+        self.workslot.building.objects.append(self.object)
+
+    def canExecute(self):
+        result = LittleAction.canExecute(self)
+        if self.object not in self.people.objects:
+            return False
+        return result       
         
 class LittleOldActions():
     def __init__(self,people, root=None):
@@ -472,6 +508,8 @@ def readAction(root, people):
         a = LittleManageAction(root=root)
     elif root.attrib["class"] == "LittleBuyAction":
         a = LittleBuyAction(root=root)
+    elif root.attrib["class"] == "LittleSellAction":
+        a = LittleSellAction(root=root)
     else:
         a = LittleAction(root=root)
         

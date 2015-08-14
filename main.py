@@ -14,7 +14,7 @@ from xml.dom import minidom
 if __name__ == '__main__':
 
     newVillage =False
-    DO_DISPLAY =False
+    DO_DISPLAY =True
     
     path = "village.xml"
     
@@ -22,14 +22,15 @@ if __name__ == '__main__':
         
         village = LittleVillage()
         
-        for i in range(0, 3):
+        for i in range(0, 4):
             village.addPeople()
         village.money = 0
         
         for b in allBuildings:
-            for w in b.workSlots:
-                while "constructing" in w.types:
-                    w.types.remove("constructing")
+            w=b.workSlots[0]
+            #~ for w in b.workSlots:
+            while "constructing" in w.types:
+                w.types.remove("constructing")
 
             
     else:

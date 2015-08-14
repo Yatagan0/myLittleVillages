@@ -158,17 +158,19 @@ class LittlePeople:
         if self.tired > 20*60 and random.randint(0, 10) != 0:
                 a =  LittleSleepAction()
                 self.moveToAction(a)
-                return
+                if self.action is not None:
+                    return
         
         if self.hungry > 10*60 and random.randint(0, 10) != 0:
                 a = LittleEatAction( )
                 self.moveToAction(a)
-                return
+                if self.action is not None:
+                    return
             
-        if self.money < 5.0 and random.randint(0, 10) != 0:
-            a = LittleWorkAction( )
-            self.moveToAction(a)
-            return
+        #~ if self.money < 5.0 and random.randint(0, 10) != 0:
+            #~ a = LittleWorkAction( )
+            #~ self.moveToAction(a)
+            #~ return
                 
                 
                 
@@ -185,6 +187,13 @@ class LittlePeople:
             for a in aa:
                 if self.canDoAction(a):
                     possibleActions.append(a)
+                    
+            for o in self.objects:
+                if o in b.wantToBuy.keys():
+                    print self.name, " can sell ",o
+                    possibleActions.append(LittleSellAction(workslot=b.workSlots[0], object=o))
+                    #~ self.moveToAction(LittleSellAction(workslot=b.workSlots[0], object=o))
+                    #~ return
 
         
         myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
@@ -211,6 +220,8 @@ class LittlePeople:
         a = LittleAction()
         possibleActions.append(a)
         
+
+        
         #~ print "chosing between ", len(possibleActions), " actions"
         a = random.choice(possibleActions)
         #~ print "a.type ", a.type, " price ", a.price
@@ -223,7 +234,7 @@ class LittlePeople:
 
 
     def canDoActionHere(self, building,  action):
-        print "searching for acton of type ",action
+        #~ print "searching for acton of type ",action
         preferredActions = []
         if building is not None:
             buildingIsMine = False
@@ -233,7 +244,7 @@ class LittlePeople:
                     break
             
             preferredActions = building.getPossibleActions(isOwner=buildingIsMine, actionTypes=[action])
-            print len(preferredActions)," possible actions in building"
+            #~ print len(preferredActions)," possible actions in building"
             #~ for a in aa:
                 #~ print "can do ",a.type,"?"
                 #~ if self.canDoAction(a):
@@ -249,9 +260,15 @@ class LittlePeople:
         return None
 
     def moveToAction(self, a):
+        if a.type == "sell" or a.type=="buy":
+            a.getLocation(self)
+            self.startAction(a)
+            return
+        
         b = buildingImIn(self.pos)
         aa = self.canDoActionHere( b, a.type)
         if aa is not None:
+            #~ print self.name," can ",a.type," here"
             self.startAction(aa)
             return
         
@@ -279,9 +296,11 @@ class LittlePeople:
             #~ a.getLocation(self)
         #~ if a.type== "buy":
             #~ print "startActionn ",a.workslot," ",a.pos
-        a.startExecution(self)
+        a.people = self
+        if a.canExecute():
+            a.startExecution(self)
         #~ print "startActionn ",a.workslot
-        self.action = a
+            self.action = a
         #~ print self.name , " will ", a.type, " for ", a.price
 
     def canDoAction(self, a):
@@ -311,8 +330,8 @@ class LittlePeople:
         
         if b is not None:
             bb = buildingImIn(b.pos)
-            print self.name," : Hey, ",p.name, " tu connais ",bb.name, " ?"
-            print self.name," : C'est un super ",knowledgeType.type, " en ",b.pos
+            #~ print self.name," : Hey, ",p.name, " tu connais ",bb.name, " ?"
+            #~ print self.name," : C'est un super ",knowledgeType.type, " en ",b.pos
             #~ print self.name," tells ",p.name, " about something for ",knowledgeType.type," named ", b.name," at ",b.pos
             p.knowledge[knowledgeType.type].seenBuilding(pos=b.pos)
             
