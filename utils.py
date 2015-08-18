@@ -190,13 +190,14 @@ def randomBuildingName(type="", owner=""):
 #produits = ["pommes", "poires", "peches", "farine", "oeufs", "beurre", "sucre", "miel", "amandes", "raisins", "noisettes", "noix"]   
 produits = ["pommes",  "farine", "oeufs", "beurre", "sucre", ]
     
-def addToDict(dict, key, value):
+def addToDict(dict, key, value, keepZero=False):
     if key not in dict.keys():
         dict[key] = value
     else:
         dict[key] += value
-    if dict[key] == 0:
-        del dict[key]
+    if not keepZero:
+        if dict[key] == 0:
+            del dict[key]
 
 def getDict(dict, key):
     if key not in dict.keys():

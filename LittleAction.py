@@ -128,12 +128,13 @@ class LittleAction:
                 peopleRatio = 1.
                 buildingRatio = 0.95
                 
-                utils.addToDict(self.workslot.building.profits, self.type, buildingRatio*self.price)
+                if self.type != "manage":
+                    utils.addToDict(self.workslot.building.profits, self.type, buildingRatio*self.price, keepZero=True)
             else:
                 peopleRatio = 0.95
                 buildingRatio = 1.
-                
-                utils.addToDict(self.workslot.building.costs, self.type, buildingRatio*self.price)
+                if self.type != "manage":
+                    utils.addToDict(self.workslot.building.costs, self.type, buildingRatio*self.price, keepZero=True)
                 
             self.people.money -= peopleRatio*self.price
             self.workslot.building.money += buildingRatio*self.price
@@ -321,14 +322,46 @@ class LittleManageAction(LittleAction):
             
         for o in self.workslot.building.wantObjects.keys():
             utils.addToDict(self.workslot.building.wantToBuy, o, self.workslot.building.wantObjects[o]*24/self.workslot.building.lastManaged)
-            #~ if o not in self.workslot.building.wantToBuy.keys():
-                #~ self.workslot.building.wantToBuy[o] = 1.*24/self.workslot.building.lastManaged
-            #~ else:
-                #~ self.workslot.building.wantToBuy[o] += 1.*24/self.workslot.building.lastManaged
         self.workslot.building.wantObjects = {}
                 
         for o in self.workslot.building.wantToBuy.keys():
             self.workslot.building.wantToBuy[o] *= 0.9
+            
+        cost = 0.
+        for c in self.workslot.building.costs.values():
+            cost -= c
+            
+        print self.workslot.building.name," : couts ",cost," en ",self.workslot.building.lastManaged," heures"
+
+        profit = 0.
+        for p in self.workslot.building.profits.values():
+            profit += p
+            
+        print self.workslot.building.name," : profits ",profit," en ",self.workslot.building.lastManaged," heures"
+        
+        if profit != 0:
+            diff = (profit - 1.3*cost)/profit
+        else:
+            diff = 1
+            
+        if diff > 1.:
+            diff = 1.
+            
+        if diff < -1:
+            diff = -1.
+            
+        print diff
+
+        for c in self.workslot.building.costs.keys():
+            val = utils.getDict(self.workslot.building.prices, c)*(1+0.1*diff)
+            utils.addToDict(self.workslot.building.prices, c, min(-0.1, val))
+  
+        for p in self.workslot.building.profits.keys():
+            val = utils.getDict(self.workslot.building.prices, p)*(1-0.1*diff)
+            utils.addToDict(self.workslot.building.prices, p, max(0.1, val))           
+        
+        self.workslot.building.costs = {}
+        self.workslot.building.profits = {}
         
         self.workslot.building.lastManaged = 0
         

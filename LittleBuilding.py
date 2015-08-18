@@ -84,10 +84,11 @@ class WorkSlot:
                     price=int(10*self.building.prices["basePrice"]*meanTime)/10.
                     if a == "sleep":
                         act = LittleSleepAction(workslot=self)
-                        act.price = price
+                        #~ act.price = price
+                        act.price = max(utils.getDict(self.building.prices, "sleep"), 0.1)
                     elif a == "eat":
                         act = LittleEatAction(workslot=self)
-                        act.price = utils.getDict(self.building.prices, "eat")
+                        act.price = max(utils.getDict(self.building.prices, "eat"), 0.1)
                         #~ act.price = price
                     else:
                         act = LittleWorkAction(workslot=self, type=a)
