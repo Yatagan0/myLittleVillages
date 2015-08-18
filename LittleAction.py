@@ -127,9 +127,13 @@ class LittleAction:
             if self.price > 0.:
                 peopleRatio = 1.
                 buildingRatio = 0.95
+                
+                utils.addToDict(self.workslot.building.profits, self.type, buildingRatio*self.price)
             else:
                 peopleRatio = 0.95
                 buildingRatio = 1.
+                
+                utils.addToDict(self.workslot.building.costs, self.type, buildingRatio*self.price)
                 
             self.people.money -= peopleRatio*self.price
             self.workslot.building.money += buildingRatio*self.price

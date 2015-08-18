@@ -209,6 +209,15 @@ def addToDictList(dict, key, value):
         dict[key] = [value]
     else:
         dict[key].append(value)
+    
+def saveDict(root, dict, name):
+    for o in dict.keys():
+        sub =  ET.SubElement(root, name)
+        sub.set("name", o)    
+        sub.set("quantity", str(dict[o]))
+    
+#~ def readDict(root, dict):
+    
 
     
 def distance(p1, p2):
@@ -315,8 +324,8 @@ if __name__ == '__main__':
     for i in range(0, 30):
         print randomName()
     print "---"
-    for i in range(0, 20):
-        print randomCityName()
+    #~ for i in range(0, 20):
+        #~ print randomCityName()
     #~ print "---"
     #~ for i in range(0, 20):
         #~ print randomBuildingName(type="restaurant")

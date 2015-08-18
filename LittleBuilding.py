@@ -191,6 +191,8 @@ class LittleBuilding:
         self.wantObjects = {}
         self.wantToBuy = {}
         self.prices = {}
+        self.costs = {}
+        self.profits = {}
         
         if root is not None:
             self.read(root)
@@ -228,24 +230,29 @@ class LittleBuilding:
         else:
             elem.set("owner", self.owner.name)
             
-       
-        for o in self.objects.keys():
-            sub =  ET.SubElement(elem, 'object')
-            sub.set("name", o)    
-            sub.set("quantity", str(self.objects[o]))
-        for o in self.wantObjects.keys():
-            sub =  ET.SubElement(elem, 'wantobject')
-            sub.set("name", o)    
-            sub.set("quantity", str(self.wantObjects[o]))            
-        for o in self.wantToBuy.keys():
-            sub =  ET.SubElement(elem, 'wanttobuy')
-            sub.set("name", o)    
-            sub.set("quantity", str(self.wantToBuy[o]))    
+        utils.saveDict(elem, self.objects, 'object')
+        utils.saveDict(elem, self.wantObjects, 'wantobject')
+        utils.saveDict(elem, self.wantToBuy, 'wanttobuy')
+        utils.saveDict(elem, self.prices, 'price')
+        utils.saveDict(elem, self.costs, 'cost')
+        utils.saveDict(elem, self.profits, 'profit')
+        #~ for o in self.objects.keys():
+            #~ sub =  ET.SubElement(elem, 'object')
+            #~ sub.set("name", o)    
+            #~ sub.set("quantity", str(self.objects[o]))
+        #~ for o in self.wantObjects.keys():
+            #~ sub =  ET.SubElement(elem, 'wantobject')
+            #~ sub.set("name", o)    
+            #~ sub.set("quantity", str(self.wantObjects[o]))            
+        #~ for o in self.wantToBuy.keys():
+            #~ sub =  ET.SubElement(elem, 'wanttobuy')
+            #~ sub.set("name", o)    
+            #~ sub.set("quantity", str(self.wantToBuy[o]))    
             
-        for p in self.prices.keys():
-            sub =  ET.SubElement(elem, 'price')
-            sub.set("name", p)    
-            sub.set("quantity", str(self.prices[p]))
+        #~ for p in self.prices.keys():
+            #~ sub =  ET.SubElement(elem, 'price')
+            #~ sub.set("name", p)    
+            #~ sub.set("quantity", str(self.prices[p]))
             
         for s in self.workSlots:
             s.write(elem)
@@ -283,6 +290,10 @@ class LittleBuilding:
                 self.wantToBuy[child.attrib["name"]] = float(child.attrib["quantity"])
             elif child.tag == "price":
                 self.prices[child.attrib["name"]] = float(child.attrib["quantity"])
+            elif child.tag == "cost":
+                self.costs[child.attrib["name"]] = float(child.attrib["quantity"])
+            elif child.tag == "profit":
+                self.profits[child.attrib["name"]] = float(child.attrib["quantity"])
                 
     def findFreePos(self, pos, size):
         r0 = random.randint(pos[0]-size, pos[0]+size)
