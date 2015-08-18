@@ -454,7 +454,7 @@ class LittleOldActions():
     
     def findHabits(self, time):
         habits = []
-        for d in self.days[:-1]: #not today
+        for d in self.days:#[:-1]: #not today
             c =self.closestAction(d, time)
             if c is not None:
                 habits.append(c)
