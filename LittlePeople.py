@@ -172,44 +172,43 @@ class LittlePeople:
             #~ self.moveToAction(a)
             #~ return
                 
-                
-                
+        actionChoice = random.choice(["habits", "discover", "commerce"])
+        #~ print actionChoice
         possibleActions = []      
         
-        if b is not None:
-            buildingIsMine = False
-            for mb in self.ownedBuildings:
-                if b.pos[0] == mb[0] and b.pos[1] == mb[1]:
-                    buildingIsMine = True
-                    break
-            
-            aa = b.getPossibleActions(isOwner=buildingIsMine)
-            for a in aa:
-                if self.canDoAction(a):
-                    possibleActions.append(a)
-                    
-            for o in self.objects:
-                if o in b.wantToBuy.keys():
-                    print self.name, " can sell ",o
-                    possibleActions.append(LittleSellAction(workslot=b.workSlots[0], object=o))
-                    #~ self.moveToAction(LittleSellAction(workslot=b.workSlots[0], object=o))
-                    #~ return
-
         
-        myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
-        for a in myHabits:
-            if self.canDoAction(a):
-                #~ if a.pos is not None and a.pos[0]==self.pos[0] and a.pos[1]==self.pos[1] :
-                    #~ #check that action is possible to avoid move
-                    #~ for aa in possibleActions:
-                        #~ if aa.type == a.type:
-                            #~ possibleActions.append(aa) 
-                            #~ break
-                #~ else:
-                    possibleActions.append(a)        
+        if b is not None:
+            if actionChoice == "discover":
+                buildingIsMine = False
+                for mb in self.ownedBuildings:
+                    if b.pos[0] == mb[0] and b.pos[1] == mb[1]:
+                        buildingIsMine = True
+                        break
+                
+                aa = b.getPossibleActions(isOwner=buildingIsMine)
+                for a in aa:
+                    if self.canDoAction(a):
+                        possibleActions.append(a)
+                        
+            if actionChoice == "commerce":       
+                for o in self.objects:
+                    if o in b.wantToBuy.keys():
+                        print self.name, " can sell ",o
+                        possibleActions.append(LittleSellAction(workslot=b.workSlots[0], object=o))
+                        #~ self.moveToAction(LittleSellAction(workslot=b.workSlots[0], object=o))
+                        #~ return
 
-        a= LittleMoveAction()
-        possibleActions.append(a)
+        if actionChoice == "habits": 
+            myHabits = self.habits.findHabits([utils.globalTime.hour, utils.globalTime.minute])
+            #~ print len(myHabits)," habit "
+            for a in myHabits:
+                if self.canDoAction(a):
+                    possibleActions.append(a)  
+                    #~ print "possible habit"
+                        
+        if actionChoice == "discover":
+            a= LittleMoveAction()
+            possibleActions.append(a)
         
         for mb in self.ownedBuildings:
             if mb[0] != self.pos[0] or mb[1] != self.pos[1]:
