@@ -53,7 +53,7 @@ class WorkSlot:
 
                 recipe = allRecipes["build"]
                 meanTime = (recipe.timeMax - recipe.timeMin)/2.
-                price=int(10*self.building.basePrice*meanTime)/10.
+                price=int(10*self.building.prices["basePrice"]*meanTime)/10.
                 act = LittleWorkAction(workslot=self, type="build" )
                 act.price = -price
                 return [act]
@@ -81,16 +81,17 @@ class WorkSlot:
                             continue
                     
                     meanTime = (recipe.timeMax - recipe.timeMin)/2.
-                    price=int(10*self.building.basePrice*meanTime)/10.
+                    price=int(10*self.building.prices["basePrice"]*meanTime)/10.
                     if a == "sleep":
                         act = LittleSleepAction(workslot=self)
                         act.price = price
                     elif a == "eat":
                         act = LittleEatAction(workslot=self)
-                        act.price = price
+                        act.price = utils.getDict(self.building.prices, "eat")
+                        #~ act.price = price
                     else:
                         act = LittleWorkAction(workslot=self, type=a)
-                        act.price = -price
+                        act.price = -int(10*self.building.prices["basePrice"]*meanTime)/10.
                     
                     if act.canExecute():
                         actions.append(act)
@@ -189,6 +190,7 @@ class LittleBuilding:
         self.objects={}
         self.wantObjects = {}
         self.wantToBuy = {}
+        self.prices = {}
         
         if root is not None:
             self.read(root)
@@ -201,7 +203,8 @@ class LittleBuilding:
             if self.owner is not None:
                 self.owner.ownedBuildings.append(self.pos)
             self.money=0
-            self.basePrice = 0.1
+            self.prices["basePrice"] = 0.1
+            #~ self.basePrice = 0.1
             self.lastManaged =0
 
         
@@ -216,7 +219,7 @@ class LittleBuilding:
         elem.set("type", self.type)
         elem.set("name", self.name)
         elem.set("money", str(self.money))
-        elem.set("basePrice", str(self.basePrice))
+        #~ elem.set("basePrice", str(self.basePrice))
         elem.set("lastManaged", str(self.lastManaged))
         if self.owner is None:
             elem.set("owner", "")
@@ -225,12 +228,7 @@ class LittleBuilding:
         else:
             elem.set("owner", self.owner.name)
             
-        #~ for o in self.objects:
-            #~ sub =  ET.SubElement(elem, 'object')
-            #~ sub.set("name", o)
-        #~ for o in self.wantObjects:
-            #~ sub =  ET.SubElement(elem, 'wantobject')
-            #~ sub.set("name", o)          
+       
         for o in self.objects.keys():
             sub =  ET.SubElement(elem, 'object')
             sub.set("name", o)    
@@ -243,8 +241,15 @@ class LittleBuilding:
             sub =  ET.SubElement(elem, 'wanttobuy')
             sub.set("name", o)    
             sub.set("quantity", str(self.wantToBuy[o]))    
+            
+        for p in self.prices.keys():
+            sub =  ET.SubElement(elem, 'price')
+            sub.set("name", p)    
+            sub.set("quantity", str(self.prices[p]))
+            
         for s in self.workSlots:
             s.write(elem)
+            
         elem.set("class", "LittleBuilding")
         return elem
 
@@ -254,7 +259,7 @@ class LittleBuilding:
         self.name = root.attrib["name"]
         #~ print self.name
         self.money = float(root.attrib["money"])
-        self.basePrice = float(root.attrib["basePrice"])
+        #~ self.basePrice = float(root.attrib["basePrice"])
         self.lastManaged = float(root.attrib["lastManaged"])
         from LittlePeople import peopleNamed
         self.owner = peopleNamed(root.attrib["owner"])
@@ -276,6 +281,8 @@ class LittleBuilding:
                 #~ self.wantObjects.append(child.attrib["name"])   
             elif child.tag == "wanttobuy":
                 self.wantToBuy[child.attrib["name"]] = float(child.attrib["quantity"])
+            elif child.tag == "price":
+                self.prices[child.attrib["name"]] = float(child.attrib["quantity"])
                 
     def findFreePos(self, pos, size):
         r0 = random.randint(pos[0]-size, pos[0]+size)
@@ -441,7 +448,9 @@ class LittleShop(LittleBuilding):
                 ws = WorkSlot(types=["shop"], building=self, name = "slot"+str(i))
                 self.workSlots.append(ws)
                 
-            self.objects += ["pain", "pain", "pain"]
+            #~ self.objects += ["pain", "pain", "pain"]
+            for i in range(0, 3):
+                utils.addToDict(self.objects, "pain", 1)
         
                 
     def write(self, root):
